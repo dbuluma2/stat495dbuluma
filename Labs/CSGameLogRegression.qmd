@@ -1,0 +1,33 @@
+---
+title: "Stat 495 - Logistic Regression Practice - CS Game"
+format: pdf
+editor: visual
+---
+
+# Stat 495 - CS Game 
+
+```{r}
+#| include: false
+
+library(mosaic)
+library(readr)
+library(broom)
+```
+
+
+```{r}
+csgame <- read.csv("https://awagaman.people.amherst.edu/stat495/csgame.csv", header = T)
+```
+
+A student at Amherst has written a portion of a video game while studying the behavior of some computer algorithms. For a particular encounter in the video game, ten different inputs are used to determine the outcome of the encounter - i.e. whether the player wins or loses a fight against a monster. A set of 190 test instances of the encounter have had their inputs recorded, as well as the outcome. The data set is available as csgame.csv. 
+
+The inputs are: BaseAttack, BaseDefense, Charisma, Constitution, Dexterity, Intelligence, MagicDefense, MonsterAttack, MonsterMagic, and ZoneLevel. The first 7 inputs are player attributes and higher values denote a stronger player character. You should note that BaseDefense is based on armor, and MagicDefense is not, and also that it is usually the case that characters in plate armor (the strongest usually available in these sorts of games) are usually not strong magic users, and vice versa (magic users often wear cloth armor, generally the weakest available). The 8th and 9th input variables are monster attributes where higher values indicate a stronger, more powerful monster. Finally, ZoneLevel is an indication of how hard the zone where the encounter takes place is (higher values should be a harder zone). Some of the input names are based on concepts from Dungeons and Dragons.
+
+The outcome variable is provided both numerically as 0 and 1 and categorically as Loss and Win (Loss=0; Win=1) in the variables OutcomeNum and Outcome, respectively. 
+
+Another student wants to play the game and win the encounter, and is looking for guidance as to how to approach that. For example, should they develop a character with high Dexterity or one with high Charisma if they want to win the encounter?
+
+Your task is to examine the data set and perform a relevant analysis to assist the students (predict the outcome using the input variables).  Provide relevant interpretations of your findings for the student who wants to win the encounter as well as for the student who has written the game. 
+
+## Analysis
+
