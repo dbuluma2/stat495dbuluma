@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.433">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Clara Hoey, Daizy Buluma, Christian Manzi">
+<meta name="dcterms.date" content="2023-12-13">
+
+<title>Exploring Artificial Intelligence and Programming: A Comprehensive Analysis of Developer Perspectives</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="index_files/libs/clipboard/clipboard.min.js"></script>
+<script src="index_files/libs/quarto-html/quarto.js"></script>
+<script src="index_files/libs/quarto-html/popper.min.js"></script>
+<script src="index_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="index_files/libs/quarto-html/anchor.min.js"></script>
+<link href="index_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="index_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="index_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="index_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="index_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#research-findings" id="toc-research-findings" class="nav-link" data-scroll-target="#research-findings">Research Findings</a>
+  <ul class="collapse">
+  <li><a href="#overall-developer-sentiments" id="toc-overall-developer-sentiments" class="nav-link" data-scroll-target="#overall-developer-sentiments">Overall Developer Sentiments</a></li>
+  <li><a href="#analysis-of-text-responses" id="toc-analysis-of-text-responses" class="nav-link" data-scroll-target="#analysis-of-text-responses">Analysis of Text Responses</a></li>
+  <li><a href="#sentiments-based-on-various-categories" id="toc-sentiments-based-on-various-categories" class="nav-link" data-scroll-target="#sentiments-based-on-various-categories">Sentiments based on various categories</a></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  <li><a href="#limitations-and-improvements" id="toc-limitations-and-improvements" class="nav-link" data-scroll-target="#limitations-and-improvements">Limitations and Improvements</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Exploring Artificial Intelligence and Programming: A Comprehensive Analysis of Developer Perspectives</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Clara Hoey, Daizy Buluma, Christian Manzi </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">December 13, 2023</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>In the world of coding, things are shaking up with the rise of artificial intelligence (AI) tools. From people just getting the hang of coding to the pros handling big projects, everyone has a different perspective on AI. In this blog project, we’re digging into the real thoughts of thousands of programmers across the United States at different career stages. Our goal is to use sentiment analysis to better understand the attitudes of programmers towards the use of AI tools in Stack Overflow. With the continuing rise of AI usage in the programming industry, it is important to understand how professional programmers feel about the impact of AI on their work.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="img/AI.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<figcaption class="figure-caption">Man vs AI</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>All of the programmers in our study are software developers who use Stack Overflow (an online platform for sharing knowledge about computer programming) for their work at least once a week. The data is in the form of survey responses. The survey includes a mix of multiple choice and open response questions in 7 categories: (1) Basic Information; (2) Education, Work, and Career; (3) Technology and Tech Culture; (4) Stack Overflow Usage + Community; (5) Artificial Intelligence; (6) Professional Developer Series (Optional); and (7) Final Questions. In this blog, we have included data from some demographic multiple choice questions (e.g.&nbsp;age, years of coding experience) and have also done text analysis on the open response question “What is your opinion on Stack Overflow using AI tools to improve the current experience? What could AI help with most to improve Stack Overflow?”.</p>
+<p>This data is from the American Statistical Association’s Fall 2023 Data Challenge. The description of the dataset and downloadable zip file containing all of the data used in this project can be found at this link: <a href="https://community.amstat.org/asafalldatachallenge/home" class="uri">https://community.amstat.org/asafalldatachallenge/home</a>.</p>
+<!-- ## Website publication work flow -->
+<!-- 1. Edit qmd -->
+<!-- 2. Knit to HTML to view progress. You may need to click "Open in Browser" for some content to show (sometimes content won't show until you actually push your changes to GitHub and view the published website). -->
+<!-- 3. Commit and push changes when you are ready. The website may take a couple minutes to update automatically after the push, but you may need to clear your browser's cache or view the page in a private/incognito window to see the changes more quickly.  -->
+</section>
+<section id="research-findings" class="level1">
+<h1>Research Findings</h1>
+<section id="overall-developer-sentiments" class="level2">
+<h2 class="anchored" data-anchor-id="overall-developer-sentiments">Overall Developer Sentiments</h2>
+<p>Upon analyzing the survey responses from our cohort of active Stack Overflow users, several noteworthy trends and sentiments emerged. Firstly, a majority of participants expressed a generally positive attitude towards the integration of AI tools on Stack Overflow, citing potential benefits in streamlining problem-solving processes and enhancing the overall user experience. Respondents highlighted the prospect of improved search functionality, more accurate question categorization, and tailored content recommendations as areas where AI could significantly contribute.</p>
+<!-- You can include text, `code`, and output as usual. Remember to take full advantage of Markdown and its [syntax shortcuts](https://www.markdownguide.org/basic-syntax/). -->
+<div class="cell" data-layout-align="left">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="index_files/figure-html/ggplot-3-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Examining the density plot, it is evident that a majority of responses lean towards the positive side, indicating an overall optimistic sentiment among the surveyed developers. However, recognizing that opinions extend beyond a simple positive-negative spectrum, we sought a more specific understanding of respondents’ feelings. To look deeper into the emotional landscape, we used a bar chart to visualize the diverse sentiments expressed by developers.</p>
+<div class="cell" data-layout-align="left">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="index_files/figure-html/ggplot-4-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This emotional analysis categorizes responses based on various emotions, such as anticipation, surprise, and trust, offering a more comprehensive perspective beyond positivity or negativity. For instance, the prevalence of trust in the chart implies a widespread optimistic outlook among the participants. Conversely, the substantial frequency of fear, as observed in responses from over 5,000 participants, signals notable concerns or reservations regarding the integration of AI tools on Stack Overflow. This emotional analysis adds more depth to our understanding of the sentiments expressed by programmers, offering a more holistic view of their attitudes toward AI.</p>
+</section>
+<section id="analysis-of-text-responses" class="level2">
+<h2 class="anchored" data-anchor-id="analysis-of-text-responses">Analysis of Text Responses</h2>
+<p>The two charts below show the most common words and three-word phrases respectively used in programmers’ responses to the question “What is your opinion on Stack Overflow using AI tools to improve the current experience? What could AI help with most to improve Stack Overflow?”. These graphs help to provide context for the sentiment analysis above. We have also removed stop words and plurals from these sets of text to help ensure only relevant text is included.</p>
+<div class="cell" data-layout-align="left">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="index_files/figure-html/ggplot-1-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>As we can see, some of the most common words used are “question,” “answer,” “improve,” and “search,” indicating a level of curiosity towards AI. Some of these words are also predictable, such as “code” or “tools,” hence the trigram below to add context.</p>
+<div class="cell" data-layout-align="left">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="index_files/figure-html/ggplot-2-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>As we can see, some of the most common phrases using these words are “AI could help,” “I think it,” “as long as,” “questions and answers,” etcetera. In conjunction with what we know from the sentiment analysis, we can see how the words and phrases from both of these charts, particularly “improve,” “AI could help,” and “as long as,” indicate fairly positive feelings and ancitipation about the use of AI tools in Stack Overflow.</p>
+</section>
+<section id="sentiments-based-on-various-categories" class="level2">
+<h2 class="anchored" data-anchor-id="sentiments-based-on-various-categories">Sentiments based on various categories</h2>
+<p>In addition, we used a Shiny app to facilitate further exploration of the data. This application breaks down response scores by key demographic factors, providing a comprehensive look at how opinions regarding AI integration on Stack Overflow vary across different segments of the programming community. Through the Shiny app, users can interactively analyze response scores based on factors such as experience, age, and education.</p>
+<div class="cell">
+<iframe src="https://manzic.shinyapps.io/NMSHINY/?showcase=0" width="100%" height="500px" data-external="1">
+</iframe>
+</div>
+<p>Analyzing the findings from the Shiny app, which breaks down response scores by demographic factors, several noteworthy patterns emerged. Examining sentiments based on experience levels, it became apparent that less experienced programmers tended to express more positive opinions about AI. This suggests a potential correlation between lower levels of coding experience and a more favorable outlook towards the integration of AI tools on Stack Overflow. In terms of age groups, the median opinion scores were consistent across most groups, except for respondents aged 65 and above, who exhibited a slightly lower median sentiment. Notably, the age groups of 18-24 and 25-34 displayed the highest upper range in opinions, though this could be influenced by a higher number of respondents within these age brackets. Conversely, the 35-44 and 45-54 age groups showed lower sentiment ranges. When examining sentiments by education, no substantial differences were observed, with most outliers occurring among respondents holding a Bachelor’s degree. These nuanced insights gleaned from the Shiny app shed light on the intersectionality of demographic factors and their impact on programmers’ sentiments regarding AI integration on Stack Overflow.</p>
+<!-- <iframe src = "https://manzic.shinyapps.io/NMSHINY/" height="500" width="1000" > </iframe> -->
+<!-- ![This is another figure caption](https://media.giphy.com/media/8i5IvxP9ZLgmjXN1BF/giphy.gif) -->
+</section>
+</section>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
+<p>Our sentiment and text analysis centered around programmers’ responses to the open response question “What is your opinion on Stack Overflow using AI tools to improve the current experience? What could AI help with most to improve Stack Overflow?”.</p>
+<p>From analyzing responses to this question, we found that a majority of programmers in the survey had overall positive things to say about the development and use of AI tools in Stack Overflow. From our sentiment analysis using the AFINN lexicon, which assigns text a numerical response score (higher being more positive and vice versa), we found that the majority of programmers had positive response scores, indicating that the majority of programmers felt positive about the use of AI in Stack Overflow. One of the most interesting and important results from our sentiment analysis came from our use of the NRC lexicon, which showed that the most common sentiments among responses were “positive” and “trust.” “Trust” in particular seems crucial, since we are often warned about the potential dangers of AI, but it appears from our results that the programmers have some level of trust at least in the AI tools used by Stack Overflow.</p>
+<p>In our text analysis, we looked at the most common words and the most common three-word phrases used in responses to the same survey question. Here our results were somewhat more predictable than the sentiment analysis, but not quite as revealing. The top five most common words in programmers’ responses were “question,” “answer,” “improve,” “search,” and “don’t.” Along those lines, some of the most common phrases using these words were “AI could help,” “I think it,” “as long as,” “questions and answers,” etcetera. In conjunction with what we know from the sentiment analysis, we can see how these words and phrases, particularly “improve,” “AI could help,” and “as long as,” indicate relatively positive feelings about the use of AI tools in Stack Overflow. These words and phrases in isolation don’t necessarily provide a clear narrative. However, that isn’t necessarily a bad thing — there is a wide variety of thoughts and opinions among different programmers, which must be acknowledged and represented.</p>
+<p>Finally, our Shiny app provided some insight into which groups of programmers, broken down by age, education, and years of coding experience, were more likely to feel a certain way (measured by the response score variable) about AI tools in Stack Overflow. Results did not differ strongly by age, but there was a slight trend of younger respondents having a higher upper bound on response scores, indicating there were some younger programmers who felt very positive about the AI tools, and the 65+ group had a slightly lower median response score than the other age groups, indicating that older programmers felt slightly less positive than younger programmers. There were not substantial differences in response score by education level; we saw the most variation among programmers with a Bachelor’s degree, but this may be due to having the greatest number of survey respondents with a Bachelor’s degree compared to other groups. There were similarly more positive outliers in response score among programmers with fewer years of coding experience, and the lower quartile bounds were at lower response scores among programmers with more years of experience, indicating that newer programmers tended to feel more positive about AI tools.</p>
+<p>To summarize our key findings, the programmers surveyed had moderately positive (on average) responses about the use of AI tools in Stack Overflow, with a surprisingly high amount of programmers responses having a trusting sentiment. This was bolstered by the most common words and phrases found by our text analysis in the programmers’ responses. Perhaps predictably, younger and/or less experienced programmers tended to have more positive attitudes towards AI tools than older and/or more experienced programmers.</p>
+</section>
+<section id="limitations-and-improvements" class="level1">
+<h1>Limitations and Improvements</h1>
+<p>While our study has provided valuable insights into programmers’ attitudes towards AI on Stack Overflow, it is important to acknowledge certain limitations that could impact the accuracy of our findings. Sentiment analysis, while a powerful tool, is not without its flaws. The complex nature of human language, sarcasm, or context-specific interpretations can challenge the accuracy of sentiment categorization. Additionally, the filtration of words and the strength assigned to them can influence the analysis outcome, potentially introducing bias. Furthermore, the uneven distribution of ages and experience levels in our dataset might skew our results towards certain demographic groups.</p>
+<p>To address these limitations, future research endeavors could focus on analyzing a larger set of open-response answers, providing a more precise understanding of programmer sentiments. Experimenting with various lexicons and refining the sentiment analysis methodology could also enhance the accuracy of our findings. Moreover, diversifying the survey audience beyond Stack Overflow users to include programmers from specific companies or industries could offer a more comprehensive and representative view of attitudes towards AI tools in coding. We may obtain a more comprehensive and precise representation of the perspectives of the programming community by implementing these enhancements.</p>
+</section>
+<section id="references" class="level1">
+<h1>References</h1>
+<!-- Dataset -->
+<p>American Statistical Association (Fall 2023), “The Public 2023 Stack Overflow Developer Survey Results”, available at <a href="https://community.amstat.org/asafalldatachallenge/home" class="uri">https://community.amstat.org/asafalldatachallenge/home</a>.</p>
+<!-- Textbook -->
+<p>Baumer, B. S., Kaplan, D. T., and Horton, N. J. (2021), <em>Modern Data Science with R</em> (2nd ed.), Boca Raton, FL: CRC Press.</p>
+<!-- R packages -->
+<p>Silge J, Robinson D (2016). “tidytext: Text Mining and Analysis Using Tidy Data Principles in R.” <em>JOSS</em>, <em>1</em>(3). doi:10.21105/joss.00037 <a href="https://doi.org/10.21105/joss.00037" class="uri">https://doi.org/10.21105/joss.00037</a>, <a href="http://dx.doi.org/10.21105/joss.00037" class="uri">http://dx.doi.org/10.21105/joss.00037</a>.</p>
+<p>Hvitfeldt E (2022). <em>textdata: Download and Load Various Text Datasets</em>. R package version 0.4.4, <a href="https://CRAN.R-project.org/package=textdata" class="uri">https://CRAN.R-project.org/package=textdata</a>.</p>
+<p>Wickham H, Averick M, Bryan J, Chang W, McGowan LD, François R, Grolemund G, Hayes A, Henry L, Hester J, Kuhn M, Pedersen TL, Miller E, Bache SM, Müller K, Ooms J, Robinson D, Seidel DP, Spinu V, Takahashi K, Vaughan D, Wilke C, Woo K, Yutani H (2019). “Welcome to the tidyverse.” <em>Journal of Open Source Software</em>, <em>4</em>(43), 1686. doi:10.21105/joss.01686 <a href="https://doi.org/10.21105/joss.01686" class="uri">https://doi.org/10.21105/joss.01686</a>.</p>
+<p>Wickham H, Hester J, Bryan J (2023). <em>readr: Read Rectangular Text Data</em>. R package version 2.1.4, <a href="https://CRAN.R-project.org/package=readr" class="uri">https://CRAN.R-project.org/package=readr</a>.</p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
