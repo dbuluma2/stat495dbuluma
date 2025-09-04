@@ -1,4 +1,4 @@
-# stat495dbuluma
+# About Me
 My main goals for the class are:
 1. To strengthen my ability to apply statistical methods to real-world business and e-commerce problems.
 2. Refresh some of the theoretical foundations from earlier Statistics courses.
