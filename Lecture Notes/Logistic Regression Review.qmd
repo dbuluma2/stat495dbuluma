@@ -1,0 +1,245 @@
+---
+title: "Logistic Regression Review"
+format: pdf
+editor: visual
+---
+
+```{r}
+#| include: false
+
+library(mosaic)
+library(readr)
+library(Stat2Data)
+library(lmtest)
+library(broom)
+library(DescTools)
+```
+
+# Multiple Logistic Regression - Review
+
+We are trying to predict which restaurants ended up in a Michelin guide to NYC based on their corresponding entries in Zagat's Guide.
+
+```{r}
+mydata <- read.csv("https://awagaman.people.amherst.edu/stat495/MichelinNY.csv", header = T)
+```
+
+## Steps in the Data Analysis Process
+
+What should you do when given this analysis task?
+
+\vspace{1in}
+
+## Let's Look at the Data
+
+```{r}
+glimpse(mydata)
+```
+
+Other visualizations should be undertaken to understand the variables in the data set and their relationships. Here are examples looking at the relationships between potential predictors and our intended response variable.
+
+```{r}
+ggplot(mydata, aes(x = as.factor(InMichelin), y = Food)) +
+  geom_boxplot() +
+  labs(x = "In Michelin?")
+```
+
+What does this plot suggest about whether Food should be included in the model at a first pass?
+
+```{r}
+ggplot(mydata, aes(x = as.factor(InMichelin), y = Service)) +
+  geom_boxplot() +
+  labs(x = "In Michelin?")
+```
+
+What does this plot suggest about whether Service should be included in the model at a first pass?
+
+Are there other plots we should be making?
+
+\vspace{1in}
+
+```{r}
+ggplot(mydata, aes(x = Service, y = Food)) +
+  geom_point(alpha = 0.3) 
+```
+
+Would this plot raise any concerns for you? What concerns?
+
+## Conditions for Logistic Regression
+
+Do you recall the conditions for logistic regression?\
+Write down the logistic model.\
+Where are the errors in your model?
+
+\vspace{1in}
+
+You can make empirical logit plots using the function provided (requires a numeric response) in the Stat2Data package. Remember, you can change the number of breaks.
+
+```{r}
+#| message: false
+#| warning: false
+
+emplogitplot1(InMichelin ~ Food, ngroups = 5, data = mydata)
+```
+
+We can fit a full model easily. In order to demonstrate nested drop in deviance procedures, I added some interactions and transformed price based on modelling performed previously.
+
+```{r}
+# Add log Price
+mydata <- mutate(mydata, logPrice = log(Price))
+
+#Fit model and get basic output
+logm <- glm(InMichelin ~ Food + Decor + Service + Price + Food:Decor + 
+              Decor:Service + logPrice, data = mydata, family = binomial(logit))
+msummary(logm)
+
+# Show other tests and output
+lrtest(logm)
+exp(confint(logm))
+# Do you know what augment does?
+logmaugment <- augment(logm, type.predict = "response")
+```
+
+For a nested drop in deviance procedure, we need a second reduced model. The challenge you can encounter here is that if you fit the specified reduced model on the data set, you may end up with more observations than in the full model depending on what your reduced model is because some predictors have some *missing values*, which were removed automatically by R in the model fitting process. While this does not occur here, it is important to note because you want to compare models on the *same* data. We can get around this (potential issue) by fitting our chosen reduced model on the augmented data set from the full model. That way, we will end up comparing models fit on the SAME data. Let's try to drop Food:Decor and Price from the model.
+
+```{r}
+logm2 <- glm(InMichelin ~ Food + Decor + Service + Decor:Service + logPrice, 
+             data = logmaugment, family = binomial(logit))
+msummary(logm2)
+G <- 131.23 - 129.27; G
+lrtdf <- 158 - 156 ; lrtdf
+pchisq(G, df = lrtdf, lower.tail = FALSE)
+```
+
+You can also have the computer do these computations with:
+
+```{r}
+anova(logm2, logm, test="Chisq")
+```
+
+The reduced model should come first in this command.
+
+This suggests (assuming we believe conditions are met) we can use the smaller reduced model. How well is that model doing? Well, we can look at something called a confusion matrix to get a sense of that, but we need to look at predictions to construct it.
+
+To wrap up this section, we examine the predictions a bit more closely.
+
+```{r}
+logm2augment <- logm2 %>% augment(type.predict = "response")
+names(logm2augment)
+head(logm2augment)
+```
+
+If you examine the augmented data set, since we asked for the "response" type of prediction, our .fitted values are the probability estimated for each restaurant to have ended up in the Michelin guide. (You can use the predict function too, but be sure you understand what options it has.)
+
+```{r}
+favstats(~ .fitted, data = logm2augment)
+```
+
+If we wanted to make binary predictions for each restaurant, we could round to the nearest integer (i.e., any probability over 0.50 would imply the restaurant would be predicted to be in the Michelin guide).
+
+```{r}
+logm2augment <- mutate(logm2augment, binprediction = round(.fitted, 0))
+tally(~ binprediction, data = logm2augment)
+```
+
+Hmm. 41% of restaurants were implied to be in the guide, based on using the 50% cutoff.
+
+```{r}
+68/164
+```
+
+How does that reflect reality?
+
+```{r}
+tally(~ InMichelin, data = logm2augment)
+74/164
+```
+
+Really, about 45% ended up in the guide, so at least we aren't predicting a very different value from that.
+
+It is possible to find the fitted values so skewed that say, none of them are over 50%, or maybe only 8% are over 50% but the data shows 20% in that group. We can use the data's percentage to alter our cutoff (this is done more appropriately with a training/test data set, which we will discuss in a few weeks, but here it is for illustration).
+
+If we made no adjustment, this is what we would get:
+
+```{r}
+with(logm2augment, table(InMichelin, binprediction))
+correct <- (79+57)/164; correct
+```
+
+This table is called a confusion matrix. It's often used in classification (response variable is categorical) problems. The truth is often in the rows (could be flipped though), so you can look across a row and see how many observations of a particular type were misclassified. Here, we see 11 0's were classified as 1's, while 17 1's were classified as 0s. The correct classifications are on the diagonal, and if you compute that % of the total, that's the accuracy.
+
+We are almost 83% correct using the 50% cutoff. Does adjusting the fraction in the guide up help? We know that roughly 45% were in the guide, and that means 55% were not.
+
+```{r}
+with(logm2augment, quantile(.fitted, 1-0.45)) #get 55th quantile
+# Split predictions based on quantile, not just using 0.5
+logm2augment <- mutate(logm2augment, binprediction2 = as.numeric(.fitted > 0.4655586))
+tally(~ binprediction2, data = logm2augment)
+```
+
+Now the confusion matrix looks like:
+
+```{r}
+with(logm2augment, table(InMichelin, binprediction2))
+correct2 <- (79+63)/164; correct2
+```
+
+We improved a little bit here - up to 86.5 percent accuracy. If the discrepancy between fraction predicted to be in group 1 versus the observed fraction is greater, you might improve more using a similar adjustment.
+
+How else can we check how the model is doing?
+
+You may or may not have seen more ideas about this in STAT 230 or other courses. Any thoughts?
+
+\vspace{1in}
+
+One idea is we can check observation concordance. It's sort of an internal consistency measure. Concordance looks at the observations in the data set in success-failure pairs. For each pair, it looks to see if the success observation has a higher predicted probability of being a success than the failure observation. If yes, the pair is called concordant (which is what we want, if the model is consistent). Otherwise, it can be discordant, or there can be a tie.
+
+If the model is like a coin toss (i.e. not great), concordance will be around 50%. Better fitting models have concordance values that are larger (highest is 100%).
+
+```{r}
+#***EXAMPLE FUNCTION TO CALCULATE CONCORDANCE AND DISCORDANCE***#
+Association <- function(model)
+{
+  Con_Dis_Data <- cbind(model$y, model$fitted.values)
+  ones <- Con_Dis_Data[Con_Dis_Data[, 1] == 1, ]
+  zeros <- Con_Dis_Data[Con_Dis_Data[, 1] == 0, ]
+  conc <- matrix(0, dim(zeros)[1], dim(ones)[1])
+  disc <- matrix(0, dim(zeros)[1], dim(ones)[1])
+  ties <- matrix(0, dim(zeros)[1], dim(ones)[1])
+    for (j in 1:dim(zeros)[1])
+    {
+      for (i in 1:dim(ones)[1])
+      {
+        if (ones[i, 2] > zeros[j, 2])
+        {conc[j, i] = 1}
+        else if (ones[i, 2] < zeros[j, 2])
+        {disc[j, i] = 1}
+        else if (ones[i, 2] == zeros[j, 2])
+        {ties[j, i] = 1}
+      }
+    }
+  Pairs <- dim(zeros)[1]*dim(ones)[1]
+  PercentConcordance <- (sum(conc)/Pairs)*100
+  PercentDiscordance <- (sum(disc)/Pairs)*100
+  PercentTied <- (sum(ties)/Pairs)*100
+  return(list("Percent Concordance" = PercentConcordance, 
+              "Percent Discordance" = PercentDiscordance,
+              "Percent Tied" = PercentTied, "Pairs" = Pairs))
+}
+#***FUNCTION TO CALCULATE CONCORDANCE AND DISCORDANCE ENDS***#
+```
+
+This function will calculate concordance and discordance values. Depending on the number of observations, this computation can take a while. Here, with 164 observations, it is fairly fast.
+
+```{r}
+Association(logm2)
+```
+
+The model concordance is 90%. We'd get 50% with a coin flip. This indicates the model fits very well.
+
+There are also pseudo-Rsquared type statistics out there that can be used to help assess performance for this type of model. These all have different ranges, etc. so you should explore the help documentation to understand what you are seeing.
+
+```{r}
+PseudoR2(logm2, "all")
+```
+
+To get back in the swing of doing a data analysis, our next activity is you practicing these ideas on a different data set.

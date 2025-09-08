@@ -29,3 +29,48 @@ Another student wants to play the game and win the encounter, and is looking for
 Your task is to examine the data set and perform a relevant analysis to assist the students (predict the outcome using the input variables). Provide relevant interpretations of your findings for the student who wants to win the encounter as well as for the student who has written the game.
 
 ## Analysis
+
+## Exploratory Data Analysis
+
+```{r}
+glimpse(csgame)
+```
+
+```{r}
+ggplot(csgame, aes(x = as.factor(Outcome), y=Dexterity )) +
+  geom_boxplot() +
+  labs(x = "Victory?")
+```
+
+```{r}
+ggplot(csgame, aes(x = as.factor(Outcome), y=Charisma )) +
+  geom_boxplot() +
+  labs(x = "Victory?")
+```
+
+```{r}
+ggplot(csgame, aes(x = as.factor(Outcome), y=ZoneLevel )) +
+  geom_boxplot() +
+  labs(x = "Victory?")
+```
+
+```{r}
+ggplot(csgame, aes(x = as.factor(Outcome), y=Intelligence )) +
+  geom_boxplot() +
+  labs(x = "Victory?")
+
+```
+
+```{r}
+csgame <- mutate(csgame, logDefense = log(BaseDefense))
+
+#Fit model and get basic output
+logm <- glm(OutcomeNum  ~ BaseAttack + logDefense + Charisma + Constitution + Dexterity + Intelligence + MagicDefense, data = csgame, family = binomial(logit))
+msummary(logm)
+
+# Show other tests and output
+lrtest(logm)
+exp(confint(logm))
+# Do you know what augment does?
+logmaugment <- augment(logm, type.predict = "response")
+```
