@@ -1,0 +1,120 @@
+---
+title: "Stat 231 - Review in Stat 495"
+format: pdf
+editor: visual
+---
+
+```{r}
+#| include: false
+
+library(mosaic)
+library(tidyverse)
+```
+
+We'll use the *iris* dataset in R to review a few concepts from Stat 231.
+
+```{r}
+data(iris)
+names(iris)
+```
+
+For these questions, the idea is to think and write down your answer BEFORE trying it out.
+
+> How would you adjust the code below to make the points all the same color, but have lines colored by Species, and make them fitted linear regressions instead of smoothed lines, and have the SEs for the fits?
+
+```{r}
+iris |>
+  ggplot(aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
+  geom_point(alpha = 0.7) +
+  geom_smooth(se = FALSE, linewidth = 0.8) +
+  labs(
+    title = "Sepal length vs width by Species",
+    x = "Sepal length (mm)", y = "Sepal width (mm)", color = "Species") 
+```
+
+What would you need to change?
+
+Now go try it. 
+
+```{r}
+#Copy code over and edit
+```
+
+
+> How would you adjust the code below to make the boxplots uncolored (black lines), but all the points colored by Species, with a legend about color? 
+
+```{r}
+iris |>
+  ggplot(aes(x = Species, y = Petal.Length, fill = Species)) +
+  geom_boxplot() +
+  geom_jitter(width = 0.15, alpha = 0.6) +
+  guides(fill = "none") +
+  labs(title = "Petal length by species", x = NULL, y = "Petal length (mm)") 
+```
+
+What would you need to change?
+
+Now go try it. 
+
+```{r}
+#Copy code over and edit
+```
+
+> What suggestions do you have for cleaning up the code below and the resulting table?
+
+```{r}
+iris |> group_by(Species) |> summarize(AVGSL = mean(Sepal.Length), AVGSW = mean(Sepal.Width), Count = n())
+```
+
+Think: What does the code look like initially to a reader? In the table, would a reader understand what is being shown? How do we make the table look more professional?
+
+What would you do?
+
+Try it. Adjust the code below to improve it and the resulting table. 
+
+```{r}
+iris |> group_by(Species) |> summarize(AVGSL = mean(Sepal.Length), AVGSW = mean(Sepal.Width), Count = n())
+```
+
+> geom_hex() is a geom for ggplot2 in a separate library/package (that you likely need to install). Install and load the appropriate library. To do this, you'll need to identify the appropriate library. How will you do that? If you wanted to learn more about geom_hex(), what are three ways you could do that? Write down your responses.
+
+
+
+
+
+```{r}
+# chunk to do the install and load
+```
+
+> Demonstrate you can use geom_hex() in an appropriate plot on the iris data set. Make a plot, including appropriate labels and a title. (The idea here is to have you apply a (hopefully) new function quickly.)
+
+```{r}
+# your plot goes here
+```
+
+
+> What output/objects would you expect from the following wrangling code? Write down your thoughts BEFORE trying it. Be sure you can identify what happens at each step of the wrangling. What is generated at the end? Will anything be printed to the screen? (If you are looking at the pdf, eval is set to false.) 
+
+List your thoughts.
+
+Now go try it. 
+
+```{r}
+#| eval: false
+iris2 <- iris |> 
+  filter(Species != "setosa", 
+         Petal.Length > 4,
+         Petal.Width < 1.7) |>
+  select(Species, Sepal.Length, Sepal.Width) |>
+  group_by(Species) |>
+  summarize(medianLength = median(Sepal.Length),
+            medianWidth = median(Sepal.Width),
+            count = n())
+```
+
+
+
+
+
+
+
