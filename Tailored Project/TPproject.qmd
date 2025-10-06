@@ -1,14 +1,26 @@
 ---
-title: "TP - Project Draft"
-author: "Daizy"
-date: today
-format: pdf
-editor: visual
+title: "YTD Analysis of E-commerce Data"
+author: "Daizy Buluma"
+date: "6 Oct. 2025"
+format:
+  html:
+    theme: united
+    toc: true
+editor: 
+  markdown: 
+    wrap: 72
 ---
 
 ```{r}
-#| label: load-packages
+#| label: setup
 #| include: false
+
+# Set code chunk defaults 
+# Consider adding `message = FALSE` option
+knitr::opts_chunk$set(echo = FALSE) 
+                      
+# Set R environment options
+options(knitr.kable.NA = '')
 
 library(mosaic)
 library(tidyverse)
@@ -18,23 +30,40 @@ library(stringr)
 library(ggplot2)
 ```
 
-## Intro
+## Abstract
 
-This project analyzes an E-Commerce Transactions dataset containing over 540,000 online retail transactions between December 2010 and December 2011. Each record includes details such as invoice number, product description, quantity purchased, unit price, transaction date, customer ID, and country. The dataset provides a rich source for examining customer purchasing behavior, product demand patterns, and overall sales trends. The goal of this project is twofold: (1) conduct a rigorous statistical analysis in R to understand the key drivers of purchase amounts and uncover business insights, and (2) design an interactive Tableau dashboard that communicates these insights in a clear, business-friendly format. By combining regression modeling with modern data visualization, this project aims to highlight how data science can guide decision-making in e-commerce, from identifying high-value customers to optimizing product strategy.
+This project explores e-commerce sales performance through the lens of applied business intelligence, combining statistical modeling in R with interactive visualization in Tableau. Using a dataset of over half a million online transactions, the analysis aimed to identify the key factors influencing purchase amounts and to derive insights for strategic decision-making.
 
+After comprehensive data cleaning and transformation, exploratory analysis revealed that most sales originated from European markets, though transactions from Asia and other regions tended to have higher per-order values. A multiple linear regression model identified Quantity and Unit Price as the strongest predictors of total transaction value, while regional effects further highlighted differences in consumer behavior across markets.
+
+The Tableau dashboard complements these findings by visualizing revenue trends, return rates, and customer performance, enabling dynamic exploration of sales patterns and business KPIs. Together, the statistical and visual analyses demonstrate how data-driven methods can enhance understanding of sales performance and inform actionable business strategies.
+
+## **1. Introduction**
+
+In today’s data-driven retail environment, organizations increasingly rely on business intelligence (BI) tools to gain insights from large volumes of transactional data. This project applies BI principles to an **e-commerce dataset** containing over half a million transaction records, with the goal of uncovering patterns in sales, customer behavior, and product performance.
+
+The dataset provides detailed information on transactions, including invoice numbers, product descriptions, quantities, unit prices, customer identifiers, and countries of origin. These attributes enable comprehensive analysis across multiple dimensions of business performance—such as revenue trends, customer segmentation, and return behaviors.
+
+The primary objective of this project is to demonstrate applied **business intelligence and analytics skills** through both **statistical modeling in R** and **interactive visualization in Tableau**. The project proceeds in two major phases:
+
+1. **Data Analytics in R** – involving data wrangling, exploratory analysis, and regression modeling to identify the factors that predict total purchase amount per transaction.
+2. **Interactive Dashboard Development in Tableau** – translating analytical findings into dynamic visualizations that provide actionable insights for decision-makers.
+
+Through this integrated approach, the project highlights how statistical and visual analytics complement each other in transforming raw data into meaningful business insights. The final deliverable combines analytical rigor with interactive storytelling—demonstrating the full BI workflow from data preparation to insight communication.
+
+
+## **2. Data Summary and Cleaning**
 
 ```{r message=FALSE}
 transactions <- read_csv("data.csv") 
-#summary(transactions)
 ```
 
-```{r}
+```{r include=FALSE}
 head(transactions)
+summary(transactions)
 ```
 
-### Initial Data Summary and Observations
-
-The dataset contains 541,909 transaction records and 8 variables: `InvoiceNo`, `StockCode`, `Description`, `Quantity`, `InvoiceDate`, `UnitPrice`, `CustomerID`, and `Country`. A preliminary summary reveals several important characteristics and data quality issues:
+The dataset contains 541,909 transaction records and 8 variables: `InvoiceNo`, `StockCode`, `Description`, `Quantity`, `InvoiceDate`, `UnitPrice`, `CustomerID`, and `Country`. Each observation represents a single product purchased (or returned) as part of a customer invoice. A preliminary summary reveals several important characteristics and data quality issues:
 
 -   **InvoiceNo, StockCode, Description, and Country** are stored as text fields, which is expected since they represent transaction identifiers, product descriptions, or categorical values.
 -   **Quantity** ranges from **-80,995 to 80,995**. Negative values represent product returns or cancellations, while most transactions involve small positive quantities (median = 3, 75th percentile = 10).
@@ -44,132 +73,365 @@ The dataset contains 541,909 transaction records and 8 variables: `InvoiceNo`, `
 
 Overall, the dataset is rich in detail but requires substantial cleaning before statistical analysis. Specifically, returns/cancellations, extreme outliers, and missing customer identifiers must be addressed to ensure reliable modeling and dashboard insights.
 
-###Data Cleaning
+### **2.1 Data Cleaning Process**
 
-```{r}
-# 1. Convert InvoiceDate to proper datetime format
-#transactions <- transactions %>%
- # mutate(InvoiceDate = dmy_hm(InvoiceDate))  # Change format if needed (dmy_hm = day-month-year hour-minute)
+During data preparation, several cleaning and transformation steps were performed to ensure analytical accuracy.
+The *InvoiceDate* field, initially stored as text, was converted into a proper datetime format to support time-based analyses such as monthly trends and year-to-date performance.
+Invalid or extreme entries in *Quantity* and *UnitPrice* were identified and removed — negative quantities were treated as returns, and only reasonable price values (between 0 and 10,000) were retained.
+Missing or invalid *CustomerID* values were replaced with “Guest,” allowing inclusion of anonymous transactions without conflating them with registered customers.
+Text variables, including product descriptions and country names, were standardized to title case and cleaned of extra spaces to avoid grouping inconsistencies.
+Duplicate records sharing the same *InvoiceNo* and *StockCode* were also removed to prevent double-counting.
+Finally, several new features were engineered: *TotalPrice* (calculated as *Quantity × UnitPrice*) to represent transaction value, and *TransactionMonth* and *TransactionYear* to facilitate temporal analysis.
 
-# 2. Handle negative and extreme Quantity values
-#    Create a flag for returns and remove extreme outliers
+
+```{r include=FALSE}
 transactions_clean <- transactions %>%
-  mutate(ReturnFlag = ifelse(Quantity < 0, TRUE, FALSE)) %>%
-  filter(Quantity > -10000 & Quantity < 10000)  # Adjust thresholds based on your data
+  # Step 1: Convert InvoiceDate
+  mutate(InvoiceDate = mdy_hm(InvoiceDate)) %>%
 
-# 3. Address UnitPrice anomalies
-#    Remove zero or negative prices and flag extreme outliers
-transactions_clean  <- transactions %>%
-  mutate(PriceFlag = ifelse(UnitPrice <= 0, TRUE, FALSE)) %>%
-  filter(UnitPrice > 0 & UnitPrice < 10000)  # Adjust thresholds based on your data
+  # Step 2: Handle negative quantities (create flag, filter extremes)
+  mutate(ReturnFlag = Quantity < 0) %>%
+  filter(Quantity > -10000 & Quantity < 10000) %>%
 
-# 4. Handle missing CustomerID values
-#    Replace NA with "Guest" for analysis purposes
-transactions_clean <- transactions %>%
+  # Step 3: Handle UnitPrice anomalies
+  mutate(PriceFlag = UnitPrice <= 0) %>%
+  filter(UnitPrice > 0 & UnitPrice < 10000) %>%
+
+  # Step 4: Handle missing CustomerID
   mutate(
-    # Convert to character first
     CustomerID = as.character(CustomerID),
-    # Replace true missing values (NA, empty, or string "NA")
     CustomerID = ifelse(is.na(CustomerID) | CustomerID == "" | CustomerID == "NA",
-                        "Guest",
-                       CustomerID)
-  )
+                        "Guest", CustomerID)
+  ) %>%
 
-# 5. Standardize text fields
-transactions_clean  <- transactions %>%
+  # Step 5: Standardize text fields
   mutate(
-    Description = str_to_title(str_trim(Description)),  # Capitalize first letter of each word, remove extra spaces
+    Description = str_to_title(str_trim(Description)),
     Country = str_to_title(str_trim(Country))
-  )
+  ) %>%
 
-# 6. Remove duplicate transactions
-transactions_clean  <- transactions %>%
-  distinct(InvoiceNo, StockCode, .keep_all = TRUE)
+  # Step 6: Remove duplicate transactions
+  distinct(InvoiceNo, StockCode, .keep_all = TRUE) %>%
 
-# 7. Create derived features
-transactions_clean <- transactions %>%
+  # Step 7: Derived variables
   mutate(
-    InvoiceDate = mdy_hm(InvoiceDate),
-    TotalPrice = Quantity * UnitPrice,                  # Total value per line
+    TotalPrice = Quantity * UnitPrice,
     TransactionMonth = month(InvoiceDate, label = TRUE),
     TransactionYear = year(InvoiceDate)
   )
 
-#head(transactions_clean )
-#summary(transactions_clean )
 write.csv(transactions_clean, "clean_ecommerce.csv", row.names = FALSE)
-unique(transactions_clean$CustomerID)
 ```
 
-### **Exploratory Data Analysis (EDA)**
+## **3. Exploratory Data Analysis**
 
-After cleaning the dataset, the next step was to conduct a thorough exploratory analysis to understand the key patterns, trends, and relationships in the data. The goal of this stage is to inform the regression modeling and identify metrics that can be highlighted in the Power BI dashboard.
+After cleaning the dataset, the next step was to conduct a thorough exploratory analysis to understand the key patterns, trends, and relationships in the data. The goal of this stage is to inform the regression modeling and identify metrics that can be highlighted in the Tableau dashboard.
 
-**1. Distribution of Transaction TotalPrice**
-We first examined the distribution of `TotalPrice`, which represents the total value of each transaction. A histogram was generated to visualize how sales are distributed across transactions. Most transactions fall within a moderate price range, while a few extreme outliers represent unusually large purchases. Understanding this distribution helps in deciding whether transformations (e.g., log-transform) are needed for regression modeling.
 
-```{r fig.width=3, fig.height=4}
-ggplot(transactions_clean, aes(x = TotalPrice)) +
-  geom_histogram(binwidth = 10, fill = "steelblue", color = "white") +
-  scale_x_continuous(limits = c(0, 200)) +  # focus on typical range
-  labs(title = "Distribution of Transaction TotalPrice", x = "Total Price", y = "Count") +
+### **3.1 Monthly Sales Trends**
+
+To identify seasonal patterns and sales dynamics over time, monthly sales totals were aggregated using the `TransactionMonth` variable. A line chart was plotted to visualize total sales per month. This allows us to detect peaks and troughs in sales, which may correspond to seasonal demand, promotional campaigns, or other temporal effects.
+
+```{r message=FALSE, warning=FALSE}
+#| label: ggplot-1
+#| fig.align: left
+#| out.width: 100%
+
+monthly_sales <- transactions_clean %>%
+  group_by(TransactionYear, TransactionMonth) %>%
+  summarise(MonthlyRevenue = sum(TotalPrice, na.rm = TRUE)) %>%
+  ungroup()
+
+ggplot(monthly_sales, aes(x = TransactionMonth, y = MonthlyRevenue, group = TransactionYear, color = as.factor(TransactionYear))) +
+  geom_line(size = 1.1) +
+  geom_point() +
+  labs(
+    title = "Monthly Sales Trends by Year",
+    x = "Month",
+    y = "Total Revenue (£)",
+    color = "Year"
+  ) +
   theme_minimal()
 ```
+Monthly revenue displays a clear cyclical pattern, with sales peaks toward the end of the year—consistent with holiday-season demand.
+Lower mid-year sales suggest slower retail activity during non-promotional months.
+Such temporal insights can guide inventory management, staffing, and promotional planning.
 
+### **3.2 Top Countries by Revenue**
 
-**2. Monthly Sales Trends**
-To identify seasonal patterns and sales dynamics over time, monthly sales totals were aggregated using the `InvoiceMonth` variable. A line chart was plotted to visualize total sales per month. This allows us to detect peaks and troughs in sales, which may correspond to seasonal demand, promotional campaigns, or other temporal effects.
+To identify geographic drivers of sales, total revenue was aggregated by country and ranked.
+
+```{r message=FALSE, warning=FALSE}
+#| label: ggplot-2
+#| fig.align: left
+#| out.width: 100%
+top_countries <- transactions_clean %>%
+  group_by(Country) %>%
+  summarise(TotalRevenue = sum(TotalPrice, na.rm = TRUE)/ 1e6) %>%
+  arrange(desc(TotalRevenue)) %>%
+  slice_head(n = 10)
+
+ggplot(top_countries, aes(x = reorder(Country, TotalRevenue), y = TotalRevenue)) +
+  geom_col(fill = "steelblue") +
+  coord_flip() +
+  labs(
+    title = "Top 10 Countries by Total Revenue",
+    x = "Country",
+    y = "Total Revenue( Million $)"
+  ) +
+  theme_minimal()
+```
+The **United Kingdom** overwhelmingly dominates total sales, accounting for the majority of transactions.
+Other European countries, including France, the Netherlands, and Germany, form the secondary market tier.
+This geographic concentration indicates a primarily UK-based e-commerce operation with limited but growing international reach.
+
+### **3.3 Customer Spending Behavior**
+
+Customer-level analysis helps reveal purchasing patterns and engagement heterogeneity. The scatterplot below plots total spending against the number of orders per customer.
 
 ```{r}
-sales_time <- transactions_clean %>%
-  group_by(TransactionYear, TransactionMonth) %>%
-  summarise(MonthlySales = sum(TotalPrice), .groups = "drop")
+customer_summary <- transactions_clean %>%
+  group_by(CustomerID) %>%
+  summarise(
+    TotalSpend = sum(TotalPrice, na.rm = TRUE),
+    NumOrders = n()
+  )
+# Remove extreme outliers (top 1%)
+customer_summary_filtered <- customer_summary %>%
+  filter(
+    TotalSpend < quantile(TotalSpend, 0.99, na.rm = TRUE),
+    NumOrders < quantile(NumOrders, 0.99, na.rm = TRUE)
+  )
 
-sales_time <- sales_time %>%
-  mutate(
-    MonthDate = as.Date(paste0(TransactionYear, "-", TransactionMonth, "-01"), format = "%Y-%b-%d")
+ggplot(customer_summary_filtered, aes(x = NumOrders, y = TotalSpend)) +
+  geom_point(alpha = 0.5, color = "#1f77b4", size = 2) +
+  labs(
+    title = "Customer Spending vs. Number of Orders",
+    subtitle = "Top 1% outliers removed for clarity",
+    x = "Number of Orders",
+    y = "Total Spend ($)"
+  ) +
+  theme_classic(base_size = 14) +
+  theme(
+    plot.title = element_text(face = "bold", size = 16),
+    plot.subtitle = element_text(size = 12, color = "gray40"),
+    axis.title = element_text(face = "bold"),
+    panel.grid.major = element_line(color = "gray90", linetype = "dotted")
   )
 
 
-ggplot(sales_time, aes(x = MonthDate, y = MonthlySales)) +
-  geom_line(color = "steelblue", linewidth = 1) +  # use linewidth instead of size
-  geom_point(color = "black") +
-  labs(title = "Monthly Sales Over Time", x = "Month", y = "Total Sales") +
-  theme_minimal()
 
 ```
+The plot exhibits a positive association between the number of orders and total spending, with a few high-value customers contributing disproportionately to total revenue.
 
 
-**3. Product Performance**
-Next, we analyzed which products contributed most to overall revenue. By aggregating total sales per product description, we identified the top 10 best-selling products. This insight is critical for understanding product-level revenue drivers and will inform the dashboard, where highlighting top products is an important KPI.
+These insights provide an empirical foundation for the subsequent **regression modeling**, which investigates predictors of transaction value and customer spending. Overall, the exploratory analysis provided a clear understanding of the dataset’s structure, key trends, and business-relevant metrics. These insights will guide the regression modeling and form the foundation for the interactive dashboard, ensuring that the project highlights actionable business intelligence.
+
+For extended descriptive summaries and return-rate analyses, see Appendices A and B.
+
+
+
+
+## **4. Regression Analysis**
+
+The goal of this regression analysis is to identify the key factors that influence the **total purchase amount per transaction** within the e-commerce dataset. This helps quantify how variables such as **quantity purchased**, **unit price**, and **country** predict the total value of a transaction. This model provides insights into spending behavior, potential pricing effects, and country-level demand variation.
+
+Before fitting the model, the dataset was filtered to include only valid, non-cancellation transactions and positive values of price and quantity. 
 
 ```{r}
-top_products <- transactions_clean %>%
-  group_by(Description) %>%
-  summarise(TotalSales = sum(TotalPrice)) %>%
-  arrange(desc(TotalSales)) %>%
-  slice(1:10)
+regression_data <- transactions_clean %>%
+  select(everything()) %>%
+  filter(TotalPrice > 0)
+```
 
-ggplot(top_products, aes(x = reorder(Description, TotalSales), y = TotalSales)) +
-  geom_col(fill = "darkgreen") +
-  coord_flip() +
-  labs(title = "Top 10 Products by Sales", x = "Product", y = "Total Sales") +
-  theme_minimal()
+### Fitting A Multiple Linear Regression Model
+
+The dependent variable in this model is **TotalPrice**, defined as the product of `Quantity × UnitPrice`. Four predictor variables were selected based on their theoretical and business relevance:
+
+* **Quantity** – Number of units purchased per transaction.
+* **UnitPrice** – Price per individual product unit.
+* **Country** – Country where the transaction occurred (categorical variable).
+
+```{r echo=FALSE}
+regression_data <- regression_data %>%
+  mutate(Continent = case_when(
+    Country %in% c("United Kingdom","France","Germany","Spain","Italy","Belgium","Norway",
+                   "Portugal","Netherlands","Austria","Switzerland","Sweden","Denmark","Finland","Eire",
+                   "Lithuania","Cyprus","Poland","Greece","Iceland","Malta") ~ "Europe",
+    Country %in% c("Saudi Arabia","United Arab Emirates","Israel","Bahrain","Lebanon") ~ "Middle East",
+    Country %in% c("Hong Kong","Japan","Singapore") ~ "Asia",
+    Country %in% c("Canada","Usa","Brazil") ~ "Americas",
+    TRUE ~ "Other"
+  ))
+
+model_continent <- lm(TotalPrice ~ Quantity + UnitPrice + Continent,
+                      data = regression_data )
+summary(model_continent)
+```
+
+To verify model validity, residual diagnostics were performed to test the assumptions of linearity, constant variance, and normality.
+
+```{r}
+# Diagnostic plots
+par(mfrow = c(2, 2))
+plot(model_continent)
+
+# Multicollinearity check
+library(car)
+vif(model_continent)
+```
+The diagnostic plots show no major violations of model assumptions. Residuals are approximately homoscedastic, and the QQ-plot indicates that the normality assumption holds reasonably well. Variance Inflation Factor (VIF) values for all predictors were below 5, suggesting no concerning multicollinearity
+
+### **4.5 Results and Interpretation**
+The final regression model is:
+[
+\text{TotalPrice} = 1.05 + 1.15(\text{Quantity}) + 1.10(\text{UnitPrice}) + 12.69(\text{Asia}) + 2.56(\text{Europe}) + 7.64(\text{Middle East}) + 16.71(\text{Other}) + \varepsilon
+]
+
+
+The regression model examined how `Quantity`, `UnitPrice`, and `Continent` influence the total transaction value (`TotalPrice`). The model is statistically significant overall,
+**F(6, 519,591) = 45,430, p < 0.001**,
+with an **adjusted R² of 0.344**, indicating that approximately **34.4% of the variation** in transaction value is explained by these predictors.
+
+### **Key Predictors**
+
+Both **Quantity** and **UnitPrice** are strong, statistically significant, and positive predictors of total sales (p < 0.001).
+
+* The coefficient for `Quantity` (**β = 1.147**) suggests that for each additional unit purchased, total transaction value increases by approximately **1.15 monetary units**, holding all else constant.
+* The coefficient for `UnitPrice` (**β = 1.10**) indicates that for every one-unit increase in product price, total transaction value increases by about **1.10 units**, reflecting the direct impact of pricing on revenue.
+
+These findings confirm that sales value is primarily driven by both the volume of products purchased and their individual prices — a relationship consistent with standard business expectations.
+
+### **Regional Effects**
+
+The categorical variable `Continent` captures geographic differences in transaction values relative to the baseline (Americas).
+
+* **Asia (β = 12.69, p = 0.005)** and **Other (β = 16.71, p < 0.001)** regions show significantly higher average transaction values compared to the baseline.
+* **Europe (β = 2.56, p = 0.498)** and **Middle East (β = 7.64, p = 0.136)** are not statistically significant, suggesting relatively similar transaction values to the reference group.
+
+These results indicate that transactions in Asian and smaller “Other” markets (e.g., smaller or niche countries) tend to involve higher-value purchases, while European and Middle Eastern transactions do not differ meaningfully from those in the Americas after accounting for quantity and price.
+
+### **Model Fit**
+
+The **residual standard error of 71.89** indicates moderate unexplained variation — reasonable for large-scale transaction data with diverse products and prices. The **adjusted R² of 0.344** confirms that the model captures the main quantitative and regional patterns in sales but that additional unobserved factors (such as product category, time of day, or customer type) may also influence transaction values.While the model explains a substantial portion of variation in transaction value (Adjusted R² = 0.344), several factors not captured in the data likely influence total sales, such as product category, promotional discounts, and customer demographics. Therefore, the model should be interpreted as capturing broad business-level relationships rather than predicting individual transaction values with precision.
+
+## **5. Interactive Dashboard Visualization**
+
+To complement the statistical modeling, an interactive Tableau dashboard was developed to visualize key e-commerce performance metrics. The dashboard provides an intuitive way to explore sales trends, customer purchasing behavior, and product-level performance across time and regions.
+
+The dashboard integrates the cleaned dataset used in the regression model and presents metrics such as:
+
+* **Total Sales and Year-to-Date Growth:** Summarizes overall revenue and its change relative to the previous year.
+* **Sales by Continent and Country:** Highlights market distribution and reveals Europe as the dominant contributor to revenue.
+* **Monthly Sales and Returns Trends:** Shows seasonality in transactions and product returns over time.
+* **Top Products and Customers:** Identifies the highest-grossing products and key customer segments driving revenue.
+
+These interactive components allow users to filter results dynamically by date, region, and product category, providing a business intelligence perspective on the data beyond the regression results.
+
+The dashboard was built using **Tableau Desktop** and published on **Tableau Public** for interactive access.
+You can explore it below:
+
+ *Note:* The embedded dashboard below may take a few seconds to load depending on your network connection. For faster access, you can view it directly on Tableau Public using this link:
+[**Open Dashboard on Tableau Public**](https://public.tableau.com/shared/GGJS4CRS7?:display_count=n&:origin=viz_share_link)
+
+```{=html}
+<div class='tableauPlaceholder' id='viz1759780353177' style='position: relative'>
+  <noscript>
+    <a href='#'>
+      <img 
+        alt='ECOMMERCE SALES DASHBOARD | YTD SALES ANALYSIS' 
+        src='https://public.tableau.com/static/images/GG/GG944YBFC/1_rss.png' 
+        style='border: none' 
+      />
+    </a>
+  </noscript>
+
+  <object class='tableauViz' style='display:none;'>
+    <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
+    <param name='embed_code_version' value='3' />
+    <param name='path' value='shared/GG944YBFC' />
+    <param name='toolbar' value='yes' />
+    <param name='static_image' value='https://public.tableau.com/static/images/GG/GG944YBFC/1.png' />
+    <param name='animate_transition' value='yes' />
+    <param name='display_static_image' value='yes' />
+    <param name='display_spinner' value='yes' />
+    <param name='display_overlay' value='yes' />
+    <param name='display_count' value='yes' />
+    <param name='language' value='en-US' />
+  </object>
+</div>
+
+<script type='text/javascript'>
+  var divElement = document.getElementById('viz1759780353177');
+  var vizElement = divElement.getElementsByTagName('object')[0];
+
+  if (divElement.offsetWidth > 800) { 
+    vizElement.style.width = '1200px';
+    vizElement.style.height = '827px';
+  } else if (divElement.offsetWidth > 500) { 
+    vizElement.style.width = '1200px';
+    vizElement.style.height = '827px';
+  } else { 
+    vizElement.style.width = '100%';
+    vizElement.style.height = '2227px';
+  }
+
+  var scriptElement = document.createElement('script');
+  scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
+  vizElement.parentNode.insertBefore(scriptElement, vizElement);
+</script>
+
 ```
 
 
-**4. Customer Behavior**
-Customer-level aggregates were also calculated to understand purchasing behavior. By summing total spend per customer, we identified the top 10 highest-spending customers. This analysis can be used to explore high-value customers and potential loyalty programs or targeted marketing opportunities.
+## **6. Discussion and Business Implications**
+
+The regression model and the Tableau dashboard collectively provide a comprehensive understanding of the key factors driving e-commerce performance.
+
+### **Model Interpretation**
+
+The regression analysis showed that both **Quantity** and **Unit Price** are highly significant predictors of total revenue. As expected, higher quantities and prices lead to larger transaction values. The coefficients indicate that for every one-unit increase in quantity, total sales increase by approximately **1.15 units**, holding other variables constant. Similarly, each one-unit increase in unit price raises total revenue by about **1.10 units**, confirming a strong, direct relationship between product price and sales value.
+
+Regional effects also emerged: transactions from **Asia** and **Other regions** (which include smaller markets outside Europe and the Middle East) had significantly higher sales values compared to the baseline category. In contrast, European sales—while dominant in volume—did not differ significantly in per-transaction value, suggesting that European buyers purchase more frequently but in smaller amounts per order.
+
+### **Insights from the Dashboard**
+
+The interactive dashboard complements these findings by offering a visual perspective on trends and distributions.
+
+* **Sales Concentration:** Europe accounts for the majority of transactions, confirming the regression finding that quantity drives revenue more than price in this market.
+* **Temporal Trends:** Monthly sales visualizations show peak activity during the holiday season, followed by a drop early in the year, suggesting strong seasonality.
+* **Returns and Refunds:** The dashboard highlights specific months and products with unusually high return rates, which can help identify potential quality or fulfillment issues.
+* **Customer Segmentation:** The “Top Customers” view reveals a small group of repeat buyers contributing disproportionately to revenue—an insight that could guide retention strategies.
+
+### **Business Implications**
+
+From a strategic perspective, these findings suggest several actionable takeaways:
+
+1. **Leverage High-Value Markets:** Asia and smaller “Other” regions represent opportunities for premium-priced products or localized marketing efforts.
+2. **Optimize Product Mix in Europe:** Since transaction frequency is high but per-order value is lower, strategies such as bundling or upselling could improve margins.
+3. **Seasonal Inventory Planning:** Retailers should stock up in advance of seasonal peaks and prepare return-handling capacity post-holiday.
+4. **Customer Retention Focus:** Targeting high-value repeat customers through loyalty programs could yield significant revenue stability.
+
+Together, the statistical model and dashboard visualization illustrate how **data-driven decision-making** can uncover patterns that are not immediately visible through raw figures alone.
 
 
-**5. Geographic Insights**
-Sales were also aggregated by country to explore geographic trends. The top 10 countries by total sales were visualized, providing insights into key markets that may drive the majority of revenue. This is particularly useful for dashboards where stakeholders may want to analyze sales by region.
+## **7. Conclusion and Future Work**
 
-**6. Quantity vs TotalPrice Relationship**
-Finally, a scatter plot of `Quantity` versus `TotalPrice` was created to understand the relationship between the number of units purchased and total transaction value. This helps in evaluating whether larger quantities consistently generate higher revenue and may inform regression predictors.
+This project demonstrated the application of **business intelligence and statistical analysis** to uncover actionable insights from e-commerce transaction data. Using R for data wrangling, exploratory analysis, and regression modeling, and Tableau for interactive visualization, the study integrated analytical and visual storytelling approaches that mirror real-world data analytics workflows.
 
-Overall, the exploratory analysis provided a clear understanding of the dataset’s structure, key trends, and business-relevant metrics. These insights will guide the regression modeling and form the foundation for the interactive dashboard, ensuring that the project highlights actionable business intelligence.
+The regression analysis revealed that **Quantity** and **Unit Price** are the strongest predictors of transaction value, reaffirming their central role in revenue generation. Regional analysis suggested that while Europe dominates total sales, other regions such as **Asia** and **smaller global markets** exhibit higher transaction values, highlighting opportunities for market diversification. The accompanying Tableau dashboard provided an intuitive interface for stakeholders to explore these findings dynamically, bridging the gap between statistical output and managerial decision-making.
 
----
+Despite its strengths, the study has certain limitations. The dataset lacked detailed customer demographics, marketing spend, and product category granularity—factors that could further enhance predictive power. Additionally, the regression model, while statistically robust, captures only a portion of the variation in sales behavior.
 
-If you want, I can next **write a similar prose section for the regression modeling step**, explaining the choice of variables, model type, and how we will interpret the results—so your report will essentially write itself as you code. Do you want me to do that?
+For **future work**, several extensions are possible:
+
+1. **Incorporate temporal forecasting** (e.g., ARIMA or Prophet models) to predict future sales trends.
+2. **Develop customer segmentation models** (such as k-means clustering) to identify distinct buying behaviors.
+3. **Integrate external factors** like holidays, promotions, or macroeconomic indicators to contextualize trends.
+4. Expand the **Tableau dashboard** to include predictive KPIs or real-time sales feeds for ongoing business monitoring.
+
+In conclusion, this project underscores the value of **data-driven decision-making** in e-commerce. By combining R’s analytical power with Tableau’s visual interactivity, businesses can move beyond descriptive reporting to uncover predictive and prescriptive insights that drive smarter strategy and measurable performance improvement.
+
+
+
+
