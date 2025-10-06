@@ -1,0 +1,826 @@
+---
+title: "Modeling Process Notes - HOMLR Selected Chapters"
+format: pdf
+editor: visual
+---
+
+```{r, setup, include=FALSE}
+library(mosaic)  
+library(GGally)
+
+# Helper packages
+library(dplyr)     # for data manipulation
+library(ggplot2)   # for awesome graphics
+
+# Modeling process packages
+library(rsample)   # for resampling procedures
+library(caret)     # for resampling and model training
+library(AmesHousing) # for data
+library(recipes) # for chapter 3 and recipes
+
+# Classification packages (for demos)
+library(rpart)
+library(rpart.plot)
+```
+
+These notes cover Hands On Machine Learning with R (Boehmke and Greenwell - BG) Chapter 2 and Chapter 3 (focused on 3.4, 3.5, 3.6 and 3.8), and were originally used for STAT 240 in Spring 2025.
+
+For STAT 495, our focus is on the Chapter 2 content, but some of you may be interested in the Chapter 3 content so I'm leaving those notes here. I have removed the h2o content from them, though, and made some minor other changes/updates for 495.
+
+Note that the BG authors made the code available online and through downloadable files to be re-used, so that is being done here. DO NOT code from scratch - find examples in the text or our notes/examples that do what you want and edit from there. You can copy code from the online textbook into your own .Qmds, the trick is making sure you know what it is doing and how to adjust it to your data set.
+
+# What's in these chapters/sections?
+
+The topics in these sections are semi-overarching topics that potentially have significant impact on an analysis.
+
+For modeling (such as regression or classification), we'll see a concept called data splitting so we don't use all the data in the model. We'll see resampling methods that can help us to choose tuning parameters for methods. We also need to consider how to evaluate our models - how do we know we found a good model? Finally, in Chapter 3, we'll take a little bit of a look at how variables are coded, why you might take a log, what your overall analysis process should be, etc. These are all choices to be made in an analysis that you as the analyst have control over. We want to emphasize that here so we understand we need to be transparent in these decisions when reporting our results. I might get different results from you if I logged three predictor variables and you didn't, but you squared the response variable or something I didn't, etc.
+
+Above all else, what these sections should illustrate is that you have to look at your data a good bit before doing anything with it. That's what EDA (exploratory data analysis) is for.
+
+It means we want to look at graphs and descriptive statistics (or summary methods for that like the scatterplot matrix on your intro handout) to get a sense of the data before doing anything else.
+
+# Data and Setup
+
+The data set we will use for our examples is the iris data set pre-loaded in R, and we also have the BG book examples using AmesHousing. (The other BG book example has ordered factors to deal with, so I left that out for now.) You may need to install the AmesHousing package.
+
+For iris, from the help menu, we learn "This famous (Fisher's or Anderson's) iris data set gives the measurements in centimeters of the variables sepal length and width and petal length and width, respectively, for 50 flowers from each of 3 species of iris. The species are Iris setosa, versicolor, and virginica."
+
+Specifically, "iris is a data frame with 150 cases (rows) and 5 variables (columns) named Sepal.Length, Sepal.Width, Petal.Length, Petal.Width, and Species."
+
+```{r}
+data(iris)
+# help(iris)
+names(iris)
+```
+
+For the Ames data set, we load it the same as a text, noting that it gives both the data set and an h2o version of the data set. It has observations on houses from Ames, Iowa, and the main focus is on predicting Sale_Price.
+
+```{r}
+# Ames housing data
+library(AmesHousing)
+ames <- AmesHousing::make_ames()
+```
+
+# Data Splitting (BG 2.2)
+
+This section is all about creation of training and test sets. The book gives multiple examples/ways to do it. We'll focus on the *rsample* command.
+
+Why are we doing this? For settings where we need to pick a model, if you use the entire data set to fit the model, you can overfit or find that the model doesn't extend well to new data. To try to offset this issue, we split the data into training and test data sets. We fit the model ONLY using the training data set. We then assess performance on the test set. You can assess performance on the training data but that usually gives better performance than you get on the test set (overly optimistic).
+
+## Simple Random Sampling
+
+```{r modeling-process-splitting-applied}
+# Using rsample package
+library(rsample)
+set.seed(123)  # for reproducibility
+split_1  <- initial_split(ames, prop = 0.7)
+train_1  <- training(split_1)
+test_1   <- testing(split_1)
+```
+
+How big should training sets be relative to test sets? This varies, as the book explains, especially in relation to data set size. With a larger number of observations, a 90:10 split may be fine. But for say, only 50 observations, maybe 67:33 or 70:30 splits are more reasonable. The examples all demo 70:30 splits. See if you can see where you'd adjust this in the examples.
+
+Let's try the rsample approach with iris and see what happens. We'll keep it a 70-30 split.
+
+```{r}
+# Using rsample package
+set.seed(240)  # for reproducibility
+split_iris  <- initial_split(iris, prop = 0.7)
+iris_train  <- training(split_iris)
+iris_test   <- testing(split_iris)
+
+dim(iris_train)
+dim(iris_test)
+```
+
+How well is the species variable represented in these groups? We know there are 50 of each iris type in the overall data set.
+
+```{r}
+library(dplyr)
+tally(~ Species, data = iris_train)
+tally(~ Species, data = iris_test)
+```
+
+If we want to balance those, we should stratify. Theoretically, you can stratify on multiple variables at a time. However, in practice, that is very difficult (if you ever really want to do it, create a new variable that combines the variables you want to jointly stratify by).
+
+## Stratified Random Sampling
+
+The command here is only from the rsample package. It used the churn data set so I swapped it to use Ames, and picked a variable that seemed somewhat reasonable to try out.
+
+```{r}
+table(ames$Heating_QC) %>% prop.table()
+
+# stratified sampling with the rsample package
+set.seed(123)
+split_strat  <- initial_split(ames, prop = 0.7, 
+                              strata = "Heating_QC")
+train_strat  <- training(split_strat)
+test_strat   <- testing(split_strat)
+
+# consistent response ratio between train & test?
+table(train_strat$Heating_QC) %>% prop.table()
+table(test_strat$Heating_QC) %>% prop.table()
+```
+
+Notice any issues? The poor category doesn't show in the test set. There's likely only one observation with that value, so you'd need to do more data management before continuing. Perhaps you need to merge categories (case_when, from Stat 231, would be an example command within a mutate you could try).
+
+Now let's try it with iris. Here, we know we want to balance the Species.
+
+```{r}
+table(iris$Species) %>% prop.table()
+
+# stratified sampling with the rsample package
+set.seed(240)
+iris_split_strat  <- initial_split(iris, prop = 0.7, 
+                              strata = "Species")
+iris_train_strat  <- training(iris_split_strat)
+iris_test_strat   <- testing(iris_split_strat)
+
+# consistent response ratio between train & test
+table(iris_train_strat$Species) %>% prop.table()
+table(iris_test_strat$Species) %>% prop.table()
+```
+
+The `strata = "Species"` part ensures that the species proportions stay consistent in both sets.
+
+Looks good!
+
+## What to remember here:
+
+-   For any modelling problem, we want to split the data so we fit the model on part and test it out on another.
+-   The statistician in charge decides how that split is done, and how much (usually a proportion) goes into the training versus the test set.
+-   The split should be reproducible.
+-   The training set may be further split into a training set and validation set. There, the training set is used to fit models, validation to pick between them, and test to then assess the final model. It's like splitting into 3 components. We'll see that other approaches are better (in later sections), than just using a single validation set. So, we'll usually just need a training and test data set (if needed).
+-   We don't necessarily need the splits for data analysis that doesn't involve modelling.
+
+# Creating Models in R (BG 2.3)
+
+The biggest takeways from this section are the following:
+
+-   There are usually many ways to do the thing you want to do in R.
+-   There are differences across packages that are very important to learn about if going back and forth between them.
+-   Some functions are "generic" but coded differently across multiple packages (the example here is the predict function and how it has different arguments).
+-   Understanding "formula interface" is very important as it is a common structure in many functions/packages. (However, not all functions have it.)
+
+You've seen the formula interface in intro stats.
+
+Anytime you had a structure of "Y \~ X" was formula structure. There's a reminder here that the X can in fact, be multiple X's. "Y \~ X1 + X2 + X3" for example.
+
+# Resampling (BG 2.4)
+
+Many of our modelling approaches require some iteration/refinement. For example, how do I decide what tuning parameters to use for ridge regression or LASSO? (These are the methods in CASI section 7.3 and Ch 16.)
+
+You could split the training set into a training and validation set (or holdout set) to try to figure this out. But unless the data set is very very large, this often doesn't work well. Instead, there are two major resampling approaches that are used instead.
+
+These approaches are "k-fold cross-validation" and "bootstrapping".
+
+## k-fold CV
+
+CV is short for cross-validation. The idea for CV is based on the idea of the validation set above. The problem is that if you take a (training) data set and split it 80:20, fit the model on 80 percent and validate on 20 percent, the results could be particular to that 20 percent and any issues with it. The idea behind CV comes from doing this approach, but then putting the 20 percent back, pulling out a different 20 percent, and repeating, until all 5 randomly generated 20 percent pieces have played the role of the validation set. The 5 pieces are distinct, and don't overlap (in terms of which observations are included). So, observation 1 is only in 1 of the 5 pieces, and that's true for each observation.
+
+Said differently, for $k$-fold CV, you partition the data set into $k$ pieces. Each piece takes the role of the test or validation set for one run where the other $k-1$ pieces are used as the training set. So, a $5$-fold CV is referring to a partition of size 5 - the data was split into 5 pieces. Typical values of $k$ are 5 or 10. Larger values are possible if your data set is large. For example, a 5-fold CV on a data set with 100 observations would leave 80 observations to use for each model fit (train) and 20 to assess/validate the model on (test). Finally, there's a special case of CV that has it's own name. LOOCV (leave-out-one CV) is where you set $k=n$. It is computationally intensive. It can be really useful when assessing the effects of outliers on your model.
+
+The book's illustration in Figure 2.4 shows the process. Bear in mind the initial split is random (so it's not like the data set was divided into chunks based on ordered observation numbers).
+
+This would not be a fun process for a human to do, but computers can handle iteration like this without much issue. If you run $k$-fold CV though, you will get results back from $k$ test data sets for your model. How do you combine the results? That's going to depend on what you were doing/computing/assessing. For example, it might be appropriate to average the results to get an average error, or maybe they need summed. We'll look at specific cases as we get to them.
+
+Finally, the text recommends that if $n < 10000$, rather than do $5$-fold or $10$-fold CV just once, that you repeat the process. This works as long as you can combine results. Why? It helps reduce the variability in the process. You can imagine if your first random split happened to get all the outliers in your data in just one of the partitions, it might cause issues.
+
+Many functions have CV arguments already built into them (the book example does CV for a generalized linear model). We will try it out with regression soon. They also illustrate a function that will create the folds for you, though that's slightly harder to work with.
+
+## Bootstrapping
+
+The other resampling approach besides CV is called Bootstrapping. The name was coined by Bradley Efron and was a reference to a practice of cowboys / ranchers putting on their boots with the help of a strap. The idea is to make your data do the work. If your data is a representative sample of the population, why not use it to draw more samples for you to work with?
+
+In order to do that, something has to change. If I just draw the same observations again, the data set is the same. So, we change one thing - we sample with replacement. The idea is that if an observation value was very common in your data set, it should still be fairly common in most samples. Rarer observations will continue to be rare, and may not show up in some samples. Figure 2.6 in the text shows the process with colored circles. Here is an example with numbers for a variable.
+
+Suppose we have 6 observations: 2, 5, 6, 8, 8, and 13.
+
+Then a bootstrap sample might be: 5, 5, 6, 8, 13, and 13.
+
+Or it could be 2, 5, 6, 8, 8, and 8.
+
+The sample drawn is the same size as the original data set but just with observations selected with replacement from that data set.
+
+What does this get you? Well, you can do it a large number of times, and each time gives you an entire dataset to work with (called a bootstrap sample). Those data sets will be similar to the original, but (most usually) not exactly the same as it, or each other. In fact, about 63% of the observations will end up in any particular sample. If 63% is an odd number to remember, think about it being close to 2/3 but just under.
+
+For each bootstrap sample, you do your planned analysis. Then you need to figure out how to combine your results. As above with CV, that may be through averaging some measure or summing, etc. The bootstrap procedure is naturally built into several algorithms we will see in our classification unit. It's the basis for where trees were extended first to bagging then to random forests.
+
+# Bias - Variance Tradeoff (BG 2.5)
+
+To illustrate with ideas from intro stats, remember that you've used the sample mean to estimate the population mean. The sample mean had an expected value equal to the population mean, so that it was what we call unbiased for the population mean. It does have spread, and you probably looked at the standard error of X-bar. It was used in computations of CIs and test statistics. You can compute the theoretical spread as well. Variance is the measure of spread considered here (Variance = SD\^2).
+
+When we fit a model, we are usually trying to minimize both bias and variance in our estimators. But you can't drive both to 0 at the same time.
+
+You could imagine it's like throwing darts at a target, and you learn you have choices - a tight cluster that's usually off-center a bit or a large field that's centered on average. Which is better? It depends on the situation. Many of our common estimators are unbiased, but may not have the lowest variance. This is why alternative estimators, such as ridge regression and LASSO in the regression setting, have been developed.
+
+Bootstrapping is usually biased but has lower variance, while CV tends to be less biased and more variable. That's why suggestions were made to repeat CV, for example.
+
+The part we really care about in this section is the next part, which, I would argue, should really have its own section.
+
+## Hyperparameter tuning (BG 2.5.3)
+
+All the methods we will learn about have some choices that must be made by the statistician doing the analysis. There are some that aren't specific to the method: What data set do I use? What variables do I use? But then the algorithms themselves have options. Those are referred to as the hyperparameters. It will be $\lambda$ in ridge regression and LASSO, as that's the shrinkage parameter. You might fit a model with m_try = 4 and I might use m_try = 6 (this is an option in a random forest). Or I might fit a $k$-NN model with $k=3$ and you might use $k=7$. How do we know which setting to use?
+
+We could use the computer defaults, or maybe trial and error. A grid search is better, where we make the computer search over a specified range of values to find the "best" value for the tuning parameter (hyperparameter). You can search for multiple parameters at a time. What is "best" is going to depend on your setting. The book example in Figure 2.11 shows error computed as RMSE (which isn't defined till the next section below), where you want values to be small. The challenge is that searching adds computational complexity. CV or bootstrapping are ways to assist with this as well. They are often used to help us "tune" or "find the best" hyperparameters for our models.
+
+The text has multiple types of grid searches illustrated throughout. The simplest is just going through a set of parameter values you've defined.
+
+# Model Evaluation (BG 2.6)
+
+For analyses where there is a response variable (regression and classification), you know you want your model to recover that variable. In intro stats, you learned a bit about assessing the model fit for regression. Perhaps you remember learning about (multiple) R-squared and the residual SE? We want to generalize the idea that there's some measure we want to optimize.
+
+Speaking generally, when modeling, we want to assess predictive accuracy (how well can I recover my target variable) and we'll try to do that using loss functions. You get to choose the loss function.
+
+Within the example loss functions, you'll see different ones for regression versus classification. The ones we will likely focus on are MSE or RMSE for regression (mean squared error or root mean squared error), and for classification, accuracy or misclassification (which we'll need the week after next).
+
+The RMSE is the residual standard error you're used to seeing in the regression output. The MSE is the square of that value. The MSE is computed by taking the difference between the observed and predicted y values, squaring the differences, adding them up, and then (almost) taking the average. Ideally, instead of dividing by $n$, you divide by $n$ adjusted by the number of parameters you estimated. But we still call it the mean squared error. So it's the sum of squared residuals (which you could call SSE), scaled slightly by a constant (related to $n$ and the number of parameters).
+
+For any one of these evaluation measures, you need to know if you want to minimize or maximize it. For MSE and RMSE, we want those both minimized. For accuracy, that should be maximized. For misclassification error, that should be minimized, etc.
+
+# Example (BG 2.7)
+
+The book example shows using a $k$-NN regression (which you likely haven't seen before) to connect all the prior steps. We'll show that, but also an example using iris.
+
+## BG Example using AmesHousing
+
+What: Predict Sale_Price in AmesHousing\
+Using: k-NN regression\
+What is k? $k$ is the number of neighbors being used to do the prediction.\
+What is this method: Simply put, you find observations with similar predictor values ($k$ neighbors) and you average their response values together to make a prediction for your observations.
+
+This example demonstrates a training/test split, using CV and a grid search to pick the $k$ for the model (that's the hyperparameter), and then RMSE as the evaluation method for the best model.
+
+There's a warning in the text that if you try the grid search part of the command yourself, it takes a few minutes. To assist with this, I suggest you keep data wrangling, etc. separate from places where you do the grid search. Once the search is complete, use new chunks to illustrate results, do computations, etc. Leave the grid search chunk alone, unless you need to re-run it or adjust parameters, etc. You can also turn on the cache = TRUE option for the chunks with grid searches so they don't have to re-run (assuming you don't change anything within them). This setup means I have re-structured the text example code a bit, as shown below.
+
+First, we get the data set ready and split.
+
+```{r}
+# Set up data set train/test split
+# Stratified sampling with the rsample package
+set.seed(240)
+split <- initial_split(ames, prop = 0.7, strata = "Sale_Price")
+ames_train  <- training(split)
+ames_test   <- testing(split)
+```
+
+Now we define the details of what we want to happen in terms of picking the best model. This doesn't actually run the grid search yet.
+
+```{r}
+library(mosaic)
+# Specify resampling strategy
+cv <- trainControl(
+  method = "repeatedcv", 
+  number = 10, 
+  repeats = 5
+)
+
+# Create grid of hyperparameter values
+hyper_grid <- expand.grid(k = seq(2, 25, by = 1))
+```
+
+Now that setup is complete, we implement the "train" step and this actually runs the grid search.
+
+```{r, cache = TRUE}
+# Tune a knn model using grid search
+knn_fit <- train(
+  Sale_Price ~ ., 
+  data = ames_train, 
+  method = "knn", 
+  trControl = cv, 
+  tuneGrid = hyper_grid,
+  metric = "RMSE"
+)
+```
+
+The text reported that this grid search takes approximately 3.5 minutes. It was closer to 5 minutes on my college issued laptop.
+
+The grid search is complete, so now we need to see what the results were. From this, we can see that the best model had $k=7$. Note that you could then refit the model with k=7 to use it for predictions (or there are ways to do that using these functions, as we will see).
+
+```{r}
+# Print and plot the CV results
+knn_fit
+ggplot(knn_fit)
+```
+
+### How to get model details
+
+This will depend on what model you are fitting. For *k-NN* regression, there are no slopes or anything to get, so there's not much to glean here.
+
+```{r}
+summary(knn_fit)
+```
+
+### Fitting on training and test set
+
+The predict function is how we'll get predictions using the "best" model it chose. And using that to compute the MSE (where we just take the average, don't adjust for number of parameters, so different from the usual output).
+
+```{r}
+train_pred <- predict(knn_fit, newdata = ames_train)
+
+#training set MSE
+train_mse <- mean((ames_train$Sale_Price - train_pred)^2)
+train_mse
+
+# These will not match 
+# because the CV results are not on the full training data set!
+43185.26^2 #RMSE squared from CV results
+```
+
+You can do the same on the test data set, and the idea here would be to compare the test MSE across several different models. I.E. get test set MSE for several models, each chosen via CV for their tuning parameters, to finally pick between them. You can do comparisons at the CV stage as well (will see in lab).
+
+```{r}
+test_pred <- predict(knn_fit, newdata = ames_test)
+
+#training set MSE
+test_mse <- mean((ames_test$Sale_Price - test_pred)^2)
+test_mse
+```
+
+Often, the test_mse is (predictably) larger than the training_mse, but it could be less. I.E. That's possible. For example, here, we see the CV MSE is larger than the test_MSE, but the train_MSE is less than the test_MSE.
+
+### A Word about Predict
+
+*predict* is a great function, but it takes different arguments depending on what function you are using predict on. That is, there are different *predict* functions for *lm*, *glm*, etc.
+
+That is, there's *predict.lm()*, *predict.rpart()*, and *predict.glm()*, for starters. And those all could have different options!
+
+## Classification Example
+
+Briefly, we'll look at a classification example with a tree, since we'll see that very soon. The iris species are fairly easy to classify, at least telling setosa (much smaller) apart from the others.
+
+We had a code chunk above with the data setup so we'll re-use that:
+
+```{r}
+# set up data set
+# stratified sampling with the rsample package
+set.seed(240)
+iris_split_strat  <- initial_split(iris, prop = 0.7, 
+                              strata = "Species")
+iris_train_strat  <- training(iris_split_strat)
+iris_test_strat   <- testing(iris_split_strat)
+```
+
+Previously, we saw this maintained a 1/3, 1/3, 1/3, split among the species in both the train and test data sets.
+
+Now we want to try a tree. Above, we listed out the trainControl options and saved them as "cv" to use. Here, we just do it in-line. Either is fine. This means the grid search is happening in this chunk. It's pretty fast here because the data set is small.
+
+```{r, cache = TRUE}
+# fit tree; seed set for reproducibility
+# example of auto-tuning
+set.seed(240)
+iris_tree <- train(
+  Species ~ .,
+  data = iris_train_strat,
+  method = "rpart",
+  trControl = trainControl(method = "cv", number = 5),
+  tuneLength = 12
+)
+```
+
+We put the results in the next chunk just in case.
+
+```{r}
+iris_tree
+ggplot(iris_tree)
+```
+
+CP (complexity parameter) of 0 is the biggest (deepest) tree. We see here that bigger trees are better (lower CP has higher accuracy). But, there's not much difference between a CP of 0.3 and a CP of 0.1, etc, so you could just use a CP 0.3 tree. The final value "used" in the train function fit is CP of 0.409. It's actually challenging to get model info about this, so we'll go fit the tree separately using just *rpart*.
+
+```{r}
+#| eval: false
+
+#probably too much info not useful
+summary(iris_tree)
+```
+
+We will go tell R to fit a CP 0.409 tree and look at it (just to get the cool tree plot). This is fitting it directly using *rpart*, not using the *train* function.
+
+*Update* - For some reason I had method set to ANOVA, which was doing regression, not classification. This is fixed now!
+
+```{r}
+# Generate desired tree and plot
+iris_tree2 <- rpart(
+  formula = Species ~ .,
+  data    = iris_train_strat,
+  method  = "class",
+  control = list(cp = 0.409)
+)
+
+summary(iris_tree2)
+rpart.plot(iris_tree2)
+```
+
+### Training and Test set predictions
+
+We'll use predict again! We can do it from the *train* object or the *rpart* object.
+
+```{r}
+# this is using the *train* object
+iristree_pred <- predict(iris_tree, iris_train_strat, type = "raw")
+confusionMatrix(iristree_pred, iris_train_strat$Species)
+
+# this is using the rpart object
+iristree_pred2 <- predict(iris_tree2, iris_train_strat, type = "class")
+confusionMatrix(iristree_pred2, iris_train_strat$Species)
+```
+
+These generate the same confusion matrices because they are the same tree.
+
+Now we do this on the test set to get a better sense of the error rates.
+
+```{r}
+# this is using the *train* object
+testiristree_pred <- predict(iris_tree, iris_test_strat, type = "raw")
+confusionMatrix(testiristree_pred, iris_test_strat$Species)
+
+# this is using the rpart object
+testiristree_pred2 <- predict(iris_tree2, iris_test_strat, type = "class")
+confusionMatrix(testiristree_pred2, iris_test_strat$Species)
+```
+
+We are misclassifying 2 virginica irises as versicolor but that's it. The test set accuracy is 95.56 percent, only slightly worse than the training set accuracy of 96.19 percent. Again, the idea would be to compare test set accuracies across multiple methods to pick the best one.
+
+Feel free to revisit this example when we discuss trees in CASI.
+
+This is the end of the material focus for STAT 495, but the below information might be useful or of interest to some of you.
+
+# Feature and Target Engineering Overview (BG 3)
+
+A brief overview below sheds light on what is in all the sections:
+
+-   Pre-reqs (3.1) - What packages are used in the chapter
+-   Target Engineering (3.2) - For problems with a response variable - what distribution does the response variable need to have? Does it need to be normally distributed? Would scaling it help? Gives details about using some common variable transformations (logging, square rooting, and Box-Cox transformations). We will be doing classification which has categorical responses, so this isn't as useful to us, but it's related to the 3.5 material, where we may need to do similar things to our predictors.
+-   Dealing with Missingness (3.3) - Huge problem. Good code here to show you how to examine what is missing in your data. We have a whole elective course on this - Stat 404. For one data set we will use where this is a problem, I will give directions on how to work with it (we'll just drop potential variables (NOT observations), due to how that data set is structured).
+-   Feature Filtering (3.4) - Suppose you have a categorical predictor in your data set that only has one level. I.E. it says "TRUE" 100% of the time (or similar). That's a useless variable for a model. Similarly, if it's TRUE 99.9% of the time and only FALSE 0.01% of the time, it's likely not useful. This section is about removing zero-variance or near zero-variance variables. This will be important for some of our data sets (not all) but definitely for projects when you are finding your own data sets. Will demonstrate the code for this below.
+-   Numeric Feature Engineering (3.5) - For all your numeric predictors, do they need transformed? Do they need scaled? We'll see that we use scaling a lot (in PCA and clustering it is rare to NOT scale). Some of our techniques (LDA/QDA) will want predictors to be normally distributed. This is just example code for this, and we'll see more as we get into different techniques.
+-   Categorical Feature Engineering (3.6) - Similar to 3.5, but shifted to categorical variables. Computers need numbers, so how are the categorical variables coded up so the computer can do these algorithms? For example, how could it compute distance? You may need to merge small categories, and we definitely need to get numbers in (0/1, etc.) and there are multiple ways to do that.
+-   Dimension Reduction (3.7) - We will cover PCA as a dimension reduction technique. There are many other techniques. The section is a quick intro to the idea that there are other ways to reduce the number of variables involved without manual removal of said variables.
+-   Proper Implementation (3.8) - How do you combine all these things in a single process? They give a potential order of steps. We'll adapt it because we won't have access to all techniques as we go. For example, you won't be able to make use of PCA until we cover PCA.
+
+In these sections, often, the steps are shown as being coded into a "recipe", which is a blueprint followed for the analysis, so you don't forget a step. For example, if you standardize variables but forget to copy over that chunk, you might miss that step. If it's saved in a "recipe", it won't get lost. Working with this package for this is new for me, so bear with me as I update/engage with it. There are multiple "recipe" type options too.
+
+Below, some insights from the main sections I want us to focus on are provided. 3.3 is here just so you have the example code in a .Qmd.
+
+# Missing Data (BG 3.3)
+
+Take STAT 404 to learn more about missing data!
+
+Not all the code is demo-ed here, but I wanted you to see the AmesHousing example and what happens when there is no missing data (iris data). The raw Ames data is pulled in just for this example (not the same pre-processed data from above).
+
+You can count the number of missing values:
+
+```{r}
+sum(is.na(AmesHousing::ames_raw))
+sum(is.na(iris))
+```
+
+Next is a graphic that shows missing values as light gray areas in a heatmap.
+
+```{r}
+AmesHousing::ames_raw %>%
+  is.na() %>%
+  reshape2::melt() %>%
+  ggplot(aes(Var2, Var1, fill=value)) + 
+    geom_raster() + 
+    coord_flip() +
+    scale_y_continuous(NULL, expand = c(0, 0)) +
+    scale_fill_grey(name = "", 
+                    labels = c("Present", 
+                               "Missing")) +
+    xlab("Observation") +
+    theme(axis.text.y  = element_text(size = 4))
+```
+
+To use this on a different data set, you can copy/paste and just change the first line. It's going to look silly on iris, as nothing is missing.
+
+```{r}
+iris %>%
+  is.na() %>%
+  reshape2::melt() %>%
+  ggplot(aes(Var2, Var1, fill=value)) + 
+    geom_raster() + 
+    coord_flip() +
+    scale_y_continuous(NULL, expand = c(0, 0)) +
+    scale_fill_grey(name = "", 
+                    labels = c("Present", 
+                               "Missing")) +
+    xlab("Observation") +
+    theme(axis.text.y  = element_text(size = 4))
+```
+
+Another visualization option is also given, from the visdat package in R. It makes missing values dark (likely you could change this).
+
+```{r}
+visdat::vis_miss(AmesHousing::ames_raw, cluster = TRUE)
+visdat::vis_miss(iris, cluster = TRUE)
+```
+
+Further exploration of missing values may lead to insights, as demo-ed in the text examples about the Garage variables in Ames.
+
+Most of our data sets won't have missing values. Your project data sets might. For our one data set that does - we can use these visualizations to figure out where the issues are.
+
+# Feature Filtering (BG 3.4)
+
+When you first learned about statistics, you might have heard it described as the study of variation. If one of your variables has no variation, it's not useful for most analyses. It may still show something "interesting" - like if 100% of observations got "TRUE" for something, maybe that shows 100% of students got a question right. But if you were trying to use that response to look at groups of students or predict which group a student belonged to, the lack of variation means it's not helpful to use. It doesn't add any "information" to certain analyses. (Some methods are smart enough they can ignore these variables themselves, others will try to use them, and that's where it isn't helpful.)
+
+This section talks about removing zero variance or near-zero variance variables. A categorical variable that takes the same value for all observations has zero variance, for example. Near-zero is harder to define, especially for numeric variables. The BG text has suggestions for that, and in fact, the *caret* package has a function to look for near-zero variables in the data following these definitions. Once you identify these variables, it's up to you as the statistician doing the analysis as to whether you remove them or not. Maybe you aren't planning to use any of them anyway. Maybe you see two that should be combined in some way, or something else, besides removing them.
+
+The Ames data set has some variables we can look at here. The *nearZeroVar* function has a zeroVar column and nzv (for near-zero variance).
+
+```{r}
+caret::nearZeroVar(ames_train, saveMetrics = TRUE) %>% 
+  tibble::rownames_to_column() %>% 
+  filter(nzv)
+```
+
+I'll demo it on iris (entire data set), but want to add a zero variance variable or two so you see what happens when one is present. If we didn't add those variables, the output here would be empty, because iris doesn't have any near-zero or zero variance variables.
+
+```{r}
+iris2 <- mutate(iris, boringvar = "TRUE", boring2var = 0)
+
+caret::nearZeroVar(iris2, saveMetrics = TRUE) %>% 
+  tibble::rownames_to_column() %>% 
+  filter(nzv)
+```
+
+# Numeric Feature Engineering (BG 3.5)
+
+You likely remember variable transformations or re-expressions from intro stats. This section is about where you might need that for your predictor variables. Certain models work better with numeric predictors that are more normally distributed than not. More commonly, methods can give very different results on scaled versus un-scaled data sets. Often, this occurs because we are using the values in distance (or dissimilarity) computations.
+
+The section gives some commands that can try to "unskew" or "normalize" ALL numeric predictors at once. Box-Cox or YeoJohnson (if some values are negative) methods are used. We won't need these for our methods, except perhaps LDA/QDA, but you can try the code if you like.
+
+What is more likely is that we'll use the scaling commands. You may have seen versions of this before inside *mutate*. Or some functions have their own "scale" option you can just set to true.
+
+One thing the text doesn't describe is that different types of scaling are possible.
+
+The typical scaling will remind you of a z-score. You take the variable value, subtract the mean, and divide by the SD. This is "centering" and "scaling" in typical lingo. The resulting variable has mean 0 and SD 1. Note that if doing this with a train/test split, you want the standardization to be consistent. I.E. Whatever is done on training needs to be the same that is done to test.
+
+Other types of scaling are possible. For example, you may want to scale all variables to be on the scale from 0 to 1. For each variable, you would shift the minimum to 0, and then divide by the shifted maximum. For example, if my variable currently goes from 2 to 10, I would shift it to go from 0 to 8, and then divide by 8, so the new variable goes from 0 to 1. If instead the variable went from -5 to 4, I would add 5, so the variable goes from 0 to 9, then divide by 9.
+
+You might just want to shift all values to be positive at times to, or start at 0, etc.
+
+Just be aware that most "scale" functions are doing the z-score idea, but you can do other things. It is another choice that you are making, even if it's usually the z-score one.
+
+The text code here just adds the commands to recipes, so we'll look at examples later when doing that ourselves. For an example with mutate though, look at this with iris.
+
+```{r}
+# Standardize or scale() numeric variables (subtract mean and divide by SD)
+iris3 <- iris |> # feel free to use the %>% pipe too 
+  mutate(across(where(is.numeric),  ~ scale(.)[,1],
+                .names = "{.col}_scaled"))
+names(iris3) 
+```
+
+We keep the original variables, but make scaled versions clearly labeled. Only the numeric variables are scaled.
+
+# Categorical Feature Engineering (BG 3.6)
+
+For categorical variables, there are a number of considerations.
+
+First, a number of methods just can't handle them. Period. For others, you can "convert" to numeric using one of the approaches described, but they may not "work" well, or they at least work "differently" than the numeric variables.
+
+Second, you need to understand the levels of the original variable to figure out what to do/try. You may have seen the tally command in intro stats. There are options that use table. In STAT 231, summarize would let you count, and the text has other options.
+
+```{r}
+# Text and iris example using count + arrange
+count(ames_train, Neighborhood) %>% arrange(n)
+count(iris, Species) %>% arrange(n)
+```
+
+Note that on iris here I used the entire data set, as this is an investigation you might want to do before deciding if you wanted to do splitting by stratifying or not.
+
+If you find an issue, such as a category only having 1 or 2 observations, you have options. You can remove those observations. Or you could combine categories. You get to decide what happens. Sometimes that's easier than other times. For example, if I am looking at a Likert-scaled item, coded Strongly Agree, Agree, Neutral, Disagree, and Strongly Disagree, it might make natural sense to group the "Agree" levels together and the "Disagree" levels together. Someone else might want to group "Neutral" with both "Agree" levels. If you have a collection of levels that each only have a few observations, the text procedure describes "lumping" them all together into an "other" category. The *step_other* function is used for this as part of a recipe. Our data sets (at least until projects) are not likely to require this, so I want to explore the use of *case_when* instead.
+
+If you've had STAT 231, you'll likely have seen "case_when" used within mutates to help organize categorical variable levels (or define other variables). Rather than *lump* small categories together into an "other" category, this command gives you control to either overwrite your variable (bad idea) or create a new one with levels organized however you want. I'll include the example I use in Stat 231 here to illustrate this, though the code won't execute (as it is not loading the data). This is the data set for the FIFA video game, trying to consolidate the position variable for what position the players play in soccer into 4 positions instead of the original number of positions. case_when is used to get Goalkeepers, Forwards, Defenders, and everyone else as Midfielders.
+
+```{r, eval = FALSE}
+# Add new position variable
+# Remove position NAs
+Fifadata <- Fifadata %>%
+  filter(Position != "NA") %>%
+  mutate(position_four = case_when(
+    Position == "GK" ~ "GK",
+    Position %in% c("CF","LF","LS","LW","RF","RS","RW","ST") ~ "FWD",
+    Position %in% c("CB","LB","LCB","LWB","RB","RCB","RWB") ~ "DEF",
+    TRUE ~ "MID"
+    )
+  )
+
+# Check new position breakdown
+Fifadata %>%
+  group_by(position_four) %>%
+  summarize(count = n())
+```
+
+One trick to use when imagining how to use *case_when* is that the last option TRUE \~ "whatever" is used for any levels/values not covered in the assignments above that. So if you have 40 levels being broken into 4 groups with 16, 10, 10 and 4 levels each, you'd write out lines for the 4, 10, and 10 level groups, and let the 16 be the last one, the "default".
+
+The text examples continue with an interesting numeric example, even though this section is about categorical variables. That's because at times, you may want to create a categorical variable from a numeric one.
+
+Screen_Porch is a variable in the Ames data set. Of 2049 observations in the training data set, 1865 have a value of 0 for Screen_Porch. The non-zero values are square footage of porches, but we may decide that what we really need is an indicator that there is a screen_porch versus not. Rather than having the square footage value, we'd just have 0 (no screen porch) or 1 (yes, screen porch).
+
+```{r}
+# Text example using numeric variable with count + arrange
+# I changed this to be desc(n) to show you the 0s
+count(ames_train, Screen_Porch) %>% arrange(desc(n))
+```
+
+You can create an indicator random variable in several ways, such as using ifelse within a mutate command. The text example does this in an interesting way here, by using the *lumping* idea and putting anything \>0 into "other". So, it ends up with 2 levels - 0s and "other". Mutate is what you'd see in Stat 231 so that is demo-ed below.
+
+```{r}
+# Note you'd want to do this exact step on the test set too
+# which is why recipes are useful 
+ames_train <- mutate(ames_train, SPorchInd = factor(ifelse(Screen_Porch>0, "Yes", "No")))
+
+# Check what happened
+count(ames_train, SPorchInd) %>% arrange(n)
+```
+
+The next part of the section has a description of how categorical variables are coded numerically for algorithms/models to work with. There are two major "good" options: dummy encoding (in reference to using dummy variables) and one-hot encoding.
+
+We'll go over these using an example (the text example figure is Figure 3.9, and it's pretty good).
+
+In some games, you can take different roles. In World of Warcraft, groups for certain activities are required to have a "tank", a "healer" and 3 "DPS". Don't worry about those mean, but clearly, it's three categories. Each player can only be in one of these roles at a time for that activity.
+
+Suppose we have a collection of 6 players, who currently are "tank", "tank", "DPS", "healer", "healer", "DPS". We need to come up with a numeric coding for this role variable.
+
+If you just had this variable in R, and told it to pretend it was numeric, it will do this:
+
+```{r}
+role <- factor(c("tank", "tank", "DPS", "healer", "healer", "DPS"))
+role
+as.numeric(role)
+```
+
+Huh? It sorts the categories in alphabetical order (because we didn't tell it to do otherwise), labels the first "1", the next one in order "2", etc.
+
+The text refers to this as label encoding in 3.6.3. This isn't often a good idea.
+
+In particular, this is dangerous if a variable is already coded like this and you don't know it. Why?
+
+Well, if you went to work with this variable, the computer would treat these as numbers instead of understanding they were just denoting different categories/levels. In particular, 2 is twice 1, and 3 is three times 1. It assumes 1+2 = 3 and that makes no sense here.
+
+Label encoding MAY make sense in some situations, especially, if the original variable was ordered and the categories are put in that order. E.G. Strongly agree is 5, Agree is 4, Neutral is 3, etc.
+
+There are 2 other options in the text that are what we'd prefer. Dummy encoding is what you've seen if you've done multiple regression in Intro stats (or our review) or Stat 230.
+
+In dummy encoding, one level is chosen as the "reference" level, often the first in alphabetical order, without any additional instruction, and indicator variables are created for the other levels. Thus if there are $k$ original levels, 1 becomes the reference, and you get $k-1$ indicator variables. Here's what that would look like here.
+
+```{r}
+# Dummy encoding
+# Look at role again
+role
+
+#DPS is first "level" make it the reference
+#Create two other variables, one to indicate tanks, other healers
+tank <- c(1,1,0,0,0,0)
+healer <- c(0,0,0,1,1,0)
+tank
+healer
+```
+
+We can see that in the new variables, it's easy to see which observations were originally tanks or healers. We identify DPS because they have a 0 for each of these new variables. This method (dummy encoding) is preferred for some algorithms (such as regression and neural networks) due to the underlying use of linear algebra (this approach is full rank - take MATH 271/272 if you want to learn more).
+
+One-hot encoding is different in that you don't use a reference level. Each level gets its own indicator. So, one-hot encoding in this setting would be:
+
+```{r}
+# One-hot encoding
+role
+
+# Each level gets an indicator variable
+tank <- c(1,1,0,0,0,0)
+healer <- c(0,0,0,1,1,0)
+dps <- c(0,0,1,0,0,1)
+tank
+healer
+dps
+```
+
+This approach causes issues in certain algorithms. In regression, in R, it will just drop one of the variables because it can't run with all three there. That's because they have an exact deterministic relationship. The setup is "less than full rank".
+
+The same thing happens in R for regression if you had say "total square footage" which was the sum of "living sf" and "garage sf" and tried to put all three in the model. R would drop one of them. It's better if you know about this in advance and control what happens - only put two of them in the model.
+
+A real-life example of this in Chemistry. Working with Prof. Jaswal on some research on proteins, we were using counts of the different 20 amino acids as predictors in a model. We also had the total number of amino acids as a predictor. Regression won't run with all 21 variables. If you have the total, and I tell you 19 of the amino acid separate values, you can get the last value via subtraction. So, if you put all the variables in, R will subtract one. It's better if you make the choice yourself. What variable do you not put in? At least one has to be left out for regression to run.
+
+There are options beyond this, but for most of our methods, we'll know what the method is using to code up the categorical variables, or have to specify it ourselves. Dummy encoding and one-hot encoding are the main ones to use.
+
+One last caution: related to the idea that R will remove variables if there's an exact deterministic relationship. Some algorithms will run into issues (at least in part) if there's a strong but not exact deterministic relationship. For example if X1 + X2 is almost X3 but there's a little bit of noise, R won't know to kick out one of the three variables, but you don't really need all three variables. The model can suffer from issues. In regression, checking for multicollinearity is used to check for this, but in general just know this could be an issue and try to be alert when working with your data.
+
+# Proper Implementation (BG 3.8)
+
+This section gives an overview of steps to take when working on a project and a rough suggestion of their order. Remember that the whole data analysis process is iterative, and these aren't necessarily all the steps possible either.
+
+The text does have a good discussion that when standardizing, you do that in the training set and need to be sure the same standardization (using the training mean and variance if z-scoring) is applied to the test data. The same in the context of the resampling methods. If you standardized to begin with, then "information" from the test set will be "used" in the modeling step, even if indirectly. We'll see this more as we get into the techniques and how to make R do what we want. More importantly, is that you are able to talk about what you are doing and when in the process you are doing it.
+
+Some general ideas:
+
+-   Check for zero variance or near-zero variance features on the whole data set. This should be part of our overall data exploration. Just like you want to understand the distribution of your "target" variable (if there is one) or categorical variables to decide if you will need to stratify when splitting. Some feature engineering (remember this is just re-expressions) may be done on the whole data set as well, such as creating new indicator variables.
+-   Missing data is its own thing. A lot depends on what the data is missing in and the pattern / reason for missingness. We won't do much with this. (We have a whole elective you can go learn about this in.)
+-   Normalize/standardize is next, and this you'd want to do within training sets, to apply the result to test sets. We won't need normalize much, though you can try it if you like. We definitely will need the standardization options.
+-   Dimension reduction (PCA) - this you'd often do within training sets and apply the results to test sets. (Especially if trying to check the PC stability.) Obviously, we won't do it till we learn what PCA is.
+-   Encode categorical features - many of the methods will do this for us, but if we need to specify, be sure you know the difference so you can interpret your output.
+
+Even if we don't end up using the exact recipe syntax from the text (I am checking to see if its compatible with (most) everything we will be doing, and they don't use it in all chapters either), following these steps for your analysis will improve it.
+
+# Example (BG 3.8 - end)
+
+The final text example shows the recipe syntax so I'll include it here for us to reference/discuss (even if we don't use this as much later). This is the AmesHousing data, still trying to predict SalePrice, but using more of these steps than our initial example above (with grid search).
+
+The first part of the example doesn't use a re-sampling technique, but the second part does.
+
+The data set was created above so I'll include that chunk here so we have the complete setup.
+
+```{r}
+# Set up data set train/test split
+# Stratified sampling with the rsample package
+set.seed(240)
+split <- initial_split(ames, prop = 0.7, strata = "Sale_Price")
+ames_train  <- training(split)
+ames_test   <- testing(split)
+```
+
+Part 1:
+
+Step 1: Set up that you want to predict Sale_Price using all other predictors in the data set. All scaling, etc. is done using the training data set. (Yes, this includes a PCA on the numeric variables.)
+
+```{r engineering-step1-recipe}
+blueprint <- recipe(Sale_Price ~ ., data = ames_train) %>%
+  step_nzv(all_nominal())  %>%
+  step_integer(matches("Qual|Cond|QC|Qu")) %>%
+  step_center(all_numeric(), -all_outcomes()) %>%
+  step_scale(all_numeric(), -all_outcomes()) %>%
+  step_pca(all_numeric(), -all_outcomes())
+  
+blueprint
+```
+
+Step 2: We need to actually apply the blueprint to our training data.
+
+```{r engineering-step2-prepare}
+prepare <- prep(blueprint, training = ames_train)
+prepare
+```
+
+Step 3: We can apply the model, etc. with all the pre-processing to other data. Applying it to the training data will show how well it does on itself, while applying it to the test data will give us a sense of how it works on "future" data.
+
+```{r engineering-step3-bake}
+baked_train <- bake(prepare, new_data = ames_train)
+baked_test <- bake(prepare, new_data = ames_test)
+baked_train
+```
+
+In the recipe framework, the steps are *create* a recipe, *prep* and *bake*.
+
+How does this work when a resampling technique is needed? Above we used kNN regression and had to use CV to pick $k$.
+
+Again, you start with *creating* a recipe/blueprint.
+
+```{r engineering-knn-blueprint}
+blueprint <- recipe(Sale_Price ~ ., data = ames_train) %>%
+  step_nzv(all_nominal()) %>%
+  step_integer(matches("Qual|Cond|QC|Qu")) %>%
+  step_center(all_numeric(), -all_outcomes()) %>%
+  step_scale(all_numeric(), -all_outcomes()) %>%
+  step_dummy(all_nominal(), -all_outcomes(), one_hot = TRUE)
+```
+
+When you apply the resampling technique (CV here), the package we are using for that, *caret*, understands the recipe instructions (and has its own variant as well), and it will *prep* and *bake* appropriately within the resamples.
+
+Note that I reduced the grid range for $k$ here based on what we already know from the text picture of the results, just to save time for rendering this file/example. (I also cached the results.) As I suggested before, I set up the parameters in one chunk and ran the grid search in the next, separately.
+
+```{r}
+# Set up the details for the resampling
+
+# Specify resampling plan
+cv <- trainControl(
+  method = "repeatedcv", 
+  number = 10, 
+  repeats = 5
+)
+
+# Construct grid of hyperparameter values
+hyper_grid <- expand.grid(k = seq(5, 15, by = 1))
+```
+
+```{r engineering-knn-with-blueprint, cache = TRUE}
+set.seed(240) #for reproducibility
+
+# Tune a knn model using grid search
+knn_fit2 <- train(
+  blueprint, 
+  data = ames_train, 
+  method = "knn", 
+  trControl = cv, 
+  tuneGrid = hyper_grid,
+  metric = "RMSE"
+)
+```
+
+We put the results in a separate chunk so we don't constantly re-run the grid search as we explore.
+
+```{r engineering-knn-with-blueprint-assess, }
+# print model results
+knn_fit2
+# plot cross validation results
+ggplot(knn_fit2)
+```

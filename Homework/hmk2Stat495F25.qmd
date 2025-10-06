@@ -1,0 +1,383 @@
+---
+title: "Homework 2 - Stat 495 - Fall 2025"
+author: "Daizy Buluma"
+date: today
+format: pdf
+editor: visual
+---
+
+```{r}
+#| label: load-packages
+#| include: false
+
+library(mosaic)
+library(tidyverse)
+library(ISLR)
+```
+
+### Homework 2 - Due Wednesday, Oct. 1st by midnight to Gradescope
+
+# Practicing Academic Integrity
+
+If you worked with others or used resources outside of provided course material, such as Generative AI (anything besides our textbook, course materials in the repo, labs, R help menu) to help complete this assignment, please acknowledge them below using a bulleted list. Remember that according to our class framework, if you engage with Generative AI tools, the tool and date of use must be listed here, and then a complete record of the chat history must be appended to the assignment.
+
+<!-- ~~~~~~~~~~~~~~~~ YOU MAY BEGIN EDITING BELOW THIS LINE ~~~~~~~~~~~~~~~~ -->
+
+*I acknowledge the following individuals with whom I worked on this assignment:*
+
+Name(s) and how they assisted you
+
+-   
+
+*I used the following sources to help complete this assignment:*
+
+Source(s) and where used in your submission
+
+-   
+
+\newpage
+
+```{r, include = FALSE}
+library(mosaic)
+library(rsample)
+library(caret)
+library(knitr)
+options(digits = 6)
+```
+
+# PROBLEMS TO TURN IN: Add 1 and Add 2
+
+## Additional 1 - Applications to College
+
+Adapted from similar problems in ISLR
+
+```{r}
+data(College)
+```
+
+This data set contains information from 1995 on US Colleges from US News and World Report (see help file for details). Our goal is to predict the number of applications received (Apps) using the other variables as potential predictors.
+
+> part a: Split the data into training and test data sets. What % went into your training set and why?
+
+SOLUTION: I chose the common 70:30 split where 70% went to the training set and 30% was the testing set. This split ensures that the model has enough data to sufficiently learn the patterns but also have a reasonable chunk left to test the model so that it can generalize well on unseen data.
+
+```{r}
+set.seed(495)
+split_app  <- initial_split(College, prop = 0.7, 
+                              strata = "Apps")
+train_app  <- training(split_app)
+test_app   <- testing(split_app)
+```
+
+> part b: Set up a cross-validation framework to use for comparing models below. Even models that don't have tuning parameters to pick go through the framework to enable later comparisons.
+
+SOLUTION:
+
+```{r}
+#Repeated cv because n=777 < 10000
+myControl <- trainControl(method = "repeatedcv", number = 10, repeats = 10)
+```
+
+> part c: Fit a "kitchen sink" linear regression model on the training set. Display the final model coefficients.
+
+SOLUTION:
+
+```{r}
+set.seed(495)
+reglm_model1 <- train(
+  Apps ~ ., 
+  data = train_app, 
+  method = "lm",
+  trControl = myControl
+)
+
+summary(reglm_model1)
+```
+
+> part d: Fit a linear regression model using an automated variable selection method of your choice (from Stat 230) on the training set. Display the final model coefficients.
+
+SOLUTION:
+
+```{r}
+set.seed(495)
+steplm_model1 <- train(
+  Apps ~ ., 
+  data = train_app, 
+  method = "lmStepAIC",
+  trace = FALSE, 
+  trControl = myControl
+)
+
+steplm_model1
+
+
+summary(steplm_model1)
+
+```
+
+> part e: Fit a ridge regression model on the training set, with lambda chosen by cross-validation. Report the lambda chosen, and display the final model coefficients.
+
+SOLUTION: Lambda = 305.386
+
+```{r}
+myGrid <- expand.grid(alpha = 0,
+                      lambda = 10^seq(10, -2, length = 100))
+
+set.seed(495)
+ridge_model1 <- train(
+  Apps ~ ., 
+  data = train_app,
+  method = "glmnet",
+  tuneGrid = myGrid,
+  trControl = myControl
+)
+```
+
+```{r}
+# ridge_model1
+# To get the best lambda
+ridge_model1$bestTune$lambda
+
+# to get the coefficients for the final model
+coef(ridge_model1$finalModel, s = ridge_model1$bestTune$lambda)
+
+```
+
+> part f: Fit a lasso model on the training set, with lambda chosen by cross-validation. Report the lambda chosen, and display the final model coefficients.
+
+SOLUTION: Lambda = 24.7708
+
+```{r}
+myGrid2 <- expand.grid(alpha = 1, 
+                      lambda = 10^seq(10, -2, length = 100))
+
+set.seed(495)
+lasso_model1 <- train(
+  Apps ~ ., 
+  data = train_app,
+  method = "glmnet",
+  tuneGrid = myGrid2,
+  trControl = myControl
+)
+```
+
+```{r}
+# to get the best lambda
+lasso_model1$bestTune$lambda
+
+# to get the coefficients for the final model
+coef(lasso_model1$finalModel, s = lasso_model1$bestTune$lambda)
+
+```
+
+> part g: Now we need to work to compare the models. We want to compare both the test errors and coefficients, at a minimum. You can also compare their results on the training set or through the CV framework. You'll need to do some work before addressing the following questions as part of your response. Do the test errors differ much? (Go compute them if you didn't above and show your work.) Do the coefficients differ greatly? In particular, if any variables were left out of the model in (d) or (f), is there any insight that they might have been removed based on the models in (c) or (e)?
+
+SOLUTION:
+
+```{r}
+summary(resamples(list(
+  lm_model = reglm_model1,
+  step_model = steplm_model1,
+  ridge_model = ridge_model1,
+  lasso_model = lasso_model1
+)))
+
+```
+
+The test errors differ minimally across the 4 models. By MAE, RMSE and R-squared we might prefer lasso.
+
+```{r}
+reglm_coefs <- summary(reglm_model1)$coefficients[,1]
+ridge_coefs <- coef(ridge_model1$finalModel, s = ridge_model1$bestTune$lambda)[,1]
+lasso_coefs <- coef(lasso_model1$finalModel, s = lasso_model1$bestTune$lambda)[,1]
+
+
+steplm_coefs <- summary(steplm_model1)$coefficients[,1]
+
+
+var_names <- names(reglm_coefs)
+steplm_alignedcoefs <- setNames(numeric(length(var_names)), var_names)
+common_terms <- intersect(var_names, names(steplm_coefs))
+steplm_alignedcoefs[common_terms] <- steplm_coefs[common_terms]
+
+
+mydata <- data.frame(cbind(reglm_coefs, steplm_alignedcoefs, ridge_coefs, lasso_coefs))
+
+mydata <- mydata |> 
+  mutate(name = row.names(mydata)) |>
+  rename(steplm_coefs = steplm_alignedcoefs)
+
+mydata |> 
+  select(reglm_coefs, steplm_coefs, ridge_coefs, lasso_coefs) |>
+  kable(booktabs = TRUE)
+
+
+```
+
+Lasso removes 4 variables while the step wise regression model drops 6 variables. There doesn't appear to any important insight lost as a result of the removal of those variables.
+
+```{r}
+#Using the test set
+regtest_pred <- predict(reglm_model1, test_app)
+steplm_pred <- predict(steplm_model1, test_app)
+ridgetest_pred <- predict(ridge_model1, test_app, s = ridge_model1$bestTune$lambda)
+lassotest_pred <- predict(lasso_model1, test_app, s = lasso_model1$bestTune$lambda)
+# Compute MSEs
+regtest_mse <- mean((test_app$Apps - regtest_pred)^2)
+regtest_mse
+ridgetest_mse <- mean((test_app$Apps - ridgetest_pred)^2)
+ridgetest_mse
+steplmtest_mse <- mean((test_app$Apps - steplm_pred)^2)
+steplmtest_mse
+lassotest_mse <- mean((test_app$Apps - lassotest_pred)^2)
+lassotest_mse
+
+```
+
+Lasso still performing better than the other models.
+
+> part h: Which final model would you select here? Why?
+
+SOLUTION: I would select the lasso model since it is the preferred model if we consider the all the test errors. Also, it removed 4 predictors from the model which simplifies interpretation of the final model.
+
+\newpage
+
+## Additional 2 - Soil predictions
+
+The data comes from a Kaggle competition: https://www.kaggle.com/c/afsis-soil-properties. The original data set contained 3600 variables, 3599 possible predictors (really, 3578 and some other variables) and a response, Sand. The 3599 predictors were reduced to 106 that can "best" distinguish between the two levels of Depth (another variable in the data set). The resulting data set of 107 variables (106 predictors and the response variable, Sand) was saved in the data set "newsoil". The row numbers should be removed as demonstrated below. We want to use this data set due to the large number of predictors to see what our shrinkage methods do.
+
+```{r}
+newsoil <- read.csv("https://awagaman.people.amherst.edu/stat495/newsoil.csv",
+                    header = T)
+newsoil <- select(newsoil, -X)
+```
+
+Our focus is on predicting the response variable Sand, using the selected variables from previous work.
+
+> part a: Split the data set into a training and test set (75/25), with a seed of your choice.
+
+SOLUTION:
+
+```{r}
+set.seed(495)
+split_sand  <- initial_split(newsoil, prop = 0.75, 
+                              strata = "Sand")
+train_sand  <- training(split_sand)
+test_sand   <- testing(split_sand)
+```
+
+> part b: Create a cross-validation framework to use for the models that will be fit below.
+
+SOLUTION:
+
+```{r}
+#dim(newsoil)
+#Repeated cv because n=1157 < 10000
+myControl2 <- trainControl(method = "repeatedcv", number = 10, repeats = 10)
+```
+
+> part c: Fit lasso models to predict Sand using all the possible predictors. Choose two lasso models - one that has a "best" lambda determined in some appropriate way, and another model with a different non-zero lambda of your choice. Report your lambdas. How many slope coefficients are set to 0 in each of your chosen lasso models?
+
+Hint: You only have to train the lasso model once. It saves coefficients for multiple values of lambda. Get the coefficients at the two values of lambda and save them, then count the zero or non-zero entries in the vectors. Note that you aren't required to display these vectors, because of their length.
+
+SOLUTION:
+
+The cross-validation procedure selected a best $\lambda$ = 0.01. At this $\lambda$, 101 slope coefficients were shrunk to zero out of the 106 predictors. At my non-zero $\lambda$ = 1, the shrinkage was much stronger, and all 106 slope coefficients were set to zero, leaving only the intercept.
+
+```{r, cache = TRUE}
+myGrid3 <- expand.grid(alpha = 1, 
+                      lambda = 10^seq(10, -2, length = 100))
+
+set.seed(495)
+lasso_model2 <- train(
+  Sand ~ ., 
+  data = train_sand,
+  method = "glmnet",
+  tuneGrid = myGrid3,
+  trControl = myControl2
+)
+```
+
+```{r}
+# to get the best lambda
+lasso_model2$bestTune$lambda
+
+# to get the coefficients for the final model
+coef1 <- coef(lasso_model2$finalModel, s = lasso_model2$bestTune$lambda)
+coef2 <- coef(lasso_model2$finalModel, s = 1)
+```
+
+> part d: Fit an elastic net model to predict Sand using all the possible predictors with appropriate searches for the tuning parameters. How many slope coefficients are set to 0 in your elastic net model? What are the chosen values of the tuning parameters? Did it pick a lasso or ridge model? How do you know?
+
+SOLUTION:
+
+The model selected $\alpha$ = 0.05 and $\lambda$ = 0.01 as the optimal tuning parameters. 16 slope coefficients out of 106 were set to zero, while the rest remained nonzero. Because  $\alpha$ = 0.05 is very close to zero, the model is much closer to ridge regression than to lasso. I know this because $\alpha$ = 1 corresponds to a pure lasso model and $\alpha$ = 0 corresponds to a pure ridge model. Since $\alpha$ = 0.05 is closer zero, the model behaved like ridge regression, shrinking most slope coefficients but still performing slight variable selection.
+
+```{r, cache = TRUE}
+myGrid4 <- expand.grid(alpha = seq(0, 1, by = 0.05),
+                      lambda = 10^seq(10, -2, length = 100))
+
+# This will take some time to run because of all the alpha values AND lambda values
+set.seed(495)
+enet_model1 <- train(
+  Sand ~ ., 
+  data = train_sand,
+  method = "glmnet",
+  tuneGrid = myGrid4,
+  trControl = myControl2
+)
+```
+
+```{r}
+
+# to get the best alpha and lambda
+enet_model1$bestTune$alpha
+enet_model1$bestTune$lambda
+
+# to get the coefficients for the final model
+coef3 <- coef(enet_model1$finalModel, s = enet_model1$bestTune$lambda)
+
+```
+
+> part e: Compute test MSEs for both of your lasso models and your elastic net model.
+
+SOLUTION:
+
+```{r}
+# Refit lasso for lambda = 1
+myGrid5 <- expand.grid(alpha = 1, 
+                      lambda = 1)
+
+set.seed(495)
+lasso_model22 <- train(
+  Sand ~ ., 
+  data = train_sand,
+  method = "glmnet",
+  tuneGrid = myGrid5,
+  trControl = myControl2
+)
+```
+
+```{r}
+lassotest1_pred <- predict(lasso_model2, test_sand, s = lasso_model2$bestTune$lambda)
+lassotest22_pred <- predict(lasso_model22, test_sand)
+enettest_pred <- predict(enet_model1, test_sand, s = enet_model1$bestTune$lambda)
+
+#Copmputing mse
+lassotest1_mse <- mean((test_sand$Sand - lassotest1_pred)^2)
+lassotest1_mse
+lassotest22_mse <- mean((test_sand$Sand - lassotest22_pred)^2)
+lassotest22_mse
+enettest1_mse <- mean((test_sand$Sand - enettest_pred)^2)
+enettest1_mse
+```
+
+> part f: Write a few sentences to address the following questions. Does the test MSE from the model with the "best" lambda suggest it is in fact a better predictive model than your other lasso model? Is the elastic net model better than the lasso models? Which final model would you choose here from these three models? Why?
+
+Hint: You can compare metrics not specifically referenced here, such as performance on the training set or in the CV results for the final model selection. You need to figure out your own rationale for your model choice and there are many options.
+
+SOLUTION:
+
+The test MSE for the lasso model with the "best" lambda is 0.31523, which is much lower than the test MSE for the other lasso model (1.01401). This confirms that the best lambda model is indeed a better predictive model than the alternative lasso model. The elastic net model has the lowest test MSE (0.295979), indicating that it outperforms both lasso models in predictive accuracy.
+
+I would choose the elastic net model as the final model based on these results. It achieves the lowest test error (MSE) and combines the properties of both lasso and ridge regression i.e. balances variable selection with coefficient shrinkage which in turn improves the stability of the prediction.
