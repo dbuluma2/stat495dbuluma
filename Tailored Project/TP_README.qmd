@@ -5,6 +5,28 @@ format: pdf
 editor: visual
 ---
 
+# Practicing Academic Integrity
+
+If you worked with others or used resources outside of provided course material, such as Generative AI (anything besides our textbook, course materials in the repo, labs, R help menu) to help complete this assignment, please acknowledge them below using a bulleted list. Remember that according to our class framework, if you engage with Generative AI tools, the tool and date of use must be listed here, and then a complete record of the chat history must be appended to the assignment.
+
+<!-- ~~~~~~~~~~~~~~~~ YOU MAY BEGIN EDITING BELOW THIS LINE ~~~~~~~~~~~~~~~~ -->
+
+*I acknowledge the following individuals with whom I worked on this assignment:*
+
+Name(s) and how they assisted you
+
+-   
+
+*I used the following sources to help complete this assignment:*
+
+Source(s) and where used in your submission
+
+- I used ChatGPT to ask many questions on how to use Tableau, ask for help formatting of html code for readability, and seek feedback on whether prose or list would be better for my writeup: https://chatgpt.com/share/68e48cb1-caa4-800c-96ca-a8012a717612
+- I used my STAT 231 blog project and STAT 230 project as a refresher for some code syntaxes.
+- I watched many demos on the Tableau Public website to learn how to make dashboards.
+
+\newpage
+
 ## Project Overview
 
 This project investigates sales performance patterns in an e-commerce dataset by combining statistical analysis in R and business intelligence visualization in Tableau.
@@ -40,7 +62,7 @@ The Tableau dashboard is embedded within the HTML report. However, since embedde
 
 1.  Primary Access (Embedded): Open the `TPproject.html` report and scroll to the Tableau Dashboard section.
 
-2.  Alternate Access (Recommended): <https://public.tableau.com/shared/GGJS4CRS7?:display_count=n&:origin=viz_share_link>
+2.  Alternate Access (Recommended): <https://public.tableau.com/views/TP_ecommerce_dashboard/Dashboard1?:language=en-US&publish=yes&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link>
 
 3.  Offline Option: Download and open the file `TP_ecommerce_dashboard.twbx` in Tableau Desktop or Tableau Public Desktop.
 
