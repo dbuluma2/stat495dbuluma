@@ -1,0 +1,57 @@
+---
+title: "Tailored Project README"
+author: "Daizy Buluma"
+format: pdf
+editor: visual
+---
+
+## Project Overview
+
+This project investigates sales performance patterns in an e-commerce dataset by combining statistical analysis in R and business intelligence visualization in Tableau.
+
+## Main Deliverables
+
+-   **`TPproject.html`** : The final HTML report (Quarto-based) that integrates written analysis, R visualizations, regression results, and an embedded Tableau dashboard.
+-   **`TP_ecommerce_dashboard.twbx`** : The Tableau packaged workbook containing the full interactive dashboard, including KPIs, sales trends, customer behavior, and returns analysis.
+
+## Repository Contents
+
+The repository also includes all supporting files necessary for reproducibility:
+
+- **`data.csv`**: Original raw e-commerce dataset (pre-cleaning). 
+- **`clean_ecommerce.csv`**: Cleaned version used for regression and visualization. 
+- **`TPproject.qmd`**: Quarto source file for the HTML report which includes R code and written sections. 
+- **`header_image`**: Cover image used in the HTML report for visual presentation. 
+- **`TPproject_files`**: Automatically generated folder containing dependencies when rendering the HTML. 
+- **`TP_README.pdf`**: This document, describing contents and access instructions.
+
+## Accessing the Blog Report
+
+Because class repositories must remain private, I could not publish the HTML report on GitHub as I had hoped. My initial plan was to host the blog on Github in order to get a shareable link. While it has been pushed to GitHub, the online preview appears as raw HTML code due to privacy restrictions.
+
+**Solutions:**
+
+-   (Recommended) Open the `.qmd` file in RStudio and click Render to view it with full styling and interactivity.
+-   Alternatively, download the raw html file from github repo, and click on the downloaded file to run (this gives a very simplified version of the blog with no themes).
+
+## Accessing the Dashboard
+
+The Tableau dashboard is embedded within the HTML report. However, since embedded dashboards may load slowly, there are two alternate access options:
+
+1.  Primary Access (Embedded): Open the `TPproject.html` report and scroll to the Tableau Dashboard section.
+
+2.  Alternate Access (Recommended): <https://public.tableau.com/shared/GGJS4CRS7?:display_count=n&:origin=viz_share_link>
+
+3.  Offline Option: Download and open the file `TP_ecommerce_dashboard.twbx` in Tableau Desktop or Tableau Public Desktop.
+
+If any visualization fails to load, rendering the `.qmd` file in RStudio (`Render → HTML`) will ensure the full dashboard is displayed locally.
+
+## Reflection
+
+Working on this project was both challenging and rewarding. I initially planned to build the interactive dashboard using Power BI, but partway through the project I learned that sharing Power BI dashboards publicly would be difficult without institutional access. This led me to pivot to Tableau, which required extra time to learn and adapt my workflow. Although this change delayed my progress, it turned out to be one of the most valuable parts of the experience.
+
+I really enjoyed learning how to use Tableau, from designing KPI cards and creating calculated fields to building an interactive dashboard that tells a business story. The process gave me a deeper appreciation of how data visualization tools bring analytical results to life and make insights easier to communicate.
+
+To complete the written portion of the project, I revisited one of my STAT-231 projects, which was a nostalgic and helpful refresher on how to structure and style html report.
+
+Overall, this project reaffirmed my passion for business intelligence. I plan to continue improving my Tableau skills and creating more dashboards to strengthen both my analytical thinking and creative presentation abilities.
