@@ -16,7 +16,6 @@ editor:
 #| include: false
 
 # Set code chunk defaults 
-# Consider adding `message = FALSE` option
 knitr::opts_chunk$set(echo = FALSE) 
                       
 # Set R environment options
@@ -245,11 +244,9 @@ The goal of this regression analysis is to identify the key factors that influen
 
 
 ```{r}
-
 regression_data <- transactions_clean |> 
   select(everything()) |> 
   filter(TotalPrice > 0)
-
 ```
 
 Before fitting the model, the dataset was filtered to include only valid, non-cancellation transactions and positive values of price and quantity. 
