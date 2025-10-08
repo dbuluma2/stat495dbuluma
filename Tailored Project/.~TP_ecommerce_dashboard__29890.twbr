@@ -1,0 +1,1912 @@
+<?xml version='1.0' encoding='utf-8' ?>
+
+<!-- build 20242.24.0910.0334                               -->
+<workbook original-version='18.1' source-build='2024.2.3 (20242.24.0910.0334)' source-platform='mac' version='18.1' xmlns:user='http://www.tableausoftware.com/xml/user'>
+  <document-format-change-manifest>
+    <_.fcp.AccessibleZoneTabOrder.true...AccessibleZoneTabOrder />
+    <_.fcp.AnimationOnByDefault.true...AnimationOnByDefault />
+    <AutoCreateAndUpdateDSDPhoneLayouts />
+    <IntuitiveSorting />
+    <IntuitiveSorting_SP2 />
+    <MapboxVectorStylesAndLayers />
+    <_.fcp.MarkAnimation.true...MarkAnimation />
+    <_.fcp.ObjectModelEncapsulateLegacy.true...ObjectModelEncapsulateLegacy />
+    <_.fcp.ObjectModelExtractV2.true...ObjectModelExtractV2 />
+    <_.fcp.ObjectModelTableType.true...ObjectModelTableType />
+    <_.fcp.SchemaViewerObjectModel.true...SchemaViewerObjectModel />
+    <SetMembershipControl />
+    <SheetIdentifierTracking />
+    <_.fcp.VConnDownstreamExtractsWithWarnings.true...VConnDownstreamExtractsWithWarnings />
+    <WindowsPersistSimpleIdentifiers />
+    <WorksheetBackgroundTransparency />
+    <ZoneBackgroundTransparency />
+  </document-format-change-manifest>
+  <preferences>
+    <preference name='ui.encoding.shelf.height' value='24' />
+    <preference name='ui.shelf.height' value='26' />
+  </preferences>
+  <_.fcp.AnimationOnByDefault.false...style>
+    <_.fcp.AnimationOnByDefault.false..._.fcp.MarkAnimation.true...style-rule element='animation'>
+      <_.fcp.AnimationOnByDefault.false...format attr='animation-on' value='ao-on' />
+    </_.fcp.AnimationOnByDefault.false..._.fcp.MarkAnimation.true...style-rule>
+  </_.fcp.AnimationOnByDefault.false...style>
+  <datasources>
+    <datasource caption='clean_ecommerce' inline='true' name='federated.1raf5hd1nwejkf1fvhoo807mht9q' version='18.1'>
+      <connection class='federated'>
+        <named-connections>
+          <named-connection caption='clean_ecommerce' name='textscan.14nl72314xgr8d17cey6a017vjbp'>
+            <connection class='textscan' directory='/var/folders/34/v3nxv6fx1jb28b139gng5sc40000gn/T/tableau-temp/3340258447/Data/Tailored Project' filename='clean_ecommerce.csv' password='' server='' />
+          </named-connection>
+        </named-connections>
+        <_.fcp.ObjectModelEncapsulateLegacy.false...relation connection='textscan.14nl72314xgr8d17cey6a017vjbp' name='clean_ecommerce.csv' table='[clean_ecommerce#csv]' type='table'>
+          <columns character-set='UTF-8' header='yes' locale='en_US' separator=','>
+            <column datatype='string' name='InvoiceNo' ordinal='0' />
+            <column datatype='string' name='StockCode' ordinal='1' />
+            <column datatype='string' date-parse-format='&apos;Pack&apos; &apos;Of&apos; MM &apos;Circus&apos; &apos;Parade&apos; &apos;Tissues&apos;' name='Description' ordinal='2' />
+            <column datatype='integer' name='Quantity' ordinal='3' />
+            <column datatype='datetime' name='InvoiceDate' ordinal='4' />
+            <column datatype='real' name='UnitPrice' ordinal='5' />
+            <column datatype='string' name='CustomerID' ordinal='6' />
+            <column datatype='string' name='Country' ordinal='7' />
+            <column datatype='boolean' name='ReturnFlag' ordinal='8' />
+            <column datatype='boolean' name='PriceFlag' ordinal='9' />
+            <column datatype='real' name='TotalPrice' ordinal='10' />
+            <column datatype='string' name='TransactionMonth' ordinal='11' />
+            <column datatype='integer' name='TransactionYear' ordinal='12' />
+          </columns>
+        </_.fcp.ObjectModelEncapsulateLegacy.false...relation>
+        <_.fcp.ObjectModelEncapsulateLegacy.true...relation connection='textscan.14nl72314xgr8d17cey6a017vjbp' name='clean_ecommerce.csv' table='[clean_ecommerce#csv]' type='table'>
+          <columns character-set='UTF-8' header='yes' locale='en_US' separator=','>
+            <column datatype='string' name='InvoiceNo' ordinal='0' />
+            <column datatype='string' name='StockCode' ordinal='1' />
+            <column datatype='string' date-parse-format='&apos;Pack&apos; &apos;Of&apos; MM &apos;Circus&apos; &apos;Parade&apos; &apos;Tissues&apos;' name='Description' ordinal='2' />
+            <column datatype='integer' name='Quantity' ordinal='3' />
+            <column datatype='datetime' name='InvoiceDate' ordinal='4' />
+            <column datatype='real' name='UnitPrice' ordinal='5' />
+            <column datatype='string' name='CustomerID' ordinal='6' />
+            <column datatype='string' name='Country' ordinal='7' />
+            <column datatype='boolean' name='ReturnFlag' ordinal='8' />
+            <column datatype='boolean' name='PriceFlag' ordinal='9' />
+            <column datatype='real' name='TotalPrice' ordinal='10' />
+            <column datatype='string' name='TransactionMonth' ordinal='11' />
+            <column datatype='integer' name='TransactionYear' ordinal='12' />
+          </columns>
+        </_.fcp.ObjectModelEncapsulateLegacy.true...relation>
+        <metadata-records>
+          <metadata-record class='capability'>
+            <remote-name />
+            <remote-type>0</remote-type>
+            <parent-name>[clean_ecommerce.csv]</parent-name>
+            <remote-alias />
+            <aggregation>Count</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='string' name='character-set'>&quot;UTF-8&quot;</attribute>
+              <attribute datatype='string' name='collation'>&quot;en_US&quot;</attribute>
+              <attribute datatype='string' name='field-delimiter'>&quot;,&quot;</attribute>
+              <attribute datatype='string' name='header-row'>&quot;true&quot;</attribute>
+              <attribute datatype='string' name='locale'>&quot;en_US&quot;</attribute>
+              <attribute datatype='string' name='single-char'>&quot;&quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>InvoiceNo</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[InvoiceNo]</local-name>
+            <parent-name>[clean_ecommerce.csv]</parent-name>
+            <remote-alias>InvoiceNo</remote-alias>
+            <ordinal>0</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LEN_RUS' />
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[clean_ecommerce.csv_2866355DCB9A4244BEC250685DC4EF3F]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>StockCode</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[StockCode]</local-name>
+            <parent-name>[clean_ecommerce.csv]</parent-name>
+            <remote-alias>StockCode</remote-alias>
+            <ordinal>1</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LEN_RUS' />
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[clean_ecommerce.csv_2866355DCB9A4244BEC250685DC4EF3F]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>Description</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[Description]</local-name>
+            <parent-name>[clean_ecommerce.csv]</parent-name>
+            <remote-alias>Description</remote-alias>
+            <ordinal>2</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LEN_RUS' />
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[clean_ecommerce.csv_2866355DCB9A4244BEC250685DC4EF3F]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>Quantity</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[Quantity]</local-name>
+            <parent-name>[clean_ecommerce.csv]</parent-name>
+            <remote-alias>Quantity</remote-alias>
+            <ordinal>3</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[clean_ecommerce.csv_2866355DCB9A4244BEC250685DC4EF3F]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>InvoiceDate</remote-name>
+            <remote-type>135</remote-type>
+            <local-name>[InvoiceDate]</local-name>
+            <parent-name>[clean_ecommerce.csv]</parent-name>
+            <remote-alias>InvoiceDate</remote-alias>
+            <ordinal>4</ordinal>
+            <local-type>datetime</local-type>
+            <aggregation>Year</aggregation>
+            <contains-null>true</contains-null>
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[clean_ecommerce.csv_2866355DCB9A4244BEC250685DC4EF3F]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>UnitPrice</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[UnitPrice]</local-name>
+            <parent-name>[clean_ecommerce.csv]</parent-name>
+            <remote-alias>UnitPrice</remote-alias>
+            <ordinal>5</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[clean_ecommerce.csv_2866355DCB9A4244BEC250685DC4EF3F]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>CustomerID</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[CustomerID]</local-name>
+            <parent-name>[clean_ecommerce.csv]</parent-name>
+            <remote-alias>CustomerID</remote-alias>
+            <ordinal>6</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LEN_RUS' />
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[clean_ecommerce.csv_2866355DCB9A4244BEC250685DC4EF3F]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>Country</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[Country]</local-name>
+            <parent-name>[clean_ecommerce.csv]</parent-name>
+            <remote-alias>Country</remote-alias>
+            <ordinal>7</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LEN_RUS' />
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[clean_ecommerce.csv_2866355DCB9A4244BEC250685DC4EF3F]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>ReturnFlag</remote-name>
+            <remote-type>11</remote-type>
+            <local-name>[ReturnFlag]</local-name>
+            <parent-name>[clean_ecommerce.csv]</parent-name>
+            <remote-alias>ReturnFlag</remote-alias>
+            <ordinal>8</ordinal>
+            <local-type>boolean</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>true</contains-null>
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[clean_ecommerce.csv_2866355DCB9A4244BEC250685DC4EF3F]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>PriceFlag</remote-name>
+            <remote-type>11</remote-type>
+            <local-name>[PriceFlag]</local-name>
+            <parent-name>[clean_ecommerce.csv]</parent-name>
+            <remote-alias>PriceFlag</remote-alias>
+            <ordinal>9</ordinal>
+            <local-type>boolean</local-type>
+            <aggregation>Count</aggregation>
+            <contains-null>true</contains-null>
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[clean_ecommerce.csv_2866355DCB9A4244BEC250685DC4EF3F]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>TotalPrice</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[TotalPrice]</local-name>
+            <parent-name>[clean_ecommerce.csv]</parent-name>
+            <remote-alias>TotalPrice</remote-alias>
+            <ordinal>10</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[clean_ecommerce.csv_2866355DCB9A4244BEC250685DC4EF3F]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>TransactionMonth</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[TransactionMonth]</local-name>
+            <parent-name>[clean_ecommerce.csv]</parent-name>
+            <remote-alias>TransactionMonth</remote-alias>
+            <ordinal>11</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LEN_RUS' />
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[clean_ecommerce.csv_2866355DCB9A4244BEC250685DC4EF3F]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>TransactionYear</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[TransactionYear]</local-name>
+            <parent-name>[clean_ecommerce.csv]</parent-name>
+            <remote-alias>TransactionYear</remote-alias>
+            <ordinal>12</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[clean_ecommerce.csv_2866355DCB9A4244BEC250685DC4EF3F]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+          </metadata-record>
+        </metadata-records>
+      </connection>
+      <aliases enabled='yes' />
+      <column caption='Customer Total Spend ' datatype='real' name='[Calculation_1378594128016252928]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='{ FIXED [CustomerID] : SUM([TotalPrice]) }' />
+      </column>
+      <column caption='Customer Order Count' datatype='integer' name='[Calculation_1378594128016850945]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='{ FIXED [CustomerID] : COUNTD([InvoiceNo]) }' />
+      </column>
+      <column caption='Avg Order Value (Customer)' datatype='real' name='[Calculation_1378594128017530883]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='[Calculation_1378594128016252928]/[Calculation_1378594128016850945]' />
+      </column>
+      <column caption='3-month Moving Avg' datatype='real' name='[Calculation_1378594128017899524]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='WINDOW_AVG(SUM([TotalPrice]), -2, 0)'>
+          <table-calc ordering-type='Rows' />
+        </calculation>
+      </column>
+      <column caption='YTD Sales LOD' datatype='real' name='[Calculation_1378594128098242565]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='{ FIXED : SUM(IF YEAR([InvoiceDate])={MAX(YEAR([InvoiceDate]))} THEN [TotalPrice] END)}' />
+      </column>
+      <column caption='YOY Sales' datatype='real' name='[Calculation_1378594128100524039]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='([Calculation_1378594128098242565]-[YTD Sales LOD (copy)_1378594128099872774])/[YTD Sales LOD (copy)_1378594128099872774]/100' />
+      </column>
+      <column caption='YOY sales margin' datatype='string' name='[Calculation_1378594128113479690]' role='dimension' type='nominal'>
+        <calculation class='tableau' formula='IF [Calculation_1378594128100524039]&gt;0 THEN &apos;▲&apos; ELSEIF [Calculation_1378594128100524039]&lt;0 THEN &apos;▼&apos; END' />
+      </column>
+      <column caption='Continent' datatype='string' name='[Calculation_1378594128188579861]' role='dimension' semantic-role='[Country].[Name]' type='nominal'>
+        <calculation class='tableau' formula='CASE [Country]&#10;    // Europe&#10;    WHEN &quot;United Kingdom&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;France&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Netherlands&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Germany&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Norway&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Eire&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Switzerland&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Spain&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Poland&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Portugal&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Italy&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Belgium&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Lithuania&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Iceland&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Channel Islands&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Denmark&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Cyprus&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Sweden&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Austria&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Finland&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Greece&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Malta&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Czech Republic&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;European Community&quot; THEN &quot;Europe&quot;&#10;&#10;    // Asia &amp; Middle East&#10;    WHEN &quot;Israel&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Bahrain&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Hong Kong&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Singapore&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Lebanon&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;United Arab Emirates&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Saudi Arabia&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Japan&quot; THEN &quot;Asia&quot;&#10;&#10;    // Oceania&#10;    WHEN &quot;Australia&quot; THEN &quot;Oceania&quot;&#10;&#10;    // North &amp; South America&#10;    WHEN &quot;Canada&quot; THEN &quot;North America&quot;&#10;    WHEN &quot;Usa&quot; THEN &quot;North America&quot;&#10;    WHEN &quot;Brazil&quot; THEN &quot;South America&quot;&#10;&#10;    // Africa&#10;    WHEN &quot;Rsa&quot; THEN &quot;Africa&quot;&#10;&#10;    // Unknown&#10;    WHEN &quot;Unspecified&quot; THEN &quot;Other&quot;&#10;    ELSE &quot;Other&quot;&#10;END' />
+      </column>
+      <column caption='YTD Sales' datatype='real' name='[Calculation_1378594128189579286]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='IF YEAR([InvoiceDate])={MAX(YEAR([InvoiceDate]))} THEN [TotalPrice] END' />
+      </column>
+      <column caption='Transaction Type' datatype='string' name='[Calculation_1378594128208158743]' role='dimension' type='nominal'>
+        <calculation class='tableau' formula='IF [Quantity] &lt; 0 THEN &quot;Return&quot; ELSE &quot;Sale&quot; END' />
+      </column>
+      <column datatype='string' name='[Country]' role='dimension' semantic-role='[Country].[ISO3166_2]' type='nominal' />
+      <column caption='Customer ID' datatype='string' name='[CustomerID]' role='dimension' type='nominal' />
+      <column caption='Invoice Date' datatype='datetime' name='[InvoiceDate]' role='dimension' type='ordinal' />
+      <column caption='Invoice No' datatype='string' default-role='measure' default-type='quantitative' name='[InvoiceNo]' role='dimension' type='nominal' />
+      <column caption='PYTD Quantity LOD' datatype='integer' name='[PYTD Sales LOD (copy)_1378594128123703308]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='{ FIXED : SUM(IF YEAR([InvoiceDate])={MAX(YEAR([InvoiceDate]))-1} THEN [Quantity] END)}' />
+      </column>
+      <column caption='Price Flag' datatype='boolean' name='[PriceFlag]' role='dimension' type='nominal' />
+      <column caption='Return Flag' datatype='boolean' name='[ReturnFlag]' role='dimension' type='nominal' />
+      <column caption='Stock Code' datatype='string' name='[StockCode]' role='dimension' type='nominal' />
+      <column caption='Sales' datatype='real' name='[TotalPrice]' role='measure' type='quantitative' />
+      <column caption='Transaction Month' datatype='string' name='[TransactionMonth]' role='dimension' type='nominal' />
+      <column caption='Transaction Year' datatype='integer' name='[TransactionYear]' role='dimension' type='quantitative' />
+      <column caption='Unit Price' datatype='real' name='[UnitPrice]' role='measure' type='quantitative' />
+      <column caption='YOY Quantity LOD' datatype='real' name='[YOY Sales (copy)_1378594128124235789]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='([YTD Sales LOD (copy)_1378594128123342859]-[PYTD Sales LOD (copy)_1378594128123703308])/[PYTD Sales LOD (copy)_1378594128123703308]/100' />
+      </column>
+      <column caption='YOY quantity margin' datatype='string' name='[YOY sales margin (copy)_1378594128125100046]' role='dimension' type='nominal'>
+        <calculation class='tableau' formula='IF [YOY Sales (copy)_1378594128124235789]&gt;0 THEN &apos;▲&apos; ELSEIF [YOY Sales (copy)_1378594128124235789]&lt;0 THEN &apos;▼&apos; END' />
+      </column>
+      <column caption='PYTD Sales LOD' datatype='real' name='[YTD Sales LOD (copy)_1378594128099872774]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='{ FIXED : SUM(IF YEAR([InvoiceDate])={MAX(YEAR([InvoiceDate]))-1} THEN [TotalPrice] END)}' />
+      </column>
+      <column caption='YTD Quantity LOD' datatype='integer' name='[YTD Sales LOD (copy)_1378594128123342859]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='{ FIXED : SUM(IF YEAR([InvoiceDate])={MAX(YEAR([InvoiceDate]))} THEN [Quantity] END)}' />
+      </column>
+      <_.fcp.ObjectModelTableType.true...column caption='clean_ecommerce.csv' datatype='table' name='[__tableau_internal_object_id__].[clean_ecommerce.csv_2866355DCB9A4244BEC250685DC4EF3F]' role='measure' type='quantitative' />
+      <column-instance column='[Calculation_1378594128188579861]' derivation='None' name='[none:Calculation_1378594128188579861:nk]' pivot='key' type='nominal' />
+      <column-instance column='[Calculation_1378594128208158743]' derivation='None' name='[none:Calculation_1378594128208158743:nk]' pivot='key' type='nominal' />
+      <extract _.fcp.ObjectModelExtractV2.true...object-id='' _.fcp.VConnDownstreamExtractsWithWarnings.true...user-specific='false' count='-1' enabled='true' units='records'>
+        <connection access_mode='readonly' authentication='auth-none' author-locale='en_US' class='hyper' dbname='Data/TP_ecommerce_dashboard.twb Files/clean_ecommerce.hyper' default-settings='yes' schema='Extract' sslmode='' tablename='Extract' update-time='10/07/2025 12:58:07 AM' username='tableau_internal_user'>
+          <_.fcp.ObjectModelEncapsulateLegacy.false...relation name='Extract' table='[Extract].[Extract]' type='table' />
+          <_.fcp.ObjectModelEncapsulateLegacy.true...relation name='Extract' table='[Extract].[Extract]' type='table' />
+          <refresh>
+            <refresh-event add-from-file-path='clean_ecommerce' increment-value='%null%' refresh-type='create' rows-inserted='528727' timestamp-start='2025-10-07 00:58:05.595' />
+          </refresh>
+          <metadata-records>
+            <metadata-record class='column'>
+              <remote-name>InvoiceNo</remote-name>
+              <remote-type>129</remote-type>
+              <local-name>[InvoiceNo]</local-name>
+              <parent-name>[Extract]</parent-name>
+              <remote-alias>InvoiceNo</remote-alias>
+              <ordinal>0</ordinal>
+              <family>clean_ecommerce.csv</family>
+              <local-type>string</local-type>
+              <aggregation>Count</aggregation>
+              <approx-count>49678</approx-count>
+              <contains-null>true</contains-null>
+              <collation flag='0' name='LEN_RUS' />
+              <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[clean_ecommerce.csv_2866355DCB9A4244BEC250685DC4EF3F]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>StockCode</remote-name>
+              <remote-type>129</remote-type>
+              <local-name>[StockCode]</local-name>
+              <parent-name>[Extract]</parent-name>
+              <remote-alias>StockCode</remote-alias>
+              <ordinal>1</ordinal>
+              <family>clean_ecommerce.csv</family>
+              <local-type>string</local-type>
+              <aggregation>Count</aggregation>
+              <approx-count>11301</approx-count>
+              <contains-null>true</contains-null>
+              <collation flag='0' name='LEN_RUS' />
+              <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[clean_ecommerce.csv_2866355DCB9A4244BEC250685DC4EF3F]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>Description</remote-name>
+              <remote-type>129</remote-type>
+              <local-name>[Description]</local-name>
+              <parent-name>[Extract]</parent-name>
+              <remote-alias>Description</remote-alias>
+              <ordinal>2</ordinal>
+              <family>clean_ecommerce.csv</family>
+              <local-type>string</local-type>
+              <aggregation>Count</aggregation>
+              <approx-count>11448</approx-count>
+              <contains-null>true</contains-null>
+              <collation flag='0' name='LEN_RUS' />
+              <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[clean_ecommerce.csv_2866355DCB9A4244BEC250685DC4EF3F]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>Quantity</remote-name>
+              <remote-type>20</remote-type>
+              <local-name>[Quantity]</local-name>
+              <parent-name>[Extract]</parent-name>
+              <remote-alias>Quantity</remote-alias>
+              <ordinal>3</ordinal>
+              <family>clean_ecommerce.csv</family>
+              <local-type>integer</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>351</approx-count>
+              <contains-null>true</contains-null>
+              <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[clean_ecommerce.csv_2866355DCB9A4244BEC250685DC4EF3F]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>InvoiceDate</remote-name>
+              <remote-type>135</remote-type>
+              <local-name>[InvoiceDate]</local-name>
+              <parent-name>[Extract]</parent-name>
+              <remote-alias>InvoiceDate</remote-alias>
+              <ordinal>4</ordinal>
+              <family>clean_ecommerce.csv</family>
+              <local-type>datetime</local-type>
+              <aggregation>Year</aggregation>
+              <approx-count>46919</approx-count>
+              <contains-null>true</contains-null>
+              <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[clean_ecommerce.csv_2866355DCB9A4244BEC250685DC4EF3F]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>UnitPrice</remote-name>
+              <remote-type>5</remote-type>
+              <local-name>[UnitPrice]</local-name>
+              <parent-name>[Extract]</parent-name>
+              <remote-alias>UnitPrice</remote-alias>
+              <ordinal>5</ordinal>
+              <family>clean_ecommerce.csv</family>
+              <local-type>real</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>528</approx-count>
+              <contains-null>true</contains-null>
+              <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[clean_ecommerce.csv_2866355DCB9A4244BEC250685DC4EF3F]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>CustomerID</remote-name>
+              <remote-type>129</remote-type>
+              <local-name>[CustomerID]</local-name>
+              <parent-name>[Extract]</parent-name>
+              <remote-alias>CustomerID</remote-alias>
+              <ordinal>6</ordinal>
+              <family>clean_ecommerce.csv</family>
+              <local-type>string</local-type>
+              <aggregation>Count</aggregation>
+              <approx-count>13104</approx-count>
+              <contains-null>true</contains-null>
+              <collation flag='0' name='LEN_RUS' />
+              <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[clean_ecommerce.csv_2866355DCB9A4244BEC250685DC4EF3F]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>Country</remote-name>
+              <remote-type>129</remote-type>
+              <local-name>[Country]</local-name>
+              <parent-name>[Extract]</parent-name>
+              <remote-alias>Country</remote-alias>
+              <ordinal>7</ordinal>
+              <family>clean_ecommerce.csv</family>
+              <local-type>string</local-type>
+              <aggregation>Count</aggregation>
+              <approx-count>51</approx-count>
+              <contains-null>true</contains-null>
+              <collation flag='0' name='LEN_RUS' />
+              <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[clean_ecommerce.csv_2866355DCB9A4244BEC250685DC4EF3F]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>ReturnFlag</remote-name>
+              <remote-type>11</remote-type>
+              <local-name>[ReturnFlag]</local-name>
+              <parent-name>[Extract]</parent-name>
+              <remote-alias>ReturnFlag</remote-alias>
+              <ordinal>8</ordinal>
+              <family>clean_ecommerce.csv</family>
+              <local-type>boolean</local-type>
+              <aggregation>Count</aggregation>
+              <approx-count>2</approx-count>
+              <contains-null>true</contains-null>
+              <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[clean_ecommerce.csv_2866355DCB9A4244BEC250685DC4EF3F]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>PriceFlag</remote-name>
+              <remote-type>11</remote-type>
+              <local-name>[PriceFlag]</local-name>
+              <parent-name>[Extract]</parent-name>
+              <remote-alias>PriceFlag</remote-alias>
+              <ordinal>9</ordinal>
+              <family>clean_ecommerce.csv</family>
+              <local-type>boolean</local-type>
+              <aggregation>Count</aggregation>
+              <approx-count>1</approx-count>
+              <contains-null>true</contains-null>
+              <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[clean_ecommerce.csv_2866355DCB9A4244BEC250685DC4EF3F]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>TotalPrice</remote-name>
+              <remote-type>5</remote-type>
+              <local-name>[TotalPrice]</local-name>
+              <parent-name>[Extract]</parent-name>
+              <remote-alias>TotalPrice</remote-alias>
+              <ordinal>10</ordinal>
+              <family>clean_ecommerce.csv</family>
+              <local-type>real</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>3739</approx-count>
+              <contains-null>true</contains-null>
+              <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[clean_ecommerce.csv_2866355DCB9A4244BEC250685DC4EF3F]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>TransactionMonth</remote-name>
+              <remote-type>129</remote-type>
+              <local-name>[TransactionMonth]</local-name>
+              <parent-name>[Extract]</parent-name>
+              <remote-alias>TransactionMonth</remote-alias>
+              <ordinal>11</ordinal>
+              <family>clean_ecommerce.csv</family>
+              <local-type>string</local-type>
+              <aggregation>Count</aggregation>
+              <approx-count>12</approx-count>
+              <contains-null>true</contains-null>
+              <collation flag='0' name='LEN_RUS' />
+              <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[clean_ecommerce.csv_2866355DCB9A4244BEC250685DC4EF3F]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>TransactionYear</remote-name>
+              <remote-type>20</remote-type>
+              <local-name>[TransactionYear]</local-name>
+              <parent-name>[Extract]</parent-name>
+              <remote-alias>TransactionYear</remote-alias>
+              <ordinal>12</ordinal>
+              <family>clean_ecommerce.csv</family>
+              <local-type>integer</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>2</approx-count>
+              <contains-null>true</contains-null>
+              <_.fcp.ObjectModelEncapsulateLegacy.true...object-id>[clean_ecommerce.csv_2866355DCB9A4244BEC250685DC4EF3F]</_.fcp.ObjectModelEncapsulateLegacy.true...object-id>
+            </metadata-record>
+          </metadata-records>
+        </connection>
+      </extract>
+      <layout _.fcp.SchemaViewerObjectModel.false...dim-percentage='0.5' _.fcp.SchemaViewerObjectModel.false...measure-percentage='0.4' dim-ordering='alphabetic' measure-ordering='alphabetic' show-structure='true' />
+      <style>
+        <style-rule element='mark'>
+          <encoding attr='color' field='[none:Calculation_1378594128188579861:nk]' type='palette'>
+            <map to='#4e79a7'>
+              <bucket>&quot;Africa&quot;</bucket>
+            </map>
+            <map to='#59a14f'>
+              <bucket>&quot;Oceania&quot;</bucket>
+            </map>
+            <map to='#76b7b2'>
+              <bucket>&quot;North America&quot;</bucket>
+            </map>
+            <map to='#b07aa1'>
+              <bucket>&quot;South America&quot;</bucket>
+            </map>
+            <map to='#e15759'>
+              <bucket>&quot;Europe&quot;</bucket>
+            </map>
+            <map to='#edc948'>
+              <bucket>&quot;Other&quot;</bucket>
+            </map>
+            <map to='#f28e2b'>
+              <bucket>&quot;Asia&quot;</bucket>
+            </map>
+          </encoding>
+          <encoding attr='color' field='[none:Calculation_1378594128208158743:nk]' type='palette'>
+            <map to='#4e79a7'>
+              <bucket>&quot;Return&quot;</bucket>
+            </map>
+            <map to='#f28e2b'>
+              <bucket>&quot;Sale&quot;</bucket>
+            </map>
+          </encoding>
+        </style-rule>
+      </style>
+      <semantic-values>
+        <semantic-value key='[Country].[Name]' value='&quot;United States&quot;' />
+      </semantic-values>
+      <field-sort-info field-sort-order-type='custom-order'>
+        <field-sort-custom-order field='InvoiceNo' />
+        <field-sort-custom-order field='StockCode' />
+        <field-sort-custom-order field='Description' />
+        <field-sort-custom-order field='Quantity' />
+        <field-sort-custom-order field='InvoiceDate' />
+        <field-sort-custom-order field='UnitPrice' />
+        <field-sort-custom-order field='CustomerID' />
+        <field-sort-custom-order field='Country' />
+        <field-sort-custom-order field='ReturnFlag' />
+        <field-sort-custom-order field='PriceFlag' />
+        <field-sort-custom-order field='TotalPrice' />
+        <field-sort-custom-order field='TransactionMonth' />
+        <field-sort-custom-order field='TransactionYear' />
+        <field-sort-custom-order field='Geometry (generated)' />
+        <field-sort-custom-order field='Latitude (generated)' />
+        <field-sort-custom-order field='Longitude (generated)' />
+        <field-sort-custom-order field=':Measure Names' />
+        <field-sort-custom-order field='Multiple Values' />
+      </field-sort-info>
+      <_.fcp.ObjectModelEncapsulateLegacy.true...object-graph>
+        <objects>
+          <object caption='clean_ecommerce.csv' id='clean_ecommerce.csv_2866355DCB9A4244BEC250685DC4EF3F'>
+            <properties context=''>
+              <relation connection='textscan.14nl72314xgr8d17cey6a017vjbp' name='clean_ecommerce.csv' table='[clean_ecommerce#csv]' type='table'>
+                <columns character-set='UTF-8' header='yes' locale='en_US' separator=','>
+                  <column datatype='string' name='InvoiceNo' ordinal='0' />
+                  <column datatype='string' name='StockCode' ordinal='1' />
+                  <column datatype='string' date-parse-format='&apos;Pack&apos; &apos;Of&apos; MM &apos;Circus&apos; &apos;Parade&apos; &apos;Tissues&apos;' name='Description' ordinal='2' />
+                  <column datatype='integer' name='Quantity' ordinal='3' />
+                  <column datatype='datetime' name='InvoiceDate' ordinal='4' />
+                  <column datatype='real' name='UnitPrice' ordinal='5' />
+                  <column datatype='string' name='CustomerID' ordinal='6' />
+                  <column datatype='string' name='Country' ordinal='7' />
+                  <column datatype='boolean' name='ReturnFlag' ordinal='8' />
+                  <column datatype='boolean' name='PriceFlag' ordinal='9' />
+                  <column datatype='real' name='TotalPrice' ordinal='10' />
+                  <column datatype='string' name='TransactionMonth' ordinal='11' />
+                  <column datatype='integer' name='TransactionYear' ordinal='12' />
+                </columns>
+              </relation>
+            </properties>
+            <properties context='extract'>
+              <relation name='Extract' table='[Extract].[Extract]' type='table' />
+            </properties>
+          </object>
+        </objects>
+      </_.fcp.ObjectModelEncapsulateLegacy.true...object-graph>
+    </datasource>
+  </datasources>
+  <mapsources>
+    <mapsource name='Tableau' />
+  </mapsources>
+  <shared-views>
+    <shared-view name='federated.1raf5hd1nwejkf1fvhoo807mht9q'>
+      <datasources>
+        <datasource caption='clean_ecommerce' name='federated.1raf5hd1nwejkf1fvhoo807mht9q' />
+      </datasources>
+      <datasource-dependencies datasource='federated.1raf5hd1nwejkf1fvhoo807mht9q'>
+        <column caption='Continent' datatype='string' name='[Calculation_1378594128188579861]' role='dimension' semantic-role='[Country].[Name]' type='nominal'>
+          <calculation class='tableau' formula='CASE [Country]&#10;    // Europe&#10;    WHEN &quot;United Kingdom&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;France&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Netherlands&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Germany&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Norway&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Eire&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Switzerland&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Spain&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Poland&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Portugal&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Italy&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Belgium&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Lithuania&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Iceland&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Channel Islands&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Denmark&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Cyprus&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Sweden&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Austria&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Finland&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Greece&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Malta&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Czech Republic&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;European Community&quot; THEN &quot;Europe&quot;&#10;&#10;    // Asia &amp; Middle East&#10;    WHEN &quot;Israel&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Bahrain&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Hong Kong&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Singapore&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Lebanon&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;United Arab Emirates&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Saudi Arabia&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Japan&quot; THEN &quot;Asia&quot;&#10;&#10;    // Oceania&#10;    WHEN &quot;Australia&quot; THEN &quot;Oceania&quot;&#10;&#10;    // North &amp; South America&#10;    WHEN &quot;Canada&quot; THEN &quot;North America&quot;&#10;    WHEN &quot;Usa&quot; THEN &quot;North America&quot;&#10;    WHEN &quot;Brazil&quot; THEN &quot;South America&quot;&#10;&#10;    // Africa&#10;    WHEN &quot;Rsa&quot; THEN &quot;Africa&quot;&#10;&#10;    // Unknown&#10;    WHEN &quot;Unspecified&quot; THEN &quot;Other&quot;&#10;    ELSE &quot;Other&quot;&#10;END' />
+        </column>
+        <column-instance column='[Calculation_1378594128188579861]' derivation='None' name='[none:Calculation_1378594128188579861:nk]' pivot='key' type='nominal' />
+      </datasource-dependencies>
+      <filter class='categorical' column='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[none:Calculation_1378594128188579861:nk]' context='true'>
+        <groupfilter function='level-members' level='[none:Calculation_1378594128188579861:nk]' user:ui-enumeration='all' user:ui-marker='enumerate' />
+      </filter>
+    </shared-view>
+  </shared-views>
+  <worksheets>
+    <worksheet name='Categorywise YTD Sales'>
+      <layout-options>
+        <title>
+          <formatted-text>
+            <run fontalignment='1' fontname='Tableau Bold'>&lt;Sheet Name&gt;</run>
+          </formatted-text>
+        </title>
+      </layout-options>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='clean_ecommerce' name='federated.1raf5hd1nwejkf1fvhoo807mht9q' />
+          </datasources>
+          <datasource-dependencies datasource='federated.1raf5hd1nwejkf1fvhoo807mht9q'>
+            <column caption='Continent' datatype='string' name='[Calculation_1378594128188579861]' role='dimension' semantic-role='[Country].[Name]' type='nominal'>
+              <calculation class='tableau' formula='CASE [Country]&#10;    // Europe&#10;    WHEN &quot;United Kingdom&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;France&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Netherlands&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Germany&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Norway&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Eire&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Switzerland&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Spain&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Poland&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Portugal&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Italy&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Belgium&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Lithuania&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Iceland&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Channel Islands&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Denmark&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Cyprus&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Sweden&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Austria&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Finland&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Greece&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Malta&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Czech Republic&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;European Community&quot; THEN &quot;Europe&quot;&#10;&#10;    // Asia &amp; Middle East&#10;    WHEN &quot;Israel&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Bahrain&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Hong Kong&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Singapore&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Lebanon&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;United Arab Emirates&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Saudi Arabia&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Japan&quot; THEN &quot;Asia&quot;&#10;&#10;    // Oceania&#10;    WHEN &quot;Australia&quot; THEN &quot;Oceania&quot;&#10;&#10;    // North &amp; South America&#10;    WHEN &quot;Canada&quot; THEN &quot;North America&quot;&#10;    WHEN &quot;Usa&quot; THEN &quot;North America&quot;&#10;    WHEN &quot;Brazil&quot; THEN &quot;South America&quot;&#10;&#10;    // Africa&#10;    WHEN &quot;Rsa&quot; THEN &quot;Africa&quot;&#10;&#10;    // Unknown&#10;    WHEN &quot;Unspecified&quot; THEN &quot;Other&quot;&#10;    ELSE &quot;Other&quot;&#10;END' />
+            </column>
+            <column caption='YTD Sales' datatype='real' name='[Calculation_1378594128189579286]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='IF YEAR([InvoiceDate])={MAX(YEAR([InvoiceDate]))} THEN [TotalPrice] END' />
+            </column>
+            <column datatype='string' name='[Country]' role='dimension' semantic-role='[Country].[ISO3166_2]' type='nominal' />
+            <column datatype='string' name='[Description]' role='dimension' type='nominal' />
+            <column caption='Invoice Date' datatype='datetime' name='[InvoiceDate]' role='dimension' type='ordinal' />
+            <column caption='Sales' datatype='real' name='[TotalPrice]' role='measure' type='quantitative' />
+            <column-instance column='[Calculation_1378594128188579861]' derivation='None' name='[none:Calculation_1378594128188579861:nk]' pivot='key' type='nominal' />
+            <column-instance column='[Description]' derivation='None' name='[none:Description:nk]' pivot='key' type='nominal' />
+            <column-instance column='[Calculation_1378594128189579286]' derivation='Sum' name='[sum:Calculation_1378594128189579286:qk]' pivot='key' type='quantitative' />
+          </datasource-dependencies>
+          <filter class='categorical' column='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[none:Description:nk]'>
+            <groupfilter count='10' end='top' function='end' units='records' user:ui-marker='end' user:ui-top-by-field='true'>
+              <groupfilter direction='DESC' expression='SUM([Calculation_1378594128189579286])' function='order' user:ui-marker='order'>
+                <groupfilter function='level-members' level='[none:Description:nk]' user:ui-manual-selection='true' user:ui-manual-selection-all-when-empty='true' user:ui-manual-selection-is-empty='true' user:ui-marker='enumerate' />
+              </groupfilter>
+            </groupfilter>
+          </filter>
+          <shelf-sorts>
+            <shelf-sort-v2 dimension-to-sort='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[none:Description:nk]' direction='DESC' is-on-innermost-dimension='true' measure-to-sort-by='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:Calculation_1378594128189579286:qk]' shelf='rows' />
+          </shelf-sorts>
+          <slices>
+            <column>[federated.1raf5hd1nwejkf1fvhoo807mht9q].[none:Calculation_1378594128188579861:nk]</column>
+            <column>[federated.1raf5hd1nwejkf1fvhoo807mht9q].[none:Description:nk]</column>
+          </slices>
+          <aggregation value='true' />
+        </view>
+        <style>
+          <style-rule element='axis'>
+            <encoding attr='space' class='1' field='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:Calculation_1378594128189579286:qk]' field-type='quantitative' fold='true' max='196628.64100000003' min='0.0' range-type='fixed' scope='cols' synchronized='true' type='space' />
+            <format attr='display' class='0' field='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:Calculation_1378594128189579286:qk]' scope='cols' value='false' />
+            <format attr='display' class='1' field='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:Calculation_1378594128189579286:qk]' scope='cols' value='false' />
+          </style-rule>
+          <style-rule element='cell'>
+            <format attr='text-format' field='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:Calculation_1378594128189579286:qk]' value='c&quot;$&quot;#,##0,,.00M;-&quot;$&quot;#,##0,,.00M' />
+            <format attr='font-family' field='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:Calculation_1378594128189579286:qk]' value='Tableau Semibold' />
+          </style-rule>
+          <style-rule element='label'>
+            <format attr='font-family' field='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[none:Description:nk]' value='Tableau Semibold' />
+            <format attr='text-align' field='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[none:Description:nk]' value='center' />
+          </style-rule>
+          <style-rule element='mark'>
+            <encoding attr='color' field='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:Calculation_1378594128189579286:qk]' palette='blue_10_0' type='interpolated' />
+          </style-rule>
+          <style-rule element='table'>
+            <format attr='background-color' value='#00000000' />
+          </style-rule>
+          <style-rule element='worksheet'>
+            <format attr='display-field-labels' scope='rows' value='false' />
+          </style-rule>
+          <style-rule element='gridline'>
+            <format attr='stroke-size' scope='cols' value='0' />
+            <format attr='line-visibility' scope='cols' value='off' />
+          </style-rule>
+        </style>
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Bar' />
+            <mark-sizing mark-sizing-setting='marks-scaling-off' />
+            <style>
+              <style-rule element='mark'>
+                <format attr='size' value='1.1534254550933838' />
+              </style-rule>
+            </style>
+          </pane>
+          <pane id='1' selection-relaxation-option='selection-relaxation-allow' x-axis-name='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:Calculation_1378594128189579286:qk]' x-index='1'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Bar' />
+            <mark-sizing mark-sizing-setting='marks-scaling-off' />
+            <encodings>
+              <color column='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:Calculation_1378594128189579286:qk]' />
+            </encodings>
+            <style>
+              <style-rule element='mark'>
+                <format attr='size' value='0.95552486181259155' />
+                <format attr='mark-color' value='#e63524' />
+              </style-rule>
+            </style>
+          </pane>
+          <pane id='2' selection-relaxation-option='selection-relaxation-allow' x-axis-name='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:Calculation_1378594128189579286:qk]'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Bar' />
+            <mark-sizing mark-sizing-setting='marks-scaling-off' />
+            <encodings>
+              <text column='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:Calculation_1378594128189579286:qk]' />
+            </encodings>
+            <customized-label>
+              <formatted-text>
+                <run fontalignment='0'>&lt;</run>
+                <run fontalignment='0'>[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:Calculation_1378594128189579286:qk]</run>
+                <run fontalignment='0'>&gt;</run>
+              </formatted-text>
+            </customized-label>
+            <style>
+              <style-rule element='cell'>
+                <format attr='text-align' value='left' />
+              </style-rule>
+              <style-rule element='mark'>
+                <format attr='size' value='1.1534254550933838' />
+                <format attr='mark-labels-show' value='true' />
+                <format attr='mark-labels-cull' value='true' />
+                <format attr='mark-color' value='#ffffff' />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows>[federated.1raf5hd1nwejkf1fvhoo807mht9q].[none:Description:nk]</rows>
+        <cols>([federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:Calculation_1378594128189579286:qk] + [federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:Calculation_1378594128189579286:qk])</cols>
+      </table>
+      <simple-id uuid='{77D9BB5F-CB37-4DA2-AA5D-78D8CCBA73A0}' />
+    </worksheet>
+    <worksheet name='Customers KPI'>
+      <layout-options>
+        <title>
+          <formatted-text>
+            <run fontalignment='1' fontname='Tableau Semibold' fontsize='18'>👥 Customers</run>
+          </formatted-text>
+        </title>
+      </layout-options>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='clean_ecommerce' name='federated.1raf5hd1nwejkf1fvhoo807mht9q' />
+          </datasources>
+          <datasource-dependencies datasource='federated.1raf5hd1nwejkf1fvhoo807mht9q'>
+            <column caption='Continent' datatype='string' name='[Calculation_1378594128188579861]' role='dimension' semantic-role='[Country].[Name]' type='nominal'>
+              <calculation class='tableau' formula='CASE [Country]&#10;    // Europe&#10;    WHEN &quot;United Kingdom&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;France&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Netherlands&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Germany&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Norway&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Eire&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Switzerland&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Spain&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Poland&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Portugal&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Italy&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Belgium&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Lithuania&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Iceland&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Channel Islands&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Denmark&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Cyprus&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Sweden&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Austria&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Finland&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Greece&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Malta&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Czech Republic&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;European Community&quot; THEN &quot;Europe&quot;&#10;&#10;    // Asia &amp; Middle East&#10;    WHEN &quot;Israel&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Bahrain&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Hong Kong&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Singapore&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Lebanon&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;United Arab Emirates&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Saudi Arabia&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Japan&quot; THEN &quot;Asia&quot;&#10;&#10;    // Oceania&#10;    WHEN &quot;Australia&quot; THEN &quot;Oceania&quot;&#10;&#10;    // North &amp; South America&#10;    WHEN &quot;Canada&quot; THEN &quot;North America&quot;&#10;    WHEN &quot;Usa&quot; THEN &quot;North America&quot;&#10;    WHEN &quot;Brazil&quot; THEN &quot;South America&quot;&#10;&#10;    // Africa&#10;    WHEN &quot;Rsa&quot; THEN &quot;Africa&quot;&#10;&#10;    // Unknown&#10;    WHEN &quot;Unspecified&quot; THEN &quot;Other&quot;&#10;    ELSE &quot;Other&quot;&#10;END' />
+            </column>
+            <column datatype='string' name='[Country]' role='dimension' semantic-role='[Country].[ISO3166_2]' type='nominal' />
+            <column caption='Customer ID' datatype='string' name='[CustomerID]' role='dimension' type='nominal' />
+            <column-instance column='[CustomerID]' derivation='CountD' name='[ctd:CustomerID:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[Calculation_1378594128188579861]' derivation='None' name='[none:Calculation_1378594128188579861:nk]' pivot='key' type='nominal' />
+          </datasource-dependencies>
+          <slices>
+            <column>[federated.1raf5hd1nwejkf1fvhoo807mht9q].[none:Calculation_1378594128188579861:nk]</column>
+          </slices>
+          <aggregation value='true' />
+        </view>
+        <style>
+          <style-rule element='cell'>
+            <format attr='height' value='130' />
+            <format attr='text-align' value='center' />
+            <format attr='vertical-align' data-class='subtotal' value='center' />
+          </style-rule>
+          <style-rule element='label'>
+            <format attr='text-align' value='center' />
+            <format attr='vertical-align' value='center' />
+          </style-rule>
+          <style-rule element='table'>
+            <format attr='background-color' value='#00000000' />
+          </style-rule>
+          <style-rule element='worksheet'>
+            <format attr='font-family' value='Tableau Bold' />
+            <format attr='font-size' value='24' />
+          </style-rule>
+        </style>
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+            <encodings>
+              <text column='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[ctd:CustomerID:qk]' />
+            </encodings>
+            <customized-label>
+              <formatted-text>
+                <run>Æ&#10;</run>
+                <run fontsize='48'><![CDATA[<[federated.1raf5hd1nwejkf1fvhoo807mht9q].[ctd:CustomerID:qk]>]]></run>
+              </formatted-text>
+            </customized-label>
+            <style>
+              <style-rule element='mark'>
+                <format attr='mark-labels-show' value='true' />
+                <format attr='mark-labels-cull' value='true' />
+              </style-rule>
+              <style-rule element='pane'>
+                <format attr='minheight' value='-1' />
+                <format attr='maxheight' value='-1' />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows />
+        <cols />
+      </table>
+      <simple-id uuid='{AB635C50-A5F6-45C8-B64F-95D9CD0F4E2D}' />
+    </worksheet>
+    <worksheet name='Market Share by Sales'>
+      <layout-options>
+        <title>
+          <formatted-text>
+            <run fontalignment='1' fontname='Tableau Bold'>Sales By Market</run>
+          </formatted-text>
+        </title>
+      </layout-options>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='clean_ecommerce' name='federated.1raf5hd1nwejkf1fvhoo807mht9q' />
+          </datasources>
+          <datasource-dependencies datasource='federated.1raf5hd1nwejkf1fvhoo807mht9q'>
+            <column caption='AVG(0)' datatype='real' name='[Calculation_1378594128185712658]' role='measure' type='quantitative' user:unnamed='Market Share by Sale'>
+              <calculation class='tableau' formula='AVG(0)' />
+            </column>
+            <column caption='AVG(0)' datatype='real' name='[Calculation_1378594128185745428]' role='measure' type='quantitative' user:unnamed='Market Share by Sale'>
+              <calculation class='tableau' formula='AVG(0)' />
+            </column>
+            <column caption='Continent' datatype='string' name='[Calculation_1378594128188579861]' role='dimension' semantic-role='[Country].[Name]' type='nominal'>
+              <calculation class='tableau' formula='CASE [Country]&#10;    // Europe&#10;    WHEN &quot;United Kingdom&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;France&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Netherlands&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Germany&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Norway&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Eire&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Switzerland&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Spain&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Poland&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Portugal&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Italy&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Belgium&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Lithuania&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Iceland&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Channel Islands&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Denmark&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Cyprus&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Sweden&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Austria&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Finland&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Greece&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Malta&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Czech Republic&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;European Community&quot; THEN &quot;Europe&quot;&#10;&#10;    // Asia &amp; Middle East&#10;    WHEN &quot;Israel&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Bahrain&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Hong Kong&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Singapore&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Lebanon&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;United Arab Emirates&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Saudi Arabia&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Japan&quot; THEN &quot;Asia&quot;&#10;&#10;    // Oceania&#10;    WHEN &quot;Australia&quot; THEN &quot;Oceania&quot;&#10;&#10;    // North &amp; South America&#10;    WHEN &quot;Canada&quot; THEN &quot;North America&quot;&#10;    WHEN &quot;Usa&quot; THEN &quot;North America&quot;&#10;    WHEN &quot;Brazil&quot; THEN &quot;South America&quot;&#10;&#10;    // Africa&#10;    WHEN &quot;Rsa&quot; THEN &quot;Africa&quot;&#10;&#10;    // Unknown&#10;    WHEN &quot;Unspecified&quot; THEN &quot;Other&quot;&#10;    ELSE &quot;Other&quot;&#10;END' />
+            </column>
+            <column caption='YTD Sales' datatype='real' name='[Calculation_1378594128189579286]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='IF YEAR([InvoiceDate])={MAX(YEAR([InvoiceDate]))} THEN [TotalPrice] END' />
+            </column>
+            <column datatype='string' name='[Country]' role='dimension' semantic-role='[Country].[ISO3166_2]' type='nominal' />
+            <column caption='Invoice Date' datatype='datetime' name='[InvoiceDate]' role='dimension' type='ordinal' />
+            <column caption='Sales' datatype='real' name='[TotalPrice]' role='measure' type='quantitative' />
+            <column-instance column='[Calculation_1378594128188579861]' derivation='None' name='[none:Calculation_1378594128188579861:nk]' pivot='key' type='nominal' />
+            <column-instance column='[Calculation_1378594128189579286]' derivation='Sum' name='[pcto:sum:Calculation_1378594128189579286:qk]' pivot='key' type='quantitative'>
+              <table-calc ordering-type='Rows' type='PctTotal' />
+            </column-instance>
+            <column-instance column='[Calculation_1378594128189579286]' derivation='Sum' name='[sum:Calculation_1378594128189579286:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[Calculation_1378594128185712658]' derivation='User' name='[usr:Calculation_1378594128185712658:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[Calculation_1378594128185745428]' derivation='User' name='[usr:Calculation_1378594128185745428:qk]' pivot='key' type='quantitative' />
+          </datasource-dependencies>
+          <slices>
+            <column>[federated.1raf5hd1nwejkf1fvhoo807mht9q].[none:Calculation_1378594128188579861:nk]</column>
+          </slices>
+          <aggregation value='true' />
+        </view>
+        <style>
+          <style-rule element='axis'>
+            <encoding attr='space' class='0' field='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[usr:Calculation_1378594128185745428:qk]' field-type='quantitative' fold='true' scope='cols' type='space' />
+            <format attr='height' field='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[usr:Calculation_1378594128185712658:qk]' value='54' />
+            <format attr='height' field='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[usr:Calculation_1378594128185745428:qk]' value='54' />
+            <format attr='display' class='0' field='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[usr:Calculation_1378594128185745428:qk]' scope='cols' value='false' />
+            <format attr='display' class='0' field='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[usr:Calculation_1378594128185712658:qk]' scope='cols' value='false' />
+          </style-rule>
+          <style-rule element='cell'>
+            <format attr='height' value='162' />
+            <format attr='text-format' field='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:Calculation_1378594128189579286:qk]' value='c&quot;$&quot;#,##0,,.00M;-&quot;$&quot;#,##0,,.00M' />
+            <format attr='font-family' field='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:Calculation_1378594128189579286:qk]' value='Tableau Bold' />
+            <format attr='font-size' field='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:Calculation_1378594128189579286:qk]' value='11' />
+          </style-rule>
+          <style-rule element='table'>
+            <format attr='background-color' value='#00000000' />
+          </style-rule>
+          <style-rule element='gridline'>
+            <format attr='stroke-size' scope='cols' value='0' />
+            <format attr='line-visibility' scope='cols' value='off' />
+          </style-rule>
+          <style-rule element='zeroline'>
+            <format attr='stroke-size' value='0' />
+            <format attr='line-visibility' value='off' />
+          </style-rule>
+          <style-rule element='table-div'>
+            <format attr='stroke-size' scope='rows' value='0' />
+            <format attr='line-visibility' scope='rows' value='off' />
+            <format attr='stroke-size' scope='cols' value='0' />
+            <format attr='line-visibility' scope='cols' value='off' />
+          </style-rule>
+        </style>
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Pie' />
+            <style>
+              <style-rule element='mark'>
+                <format attr='mark-labels-show' value='true' />
+                <format attr='mark-labels-cull' value='true' />
+              </style-rule>
+            </style>
+          </pane>
+          <pane id='1' selection-relaxation-option='selection-relaxation-allow' x-axis-name='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[usr:Calculation_1378594128185712658:qk]'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Pie' />
+            <mark-sizing mark-sizing-setting='marks-scaling-off' />
+            <encodings>
+              <color column='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[none:Calculation_1378594128188579861:nk]' />
+              <wedge-size column='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:Calculation_1378594128189579286:qk]' />
+              <text column='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[pcto:sum:Calculation_1378594128189579286:qk]' />
+              <text column='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[none:Calculation_1378594128188579861:nk]' />
+            </encodings>
+            <customized-label>
+              <formatted-text>
+                <run fontname='Tableau Semibold'><![CDATA[<[federated.1raf5hd1nwejkf1fvhoo807mht9q].[none:Calculation_1378594128188579861:nk]>]]></run>
+                <run>Æ&#10;</run>
+                <run fontname='Tableau Semibold'><![CDATA[<[federated.1raf5hd1nwejkf1fvhoo807mht9q].[pcto:sum:Calculation_1378594128189579286:qk]>]]></run>
+              </formatted-text>
+            </customized-label>
+            <style>
+              <style-rule element='mark'>
+                <format attr='size' value='1.8350828886032104' />
+                <format attr='mark-labels-show' value='true' />
+                <format attr='mark-labels-cull' value='true' />
+              </style-rule>
+            </style>
+          </pane>
+          <pane id='2' selection-relaxation-option='selection-relaxation-allow' x-axis-name='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[usr:Calculation_1378594128185745428:qk]'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Pie' />
+            <mark-sizing mark-sizing-setting='marks-scaling-off' />
+            <encodings>
+              <text column='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:Calculation_1378594128189579286:qk]' />
+            </encodings>
+            <customized-label>
+              <formatted-text>
+                <run fontname='Tableau Semibold'>YTD Sales</run>
+                <run>Æ&#10;</run>
+                <run fontname='Tableau Semibold'><![CDATA[<[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:Calculation_1378594128189579286:qk]>]]></run>
+              </formatted-text>
+            </customized-label>
+            <style>
+              <style-rule element='mark'>
+                <format attr='size' value='1.1094474792480469' />
+                <format attr='mark-color' value='#ffffff' />
+                <format attr='mark-labels-show' value='true' />
+                <format attr='mark-labels-cull' value='true' />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows />
+        <cols>([federated.1raf5hd1nwejkf1fvhoo807mht9q].[usr:Calculation_1378594128185712658:qk] + [federated.1raf5hd1nwejkf1fvhoo807mht9q].[usr:Calculation_1378594128185745428:qk])</cols>
+      </table>
+      <simple-id uuid='{E8056CCB-35A4-41B3-A2B3-D54FA7B6735F}' />
+    </worksheet>
+    <worksheet name='Monthly Returns'>
+      <layout-options>
+        <title>
+          <formatted-text>
+            <run fontalignment='1' fontname='Tableau Bold'>&lt;Sheet Name&gt;</run>
+          </formatted-text>
+        </title>
+      </layout-options>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='clean_ecommerce' name='federated.1raf5hd1nwejkf1fvhoo807mht9q' />
+          </datasources>
+          <datasource-dependencies datasource='federated.1raf5hd1nwejkf1fvhoo807mht9q'>
+            <column caption='Continent' datatype='string' name='[Calculation_1378594128188579861]' role='dimension' semantic-role='[Country].[Name]' type='nominal'>
+              <calculation class='tableau' formula='CASE [Country]&#10;    // Europe&#10;    WHEN &quot;United Kingdom&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;France&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Netherlands&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Germany&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Norway&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Eire&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Switzerland&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Spain&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Poland&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Portugal&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Italy&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Belgium&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Lithuania&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Iceland&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Channel Islands&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Denmark&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Cyprus&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Sweden&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Austria&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Finland&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Greece&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Malta&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Czech Republic&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;European Community&quot; THEN &quot;Europe&quot;&#10;&#10;    // Asia &amp; Middle East&#10;    WHEN &quot;Israel&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Bahrain&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Hong Kong&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Singapore&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Lebanon&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;United Arab Emirates&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Saudi Arabia&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Japan&quot; THEN &quot;Asia&quot;&#10;&#10;    // Oceania&#10;    WHEN &quot;Australia&quot; THEN &quot;Oceania&quot;&#10;&#10;    // North &amp; South America&#10;    WHEN &quot;Canada&quot; THEN &quot;North America&quot;&#10;    WHEN &quot;Usa&quot; THEN &quot;North America&quot;&#10;    WHEN &quot;Brazil&quot; THEN &quot;South America&quot;&#10;&#10;    // Africa&#10;    WHEN &quot;Rsa&quot; THEN &quot;Africa&quot;&#10;&#10;    // Unknown&#10;    WHEN &quot;Unspecified&quot; THEN &quot;Other&quot;&#10;    ELSE &quot;Other&quot;&#10;END' />
+            </column>
+            <column caption='Transaction Type' datatype='string' name='[Calculation_1378594128208158743]' role='dimension' type='nominal'>
+              <calculation class='tableau' formula='IF [Quantity] &lt; 0 THEN &quot;Return&quot; ELSE &quot;Sale&quot; END' />
+            </column>
+            <column datatype='string' name='[Country]' role='dimension' semantic-role='[Country].[ISO3166_2]' type='nominal' />
+            <column caption='Invoice No' datatype='string' default-role='measure' default-type='quantitative' name='[InvoiceNo]' role='dimension' type='nominal' />
+            <column datatype='integer' name='[Quantity]' role='measure' type='quantitative' />
+            <column caption='Transaction Month' datatype='string' name='[TransactionMonth]' role='dimension' type='nominal' />
+            <column-instance column='[InvoiceNo]' derivation='Count' name='[cnt:InvoiceNo:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[Calculation_1378594128188579861]' derivation='None' name='[none:Calculation_1378594128188579861:nk]' pivot='key' type='nominal' />
+            <column-instance column='[Calculation_1378594128208158743]' derivation='None' name='[none:Calculation_1378594128208158743:nk]' pivot='key' type='nominal' />
+            <column-instance column='[TransactionMonth]' derivation='None' name='[none:TransactionMonth:nk]' pivot='key' type='nominal' />
+          </datasource-dependencies>
+          <slices>
+            <column>[federated.1raf5hd1nwejkf1fvhoo807mht9q].[none:Calculation_1378594128188579861:nk]</column>
+          </slices>
+          <aggregation value='true' />
+        </view>
+        <style>
+          <style-rule element='axis'>
+            <format attr='display' class='0' field='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[cnt:InvoiceNo:qk]' scope='rows' value='false' />
+          </style-rule>
+          <style-rule element='cell'>
+            <format attr='text-format' field='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[cnt:InvoiceNo:qk]' value='' />
+          </style-rule>
+          <style-rule element='header'>
+            <format attr='height-header' value='16' />
+          </style-rule>
+          <style-rule element='label'>
+            <format attr='text-format' field='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[cnt:InvoiceNo:qk]' value='' />
+          </style-rule>
+          <style-rule element='table'>
+            <format attr='background-color' value='#00000000' />
+          </style-rule>
+          <style-rule element='worksheet'>
+            <format attr='display-field-labels' scope='cols' value='false' />
+          </style-rule>
+          <style-rule element='gridline'>
+            <format attr='stroke-size' scope='rows' value='0' />
+            <format attr='line-visibility' scope='rows' value='off' />
+          </style-rule>
+        </style>
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+            <encodings>
+              <color column='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[none:Calculation_1378594128208158743:nk]' />
+            </encodings>
+            <style>
+              <style-rule element='mark'>
+                <format attr='mark-labels-cull' value='true' />
+                <format attr='mark-labels-show' value='false' />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows>[federated.1raf5hd1nwejkf1fvhoo807mht9q].[cnt:InvoiceNo:qk]</rows>
+        <cols>[federated.1raf5hd1nwejkf1fvhoo807mht9q].[none:TransactionMonth:nk]</cols>
+      </table>
+      <simple-id uuid='{1E0175DE-F324-439C-AE3E-3F902737A93F}' />
+    </worksheet>
+    <worksheet name='Order Quantity KPI'>
+      <layout-options>
+        <title>
+          <formatted-text>
+            <run fontalignment='1' fontname='Tableau Bold' fontsize='12'>Order Quantity</run>
+            <run fontalignment='1'>Æ&#10;</run>
+            <run fontalignment='1' fontname='Tableau Bold'><![CDATA[<[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:YTD Sales LOD (copy)_1378594128123342859:qk]>]]></run>
+            <run fontalignment='1'>Æ&#10;</run>
+            <run fontalignment='1' fontcolor='#e63524' fontname='Tableau Bold' fontsize='12'><![CDATA[<[federated.1raf5hd1nwejkf1fvhoo807mht9q].[none:YOY sales margin (copy)_1378594128125100046:nk]> <[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:YOY Sales (copy)_1378594128124235789:qk]> vs PY]]></run>
+            <run fontalignment='1'>Æ&#10;</run>
+          </formatted-text>
+        </title>
+      </layout-options>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='clean_ecommerce' name='federated.1raf5hd1nwejkf1fvhoo807mht9q' />
+          </datasources>
+          <datasource-dependencies datasource='federated.1raf5hd1nwejkf1fvhoo807mht9q'>
+            <column caption='Continent' datatype='string' name='[Calculation_1378594128188579861]' role='dimension' semantic-role='[Country].[Name]' type='nominal'>
+              <calculation class='tableau' formula='CASE [Country]&#10;    // Europe&#10;    WHEN &quot;United Kingdom&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;France&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Netherlands&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Germany&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Norway&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Eire&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Switzerland&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Spain&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Poland&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Portugal&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Italy&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Belgium&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Lithuania&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Iceland&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Channel Islands&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Denmark&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Cyprus&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Sweden&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Austria&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Finland&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Greece&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Malta&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Czech Republic&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;European Community&quot; THEN &quot;Europe&quot;&#10;&#10;    // Asia &amp; Middle East&#10;    WHEN &quot;Israel&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Bahrain&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Hong Kong&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Singapore&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Lebanon&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;United Arab Emirates&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Saudi Arabia&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Japan&quot; THEN &quot;Asia&quot;&#10;&#10;    // Oceania&#10;    WHEN &quot;Australia&quot; THEN &quot;Oceania&quot;&#10;&#10;    // North &amp; South America&#10;    WHEN &quot;Canada&quot; THEN &quot;North America&quot;&#10;    WHEN &quot;Usa&quot; THEN &quot;North America&quot;&#10;    WHEN &quot;Brazil&quot; THEN &quot;South America&quot;&#10;&#10;    // Africa&#10;    WHEN &quot;Rsa&quot; THEN &quot;Africa&quot;&#10;&#10;    // Unknown&#10;    WHEN &quot;Unspecified&quot; THEN &quot;Other&quot;&#10;    ELSE &quot;Other&quot;&#10;END' />
+            </column>
+            <column datatype='string' name='[Country]' role='dimension' semantic-role='[Country].[ISO3166_2]' type='nominal' />
+            <column caption='Invoice Date' datatype='datetime' name='[InvoiceDate]' role='dimension' type='ordinal' />
+            <column caption='PYTD Quantity LOD' datatype='integer' name='[PYTD Sales LOD (copy)_1378594128123703308]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='{ FIXED : SUM(IF YEAR([InvoiceDate])={MAX(YEAR([InvoiceDate]))-1} THEN [Quantity] END)}' />
+            </column>
+            <column datatype='integer' name='[Quantity]' role='measure' type='quantitative' />
+            <column caption='YOY Quantity LOD' datatype='real' name='[YOY Sales (copy)_1378594128124235789]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='([YTD Sales LOD (copy)_1378594128123342859]-[PYTD Sales LOD (copy)_1378594128123703308])/[PYTD Sales LOD (copy)_1378594128123703308]/100' />
+            </column>
+            <column caption='YOY quantity margin' datatype='string' name='[YOY sales margin (copy)_1378594128125100046]' role='dimension' type='nominal'>
+              <calculation class='tableau' formula='IF [YOY Sales (copy)_1378594128124235789]&gt;0 THEN &apos;▲&apos; ELSEIF [YOY Sales (copy)_1378594128124235789]&lt;0 THEN &apos;▼&apos; END' />
+            </column>
+            <column caption='YTD Quantity LOD' datatype='integer' name='[YTD Sales LOD (copy)_1378594128123342859]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='{ FIXED : SUM(IF YEAR([InvoiceDate])={MAX(YEAR([InvoiceDate]))} THEN [Quantity] END)}' />
+            </column>
+            <column-instance column='[InvoiceDate]' derivation='Month' name='[mn:InvoiceDate:ok]' pivot='key' type='ordinal' />
+            <column-instance column='[Calculation_1378594128188579861]' derivation='None' name='[none:Calculation_1378594128188579861:nk]' pivot='key' type='nominal' />
+            <column-instance column='[YOY sales margin (copy)_1378594128125100046]' derivation='None' name='[none:YOY sales margin (copy)_1378594128125100046:nk]' pivot='key' type='nominal' />
+            <column-instance column='[Quantity]' derivation='Sum' name='[sum:Quantity:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[YOY Sales (copy)_1378594128124235789]' derivation='Sum' name='[sum:YOY Sales (copy)_1378594128124235789:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[YTD Sales LOD (copy)_1378594128123342859]' derivation='Sum' name='[sum:YTD Sales LOD (copy)_1378594128123342859:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[InvoiceDate]' derivation='Year' name='[yr:InvoiceDate:ok]' pivot='key' type='ordinal' />
+          </datasource-dependencies>
+          <filter class='categorical' column='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[yr:InvoiceDate:ok]'>
+            <groupfilter function='member' level='[yr:InvoiceDate:ok]' member='2011' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+          </filter>
+          <slices>
+            <column>[federated.1raf5hd1nwejkf1fvhoo807mht9q].[none:Calculation_1378594128188579861:nk]</column>
+            <column>[federated.1raf5hd1nwejkf1fvhoo807mht9q].[yr:InvoiceDate:ok]</column>
+          </slices>
+          <aggregation value='true' />
+        </view>
+        <style>
+          <style-rule element='axis'>
+            <format attr='display' class='0' field='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:Quantity:qk]' scope='rows' value='false' />
+          </style-rule>
+          <style-rule element='cell'>
+            <format attr='font-family' field='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:Quantity:qk]' value='Tableau Semibold' />
+            <format attr='text-format' field='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:YOY Sales (copy)_1378594128124235789:qk]' value='p0.00%' />
+            <format attr='text-format' field='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:Quantity:qk]' value='c#,##0,.00K;-#,##0,.00K' />
+            <format attr='text-format' field='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:YTD Sales LOD (copy)_1378594128123342859:qk]' value='c#,##0;-#,##0' />
+          </style-rule>
+          <style-rule element='label'>
+            <format attr='display' field='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[mn:InvoiceDate:ok]' value='false' />
+          </style-rule>
+          <style-rule element='table'>
+            <format attr='background-color' value='#00000000' />
+          </style-rule>
+          <style-rule element='gridline'>
+            <format attr='stroke-size' scope='cols' value='0' />
+            <format attr='stroke-size' scope='rows' value='0' />
+            <format attr='line-visibility' scope='rows' value='off' />
+          </style-rule>
+        </style>
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+            <encodings>
+              <text column='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:Quantity:qk]' />
+              <lod column='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[none:YOY sales margin (copy)_1378594128125100046:nk]' />
+              <lod column='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:YOY Sales (copy)_1378594128124235789:qk]' />
+              <lod column='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:YTD Sales LOD (copy)_1378594128123342859:qk]' />
+            </encodings>
+            <style>
+              <style-rule element='mark'>
+                <format attr='mark-labels-show' value='true' />
+                <format attr='mark-labels-mode' value='line-ends' />
+                <format attr='mark-labels-cull' value='true' />
+                <format attr='mark-color' value='#000000' />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows>[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:Quantity:qk]</rows>
+        <cols>[federated.1raf5hd1nwejkf1fvhoo807mht9q].[mn:InvoiceDate:ok]</cols>
+      </table>
+      <simple-id uuid='{FFD995F3-CE6C-4CDB-A533-EB468950D65B}' />
+    </worksheet>
+    <worksheet name='Sales KPI'>
+      <layout-options>
+        <title>
+          <formatted-text>
+            <run fontalignment='1' fontname='Tableau Bold'>Sales</run>
+            <run fontalignment='1'>Æ&#10;</run>
+            <run fontalignment='1' fontname='Tableau Bold' fontsize='20'><![CDATA[<[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:Calculation_1378594128098242565:qk]>]]></run>
+            <run fontalignment='1'>Æ&#10;</run>
+            <run fontalignment='1' fontcolor='#e15759' fontname='Tableau Bold' fontsize='12'><![CDATA[<[federated.1raf5hd1nwejkf1fvhoo807mht9q].[none:Calculation_1378594128113479690:nk]><[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:Calculation_1378594128100524039:qk]> vs PY]]></run>
+          </formatted-text>
+        </title>
+      </layout-options>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='clean_ecommerce' name='federated.1raf5hd1nwejkf1fvhoo807mht9q' />
+          </datasources>
+          <datasource-dependencies datasource='federated.1raf5hd1nwejkf1fvhoo807mht9q'>
+            <column caption='YTD Sales LOD' datatype='real' name='[Calculation_1378594128098242565]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='{ FIXED : SUM(IF YEAR([InvoiceDate])={MAX(YEAR([InvoiceDate]))} THEN [TotalPrice] END)}' />
+            </column>
+            <column caption='YOY Sales' datatype='real' name='[Calculation_1378594128100524039]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='([Calculation_1378594128098242565]-[YTD Sales LOD (copy)_1378594128099872774])/[YTD Sales LOD (copy)_1378594128099872774]/100' />
+            </column>
+            <column caption='YOY sales margin' datatype='string' name='[Calculation_1378594128113479690]' role='dimension' type='nominal'>
+              <calculation class='tableau' formula='IF [Calculation_1378594128100524039]&gt;0 THEN &apos;▲&apos; ELSEIF [Calculation_1378594128100524039]&lt;0 THEN &apos;▼&apos; END' />
+            </column>
+            <column caption='Continent' datatype='string' name='[Calculation_1378594128188579861]' role='dimension' semantic-role='[Country].[Name]' type='nominal'>
+              <calculation class='tableau' formula='CASE [Country]&#10;    // Europe&#10;    WHEN &quot;United Kingdom&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;France&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Netherlands&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Germany&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Norway&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Eire&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Switzerland&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Spain&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Poland&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Portugal&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Italy&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Belgium&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Lithuania&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Iceland&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Channel Islands&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Denmark&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Cyprus&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Sweden&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Austria&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Finland&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Greece&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Malta&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Czech Republic&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;European Community&quot; THEN &quot;Europe&quot;&#10;&#10;    // Asia &amp; Middle East&#10;    WHEN &quot;Israel&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Bahrain&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Hong Kong&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Singapore&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Lebanon&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;United Arab Emirates&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Saudi Arabia&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Japan&quot; THEN &quot;Asia&quot;&#10;&#10;    // Oceania&#10;    WHEN &quot;Australia&quot; THEN &quot;Oceania&quot;&#10;&#10;    // North &amp; South America&#10;    WHEN &quot;Canada&quot; THEN &quot;North America&quot;&#10;    WHEN &quot;Usa&quot; THEN &quot;North America&quot;&#10;    WHEN &quot;Brazil&quot; THEN &quot;South America&quot;&#10;&#10;    // Africa&#10;    WHEN &quot;Rsa&quot; THEN &quot;Africa&quot;&#10;&#10;    // Unknown&#10;    WHEN &quot;Unspecified&quot; THEN &quot;Other&quot;&#10;    ELSE &quot;Other&quot;&#10;END' />
+            </column>
+            <column datatype='string' name='[Country]' role='dimension' semantic-role='[Country].[ISO3166_2]' type='nominal' />
+            <column caption='Invoice Date' datatype='datetime' name='[InvoiceDate]' role='dimension' type='ordinal' />
+            <column caption='Sales' datatype='real' name='[TotalPrice]' role='measure' type='quantitative' />
+            <column caption='PYTD Sales LOD' datatype='real' name='[YTD Sales LOD (copy)_1378594128099872774]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='{ FIXED : SUM(IF YEAR([InvoiceDate])={MAX(YEAR([InvoiceDate]))-1} THEN [TotalPrice] END)}' />
+            </column>
+            <column-instance column='[InvoiceDate]' derivation='Month' name='[mn:InvoiceDate:ok]' pivot='key' type='ordinal' />
+            <column-instance column='[Calculation_1378594128113479690]' derivation='None' name='[none:Calculation_1378594128113479690:nk]' pivot='key' type='nominal' />
+            <column-instance column='[Calculation_1378594128188579861]' derivation='None' name='[none:Calculation_1378594128188579861:nk]' pivot='key' type='nominal' />
+            <column-instance column='[Calculation_1378594128098242565]' derivation='Sum' name='[sum:Calculation_1378594128098242565:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[Calculation_1378594128100524039]' derivation='Sum' name='[sum:Calculation_1378594128100524039:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[TotalPrice]' derivation='Sum' name='[sum:TotalPrice:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[InvoiceDate]' derivation='Year' name='[yr:InvoiceDate:ok]' pivot='key' type='ordinal' />
+          </datasource-dependencies>
+          <filter class='categorical' column='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[yr:InvoiceDate:ok]'>
+            <groupfilter function='member' level='[yr:InvoiceDate:ok]' member='2011' user:ui-domain='database' user:ui-enumeration='inclusive' user:ui-marker='enumerate' />
+          </filter>
+          <slices>
+            <column>[federated.1raf5hd1nwejkf1fvhoo807mht9q].[none:Calculation_1378594128188579861:nk]</column>
+            <column>[federated.1raf5hd1nwejkf1fvhoo807mht9q].[yr:InvoiceDate:ok]</column>
+          </slices>
+          <aggregation value='true' />
+        </view>
+        <style>
+          <style-rule element='axis'>
+            <format attr='display' class='0' field='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:TotalPrice:qk]' scope='rows' value='false' />
+          </style-rule>
+          <style-rule element='cell'>
+            <format attr='text-format' field='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:TotalPrice:qk]' value='c&quot;$&quot;#,##0,,.00M;-&quot;$&quot;#,##0,,.00M' />
+            <format attr='text-format' field='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:Calculation_1378594128098242565:qk]' value='c&quot;$&quot;#,##0,,.00M;-&quot;$&quot;#,##0,,.00M' />
+            <format attr='text-format' field='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:Calculation_1378594128100524039:qk]' value='p0.00%' />
+          </style-rule>
+          <style-rule element='label'>
+            <format attr='display' field='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[mn:InvoiceDate:ok]' value='false' />
+          </style-rule>
+          <style-rule element='table'>
+            <format attr='background-color' value='#00000000' />
+          </style-rule>
+          <style-rule element='gridline'>
+            <format attr='stroke-size' scope='rows' value='0' />
+            <format attr='line-visibility' scope='rows' value='off' />
+          </style-rule>
+          <style-rule element='quick-filter'>
+            <format attr='title' field='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[none:Calculation_1378594128188579861:nk]' value='Market Filter'>
+              <formatted-text>
+                <run fontalignment='1' fontname='Tableau Bold' fontsize='10'>Market Filter</run>
+              </formatted-text>
+            </format>
+          </style-rule>
+        </style>
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+            <encodings>
+              <text column='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:TotalPrice:qk]' />
+              <lod column='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:TotalPrice:qk]' />
+              <lod column='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:Calculation_1378594128098242565:qk]' />
+              <lod column='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:Calculation_1378594128100524039:qk]' />
+              <lod column='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[none:Calculation_1378594128113479690:nk]' />
+            </encodings>
+            <style>
+              <style-rule element='datalabel'>
+                <format attr='color-mode' value='auto' />
+                <format attr='font-weight' value='bold' />
+              </style-rule>
+              <style-rule element='mark'>
+                <format attr='mark-labels-show' value='true' />
+                <format attr='mark-color' value='#000000' />
+                <format attr='mark-labels-mode' value='line-ends' />
+                <format attr='mark-labels-cull' value='true' />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows>[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:TotalPrice:qk]</rows>
+        <cols>[federated.1raf5hd1nwejkf1fvhoo807mht9q].[mn:InvoiceDate:ok]</cols>
+      </table>
+      <simple-id uuid='{1FC9E8E7-DF63-4B5B-8239-0958E1820B58}' />
+    </worksheet>
+    <worksheet name='Sales by Country'>
+      <layout-options>
+        <title>
+          <formatted-text>
+            <run fontalignment='1' fontname='Tableau Bold'>&lt;Sheet Name&gt;</run>
+          </formatted-text>
+        </title>
+      </layout-options>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='clean_ecommerce' name='federated.1raf5hd1nwejkf1fvhoo807mht9q' />
+          </datasources>
+          <mapsources>
+            <mapsource name='Tableau' />
+          </mapsources>
+          <datasource-dependencies datasource='federated.1raf5hd1nwejkf1fvhoo807mht9q'>
+            <column caption='Continent' datatype='string' name='[Calculation_1378594128188579861]' role='dimension' semantic-role='[Country].[Name]' type='nominal'>
+              <calculation class='tableau' formula='CASE [Country]&#10;    // Europe&#10;    WHEN &quot;United Kingdom&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;France&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Netherlands&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Germany&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Norway&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Eire&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Switzerland&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Spain&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Poland&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Portugal&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Italy&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Belgium&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Lithuania&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Iceland&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Channel Islands&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Denmark&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Cyprus&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Sweden&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Austria&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Finland&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Greece&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Malta&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Czech Republic&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;European Community&quot; THEN &quot;Europe&quot;&#10;&#10;    // Asia &amp; Middle East&#10;    WHEN &quot;Israel&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Bahrain&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Hong Kong&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Singapore&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Lebanon&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;United Arab Emirates&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Saudi Arabia&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Japan&quot; THEN &quot;Asia&quot;&#10;&#10;    // Oceania&#10;    WHEN &quot;Australia&quot; THEN &quot;Oceania&quot;&#10;&#10;    // North &amp; South America&#10;    WHEN &quot;Canada&quot; THEN &quot;North America&quot;&#10;    WHEN &quot;Usa&quot; THEN &quot;North America&quot;&#10;    WHEN &quot;Brazil&quot; THEN &quot;South America&quot;&#10;&#10;    // Africa&#10;    WHEN &quot;Rsa&quot; THEN &quot;Africa&quot;&#10;&#10;    // Unknown&#10;    WHEN &quot;Unspecified&quot; THEN &quot;Other&quot;&#10;    ELSE &quot;Other&quot;&#10;END' />
+            </column>
+            <column caption='YTD Sales' datatype='real' name='[Calculation_1378594128189579286]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='IF YEAR([InvoiceDate])={MAX(YEAR([InvoiceDate]))} THEN [TotalPrice] END' />
+            </column>
+            <column datatype='string' name='[Country]' role='dimension' semantic-role='[Country].[ISO3166_2]' type='nominal' />
+            <column caption='Invoice Date' datatype='datetime' name='[InvoiceDate]' role='dimension' type='ordinal' />
+            <column caption='Sales' datatype='real' name='[TotalPrice]' role='measure' type='quantitative' />
+            <column-instance column='[Calculation_1378594128188579861]' derivation='None' name='[none:Calculation_1378594128188579861:nk]' pivot='key' type='nominal' />
+            <column-instance column='[Country]' derivation='None' name='[none:Country:nk]' pivot='key' type='nominal' />
+            <column-instance column='[Calculation_1378594128189579286]' derivation='Sum' name='[sum:Calculation_1378594128189579286:qk]' pivot='key' type='quantitative' />
+          </datasource-dependencies>
+          <filter class='categorical' column='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[none:Country:nk]'>
+            <groupfilter function='except' user:ui-domain='database' user:ui-enumeration='exclusive' user:ui-marker='enumerate'>
+              <groupfilter function='level-members' level='[none:Country:nk]' />
+              <groupfilter function='member' level='[none:Country:nk]' member='&quot;Portugal&quot;' />
+            </groupfilter>
+          </filter>
+          <slices>
+            <column>[federated.1raf5hd1nwejkf1fvhoo807mht9q].[none:Calculation_1378594128188579861:nk]</column>
+            <column>[federated.1raf5hd1nwejkf1fvhoo807mht9q].[none:Country:nk]</column>
+          </slices>
+          <aggregation value='true' />
+        </view>
+        <style>
+          <style-rule element='axis'>
+            <encoding attr='space' class='0' field='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[Longitude (generated)]' field-type='quantitative' max='36285062.070927076' min='584558.36118737794' projection='EPSG:3857' range-type='fixed' scope='cols' type='space' />
+            <encoding attr='space' class='0' field='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[Latitude (generated)]' field-type='quantitative' max='10599271.362095997' min='-16907673.247082204' projection='EPSG:3857' range-type='fixed' scope='rows' type='space' />
+          </style-rule>
+          <style-rule element='cell'>
+            <format attr='font-family' field='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:Calculation_1378594128189579286:qk]' value='Tableau Semibold' />
+            <format attr='text-format' field='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:Calculation_1378594128189579286:qk]' value='c&quot;$&quot;#,##0,.00K;-&quot;$&quot;#,##0,.00K' />
+          </style-rule>
+          <style-rule element='mark'>
+            <encoding attr='color' field='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:Calculation_1378594128189579286:qk]' palette='orange_10_0' type='interpolated' />
+          </style-rule>
+          <style-rule element='table'>
+            <format attr='background-color' value='#00000000' />
+            <format attr='show-null-value-warning' value='false' />
+          </style-rule>
+          <style-rule element='map-layer'>
+            <format attr='enabled' id='b01002_001e' value='false' />
+            <format attr='enabled' id='b01002_002e' value='false' />
+            <format attr='enabled' id='b01002_003e' value='false' />
+            <format attr='enabled' id='dp02_0001e' value='false' />
+            <format attr='enabled' id='dp02_0015e' value='false' />
+            <format attr='enabled' id='dp03_0027e_plus_dp03_0029e' value='false' />
+            <format attr='enabled' id='dp03_0028e' value='false' />
+            <format attr='enabled' id='dp03_0030e_plus_dp03_0031e' value='false' />
+            <format attr='enabled' id='dp03_0062e' value='false' />
+            <format attr='enabled' id='dp03_0088e' value='false' />
+            <format attr='enabled' id='dp04_0001e' value='false' />
+            <format attr='enabled' id='dp04_0046e' value='false' />
+            <format attr='enabled' id='dp04_0047e' value='false' />
+            <format attr='enabled' id='dp04_0089e' value='false' />
+            <format attr='enabled' id='dp05_0001e' value='false' />
+            <format attr='enabled' id='dp05_0002e_div_dp05_0003e' value='false' />
+            <format attr='enabled' id='dp05_0032e' value='false' />
+            <format attr='enabled' id='dp05_0033e' value='false' />
+            <format attr='enabled' id='dp05_0034e' value='false' />
+            <format attr='enabled' id='dp05_0039e' value='false' />
+            <format attr='enabled' id='dp05_0047e' value='false' />
+            <format attr='enabled' id='dp05_0053e' value='false' />
+            <format attr='enabled' id='dp05_0066e' value='false' />
+            <format attr='enabled' id='dp05_0077e' value='false' />
+          </style-rule>
+          <style-rule element='map'>
+            <format attr='washout' value='0' />
+            <format attr='map-style' value='outdoors' />
+          </style-rule>
+          <style-rule element='map-data-layer'>
+            <format attr='palette' value='tableau-map-blue-green-light' />
+            <format attr='geo-area-type' value='State' />
+          </style-rule>
+        </style>
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+            <encodings>
+              <color column='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:Calculation_1378594128189579286:qk]' />
+              <text column='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:Calculation_1378594128189579286:qk]' />
+              <lod column='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[none:Country:nk]' />
+              <geometry column='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[Geometry (generated)]' />
+            </encodings>
+            <style>
+              <style-rule element='mark'>
+                <format attr='mark-labels-cull' value='true' />
+                <format attr='mark-labels-mode' value='all' />
+                <format attr='mark-labels-show' value='true' />
+              </style-rule>
+            </style>
+          </pane>
+        </panes>
+        <rows>[federated.1raf5hd1nwejkf1fvhoo807mht9q].[Latitude (generated)]</rows>
+        <cols>[federated.1raf5hd1nwejkf1fvhoo807mht9q].[Longitude (generated)]</cols>
+      </table>
+      <simple-id uuid='{281A3ECB-F571-4AB4-8EDF-AB3A83B584F1}' />
+    </worksheet>
+  </worksheets>
+  <dashboards>
+    <dashboard _.fcp.AccessibleZoneTabOrder.true...enable-sort-zone-taborder='true' name='Dashboard 1'>
+      <layout-options>
+        <title>
+          <formatted-text>
+            <run fontcolor='#000000' fontname='Tableau Bold' fontsize='22'>ECOMMERCE SALES DASHBOARD</run>
+            <run fontcolor='#e63524' fontname='Tableau Bold' fontsize='22'>Æ </run>
+            <run>| </run>
+            <run fontcolor='#3a76e9' fontname='Tableau Bold' fontsize='15'>YTD SALES ANALYSIS</run>
+          </formatted-text>
+        </title>
+      </layout-options>
+      <style />
+      <size maxheight='800' maxwidth='1200' minheight='800' minwidth='1200' sizing-mode='fixed' />
+      <datasources>
+        <datasource caption='clean_ecommerce' name='federated.1raf5hd1nwejkf1fvhoo807mht9q' />
+      </datasources>
+      <datasource-dependencies datasource='federated.1raf5hd1nwejkf1fvhoo807mht9q'>
+        <column caption='Continent' datatype='string' name='[Calculation_1378594128188579861]' role='dimension' semantic-role='[Country].[Name]' type='nominal'>
+          <calculation class='tableau' formula='CASE [Country]&#10;    // Europe&#10;    WHEN &quot;United Kingdom&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;France&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Netherlands&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Germany&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Norway&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Eire&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Switzerland&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Spain&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Poland&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Portugal&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Italy&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Belgium&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Lithuania&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Iceland&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Channel Islands&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Denmark&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Cyprus&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Sweden&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Austria&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Finland&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Greece&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Malta&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;Czech Republic&quot; THEN &quot;Europe&quot;&#10;    WHEN &quot;European Community&quot; THEN &quot;Europe&quot;&#10;&#10;    // Asia &amp; Middle East&#10;    WHEN &quot;Israel&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Bahrain&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Hong Kong&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Singapore&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Lebanon&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;United Arab Emirates&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Saudi Arabia&quot; THEN &quot;Asia&quot;&#10;    WHEN &quot;Japan&quot; THEN &quot;Asia&quot;&#10;&#10;    // Oceania&#10;    WHEN &quot;Australia&quot; THEN &quot;Oceania&quot;&#10;&#10;    // North &amp; South America&#10;    WHEN &quot;Canada&quot; THEN &quot;North America&quot;&#10;    WHEN &quot;Usa&quot; THEN &quot;North America&quot;&#10;    WHEN &quot;Brazil&quot; THEN &quot;South America&quot;&#10;&#10;    // Africa&#10;    WHEN &quot;Rsa&quot; THEN &quot;Africa&quot;&#10;&#10;    // Unknown&#10;    WHEN &quot;Unspecified&quot; THEN &quot;Other&quot;&#10;    ELSE &quot;Other&quot;&#10;END' />
+        </column>
+        <column-instance column='[Calculation_1378594128188579861]' derivation='None' name='[none:Calculation_1378594128188579861:nk]' pivot='key' type='nominal' />
+      </datasource-dependencies>
+      <zones>
+        <zone h='100000' id='6' type-v2='layout-basic' w='100000' x='0' y='0'>
+          <zone h='98000' id='84' param='horz' type-v2='layout-flow' w='98666' x='667' y='1000'>
+            <zone h='98000' id='7' param='vert' type-v2='layout-flow' w='98666' x='667' y='1000'>
+              <zone fixed-size='56' h='8000' id='9' is-fixed='true' type-v2='title' w='98666' x='667' y='1000'>
+                <zone-style>
+                  <format attr='border-color' value='#000000' />
+                  <format attr='border-style' value='none' />
+                  <format attr='border-width' value='0' />
+                  <format attr='margin' value='4' />
+                </zone-style>
+              </zone>
+              <zone fixed-size='4' h='750' id='45' is-fixed='true' type-v2='empty' w='98666' x='667' y='9000'>
+                <zone-style>
+                  <format attr='border-color' value='#000000' />
+                  <format attr='border-style' value='none' />
+                  <format attr='border-width' value='0' />
+                  <format attr='margin' value='1' />
+                  <format attr='background-color' value='#1838e6' />
+                </zone-style>
+              </zone>
+              <zone h='89250' id='8' type-v2='layout-basic' w='98666' x='667' y='9750'>
+                <zone h='89250' id='10' param='vert' type-v2='layout-flow' w='98666' x='667' y='9750'>
+                  <zone fixed-size='280' h='35000' id='11' is-fixed='true' layout-strategy-id='distribute-evenly' param='horz' type-v2='layout-flow' w='98500' x='750' y='9875'>
+                    <zone fixed-size='242' h='35000' id='32' is-fixed='true' name='Sales KPI' w='24667' x='750' y='9875'>
+                      <layout-cache minheight='201' type-h='scalable' type-w='cell' />
+                      <zone-style>
+                        <format attr='border-color' value='#000000' />
+                        <format attr='border-style' value='none' />
+                        <format attr='border-width' value='0' />
+                        <format attr='margin' value='4' />
+                        <format attr='background-color' value='#ddebf0' />
+                      </zone-style>
+                    </zone>
+                    <zone fixed-size='221' h='35000' id='31' is-fixed='true' name='Order Quantity KPI' w='24666' x='25417' y='9875'>
+                      <layout-cache minheight='186' type-h='scalable' type-w='cell' />
+                      <zone-style>
+                        <format attr='border-color' value='#000000' />
+                        <format attr='border-style' value='none' />
+                        <format attr='border-width' value='0' />
+                        <format attr='margin' value='4' />
+                        <format attr='background-color' value='#ddebf0' />
+                      </zone-style>
+                    </zone>
+                    <zone h='35000' id='41' name='Market Share by Sales' w='24584' x='50083' y='9875'>
+                      <layout-cache cell-count-h='1' minwidth='100' non-cell-size-h='42' type-h='cell' type-w='scalable' />
+                      <zone-style>
+                        <format attr='border-color' value='#000000' />
+                        <format attr='border-style' value='none' />
+                        <format attr='border-width' value='0' />
+                        <format attr='margin' value='4' />
+                        <format attr='background-color' value='#ddebf0' />
+                      </zone-style>
+                    </zone>
+                    <zone h='35000' id='44' name='Customers KPI' w='24583' x='74667' y='9875'>
+                      <layout-cache cell-count-h='1' non-cell-size-h='48' type-h='cell' type-w='cell' />
+                      <zone-style>
+                        <format attr='border-color' value='#000000' />
+                        <format attr='border-style' value='none' />
+                        <format attr='border-width' value='0' />
+                        <format attr='margin' value='4' />
+                        <format attr='background-color' value='#ddebf0' />
+                      </zone-style>
+                    </zone>
+                  </zone>
+                  <zone h='54000' id='72' is-fixed='true' type-v2='layout-basic' w='98500' x='750' y='44875'>
+                    <zone h='54000' id='58' param='horz' type-v2='layout-flow' w='38164' x='750' y='44875'>
+                      <zone fixed-size='542' h='54000' id='65' is-fixed='true' name='Categorywise YTD Sales' w='38164' x='750' y='44875'>
+                        <layout-cache minwidth='262' type-h='cell' type-w='scalable' />
+                        <zone-style>
+                          <format attr='border-color' value='#000000' />
+                          <format attr='border-style' value='none' />
+                          <format attr='border-width' value='0' />
+                          <format attr='margin' value='4' />
+                          <format attr='background-color' value='#ddebf0' />
+                        </zone-style>
+                      </zone>
+                    </zone>
+                    <zone h='54000' id='73' param='horz' type-v2='layout-flow' w='60336' x='38914' y='44875'>
+                      <zone fixed-size='325' h='54000' id='68' is-fixed='true' name='Monthly Returns' w='27750' x='38914' y='44875'>
+                        <layout-cache minheight='203' type-h='scalable' type-w='cell' />
+                        <zone-style>
+                          <format attr='border-color' value='#000000' />
+                          <format attr='border-style' value='none' />
+                          <format attr='border-width' value='0' />
+                          <format attr='margin' value='4' />
+                          <format attr='background-color' value='#ddebf0' />
+                        </zone-style>
+                      </zone>
+                      <zone h='54000' id='59' name='Sales by Country' w='32586' x='66664' y='44875'>
+                        <layout-cache minheight='244' minwidth='202' type-h='scalable' type-w='scalable' />
+                        <zone-style>
+                          <format attr='border-color' value='#000000' />
+                          <format attr='border-style' value='none' />
+                          <format attr='border-width' value='0' />
+                          <format attr='margin' value='4' />
+                          <format attr='background-color' value='#ddebf0' />
+                        </zone-style>
+                      </zone>
+                    </zone>
+                  </zone>
+                  <zone-style>
+                    <format attr='border-color' value='#000000' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='margin' value='1' />
+                  </zone-style>
+                </zone>
+              </zone>
+            </zone>
+          </zone>
+          <zone-style>
+            <format attr='border-color' value='#000000' />
+            <format attr='border-style' value='none' />
+            <format attr='border-width' value='0' />
+            <format attr='margin' value='8' />
+          </zone-style>
+        </zone>
+        <zone h='7250' id='82' name='Monthly Returns' pane-specification-id='0' param='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[none:Calculation_1378594128208158743:nk]' type-v2='color' w='11667' x='39750' y='51500' />
+        <zone h='5000' id='85' mode='checkdropdown' name='Sales KPI' param='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[none:Calculation_1378594128188579861:nk]' type-v2='filter' values='database' w='14000' x='80750' y='3125' />
+      </zones>
+      <devicelayouts>
+        <devicelayout auto-generated='true' name='Phone'>
+          <layout-options>
+            <title>
+              <formatted-text>
+                <run fontcolor='#000000' fontname='Tableau Bold' fontsize='22'>ECOMMERCE SALES DASHBOARD</run>
+                <run fontcolor='#e63524' fontname='Tableau Bold' fontsize='22'>Æ </run>
+                <run>| </run>
+                <run fontcolor='#3a76e9' fontname='Tableau Bold' fontsize='15'>YTD SALES ANALYSIS</run>
+              </formatted-text>
+            </title>
+          </layout-options>
+          <size maxheight='2200' minheight='2200' sizing-mode='vscroll' />
+          <zones>
+            <zone h='100000' id='97' type-v2='layout-basic' w='100000' x='0' y='0'>
+              <zone h='98000' id='96' param='vert' type-v2='layout-flow' w='98666' x='667' y='1000'>
+                <zone fixed-size='56' h='8000' id='9' type-v2='title' w='98666' x='667' y='1000'>
+                  <zone-style>
+                    <format attr='border-color' value='#000000' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='margin' value='4' />
+                    <format attr='padding' value='0' />
+                  </zone-style>
+                </zone>
+                <zone h='5000' id='85' mode='checkdropdown' name='Sales KPI' param='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[none:Calculation_1378594128188579861:nk]' type-v2='filter' values='database' w='14000' x='80750' y='3125'>
+                  <zone-style>
+                    <format attr='border-color' value='#000000' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='margin' value='4' />
+                    <format attr='padding' value='0' />
+                  </zone-style>
+                </zone>
+                <zone fixed-size='272' h='35000' id='32' is-fixed='true' name='Sales KPI' w='24667' x='750' y='9875'>
+                  <layout-cache minheight='201' type-h='scalable' type-w='cell' />
+                  <zone-style>
+                    <format attr='border-color' value='#000000' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='margin' value='4' />
+                    <format attr='padding' value='0' />
+                    <format attr='background-color' value='#ddebf0' />
+                  </zone-style>
+                </zone>
+                <zone fixed-size='272' h='35000' id='31' is-fixed='true' name='Order Quantity KPI' w='24666' x='25417' y='9875'>
+                  <layout-cache minheight='186' type-h='scalable' type-w='cell' />
+                  <zone-style>
+                    <format attr='border-color' value='#000000' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='margin' value='4' />
+                    <format attr='padding' value='0' />
+                    <format attr='background-color' value='#ddebf0' />
+                  </zone-style>
+                </zone>
+                <zone fixed-size='272' h='35000' id='41' is-fixed='true' name='Market Share by Sales' w='24584' x='50083' y='9875'>
+                  <layout-cache cell-count-h='1' minwidth='100' non-cell-size-h='42' type-h='cell' type-w='scalable' />
+                  <zone-style>
+                    <format attr='border-color' value='#000000' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='margin' value='4' />
+                    <format attr='padding' value='0' />
+                    <format attr='background-color' value='#ddebf0' />
+                  </zone-style>
+                </zone>
+                <zone fixed-size='272' h='35000' id='44' is-fixed='true' name='Customers KPI' w='24583' x='74667' y='9875'>
+                  <layout-cache cell-count-h='1' non-cell-size-h='48' type-h='cell' type-w='cell' />
+                  <zone-style>
+                    <format attr='border-color' value='#000000' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='margin' value='4' />
+                    <format attr='padding' value='0' />
+                    <format attr='background-color' value='#ddebf0' />
+                  </zone-style>
+                </zone>
+                <zone fixed-size='280' h='54000' id='65' is-fixed='true' name='Categorywise YTD Sales' w='38164' x='750' y='44875'>
+                  <layout-cache minwidth='262' type-h='cell' type-w='scalable' />
+                  <zone-style>
+                    <format attr='border-color' value='#000000' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='margin' value='4' />
+                    <format attr='padding' value='0' />
+                    <format attr='background-color' value='#ddebf0' />
+                  </zone-style>
+                </zone>
+                <zone fixed-size='280' h='54000' id='68' is-fixed='true' name='Monthly Returns' w='27750' x='38914' y='44875'>
+                  <layout-cache minheight='203' type-h='scalable' type-w='cell' />
+                  <zone-style>
+                    <format attr='border-color' value='#000000' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='margin' value='4' />
+                    <format attr='padding' value='0' />
+                    <format attr='background-color' value='#ddebf0' />
+                  </zone-style>
+                </zone>
+                <zone h='7250' id='82' name='Monthly Returns' pane-specification-id='0' param='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[none:Calculation_1378594128208158743:nk]' type-v2='color' w='11667' x='39750' y='51500'>
+                  <zone-style>
+                    <format attr='border-color' value='#000000' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='margin' value='4' />
+                    <format attr='padding' value='0' />
+                  </zone-style>
+                </zone>
+                <zone fixed-size='280' h='54000' id='59' is-fixed='true' name='Sales by Country' w='32586' x='66664' y='44875'>
+                  <layout-cache minheight='244' minwidth='202' type-h='scalable' type-w='scalable' />
+                  <zone-style>
+                    <format attr='border-color' value='#000000' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='margin' value='4' />
+                    <format attr='padding' value='0' />
+                    <format attr='background-color' value='#ddebf0' />
+                  </zone-style>
+                </zone>
+              </zone>
+              <zone-style>
+                <format attr='border-color' value='#000000' />
+                <format attr='border-style' value='none' />
+                <format attr='border-width' value='0' />
+                <format attr='margin' value='8' />
+              </zone-style>
+            </zone>
+          </zones>
+        </devicelayout>
+      </devicelayouts>
+      <simple-id uuid='{5F739B36-1FF1-43C7-9C17-1AA4316141C1}' />
+    </dashboard>
+  </dashboards>
+  <windows show-side-pane='false' source-height='30'>
+    <window class='worksheet' name='Sales KPI'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{2EF1DB27-C3E7-407A-A676-163E5AD764F5}' />
+    </window>
+    <window class='worksheet' name='Order Quantity KPI'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{BCCCD2B6-EC65-4911-904C-B63AFE0D6563}' />
+    </window>
+    <window class='worksheet' name='Market Share by Sales'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+        <edge name='right'>
+          <strip size='160'>
+            <card pane-specification-id='1' param='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[none:Calculation_1378594128188579861:nk]' type='color' />
+          </strip>
+        </edge>
+      </cards>
+      <viewpoint>
+        <zoom type='entire-view' />
+      </viewpoint>
+      <simple-id uuid='{36EB7481-9361-41B7-96D7-35F6C77AD0F2}' />
+    </window>
+    <window class='worksheet' name='Sales by Country'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+        <edge name='right'>
+          <strip size='160'>
+            <card pane-specification-id='0' param='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:Calculation_1378594128189579286:qk]' type='color' />
+          </strip>
+        </edge>
+      </cards>
+      <viewpoint>
+        <default-map-tool-selection tool='16' />
+      </viewpoint>
+      <simple-id uuid='{15329C95-140B-4D4A-932B-B6C731950163}' />
+    </window>
+    <window class='worksheet' name='Categorywise YTD Sales'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+        <edge name='right'>
+          <strip size='160'>
+            <card pane-specification-id='1' param='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[sum:Calculation_1378594128189579286:qk]' type='color' />
+          </strip>
+        </edge>
+      </cards>
+      <viewpoint>
+        <zoom type='entire-view' />
+      </viewpoint>
+      <simple-id uuid='{2E3722B9-31EC-43F8-A339-C6D4452A6A18}' />
+    </window>
+    <window class='worksheet' name='Monthly Returns'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+        <edge name='right'>
+          <strip size='160'>
+            <card pane-specification-id='0' param='[federated.1raf5hd1nwejkf1fvhoo807mht9q].[none:Calculation_1378594128208158743:nk]' type='color' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{3012F09E-38CE-48A5-B42B-FC7EC48C8FE9}' />
+    </window>
+    <window class='worksheet' name='Customers KPI'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+        </edge>
+        <edge name='right'>
+          <strip size='160'>
+            <card type='title' />
+          </strip>
+        </edge>
+      </cards>
+      <viewpoint>
+        <zoom type='entire-view' />
+      </viewpoint>
+      <simple-id uuid='{BF525BAE-6B52-4B7E-B276-07BF93178EA8}' />
+    </window>
+    <window class='dashboard' maximized='true' name='Dashboard 1'>
+      <viewpoints>
+        <viewpoint name='Categorywise YTD Sales'>
+          <zoom type='entire-view' />
+        </viewpoint>
+        <viewpoint name='Customers KPI'>
+          <zoom type='entire-view' />
+        </viewpoint>
+        <viewpoint name='Market Share by Sales'>
+          <zoom type='entire-view' />
+        </viewpoint>
+        <viewpoint name='Monthly Returns'>
+          <zoom type='entire-view' />
+        </viewpoint>
+        <viewpoint name='Order Quantity KPI'>
+          <zoom type='entire-view' />
+        </viewpoint>
+        <viewpoint name='Sales KPI'>
+          <zoom type='entire-view' />
+        </viewpoint>
+        <viewpoint name='Sales by Country'>
+          <zoom type='entire-view' />
+        </viewpoint>
+      </viewpoints>
+      <active id='-1' />
+      <simple-id uuid='{A2CE410D-D922-460D-AB16-504D433C2828}' />
+    </window>
+  </windows>
+</workbook>

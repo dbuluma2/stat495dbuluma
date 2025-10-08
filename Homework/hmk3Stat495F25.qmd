@@ -1,0 +1,177 @@
+---
+title: "Homework 3 - Stat 495 - Fall 2025"
+author: "YourNameGoesHere"
+date: today
+format: pdf
+editor: visual
+---
+
+```{r}
+#| label: load-packages
+#| include: false
+
+library(mosaic)
+library(tidyverse)
+library(lmtest)
+library(rpart)
+library(rpart.plot)
+```
+
+### Homework 3 - Due Wednesday, Oct. 8th by midnight to Gradescope
+
+# Practicing Academic Integrity
+
+If you worked with others or used resources outside of provided course material, such as Generative AI (anything besides our textbook, course materials in the repo, labs, R help menu) to help complete this assignment, please acknowledge them below using a bulleted list. Remember that according to our class framework, if you engage with Generative AI tools, the tool and date of use must be listed here, and then a complete record of the chat history must be appended to the assignment.
+
+<!-- ~~~~~~~~~~~~~~~~ YOU MAY BEGIN EDITING BELOW THIS LINE ~~~~~~~~~~~~~~~~ -->
+
+*I acknowledge the following individuals with whom I worked on this assignment:*
+
+Name(s) and how they assisted you
+
+-   
+
+*I used the following sources to help complete this assignment:*
+
+Source(s) and where used in your submission
+
+-   
+
+\newpage
+
+```{r, include = FALSE}
+library(mosaic)
+options(digits = 6)
+```
+
+# PROBLEMS TO TURN IN: Add 1, Add 2, and Add 3
+
+## Additional 1 - Ship Damage
+
+```{r}
+ships <- MASS::ships
+# ?ships # for reference if you want more information
+```
+
+This data set contains information on ships and the number of damage incidents they have suffered along with a few potential predictors. We want to predict the number of damage incidents using other predictors. Note that due to the small data set size, we will not be using a training/test split or CV for analysis. Instead, just fit your models to the full data set to address the questions below.
+
+> part a: Plot the distribution of the response variable, incidents. Explain why the usual OLS approach should not be used here and what you should do instead, using the plot as support.
+
+SOLUTION:
+
+```{r}
+
+```
+
+> part b: Fit an appropriate regression predicting *incidents* using *service*. Obtain the model summary. Is the overall model significant? (Use a likelihood ratio test through the package *lmtest* to do the drop-in deviance procedure.)
+
+SOLUTION:
+
+```{r}
+
+```
+
+> part c: Fit an appropriate regression predicting *incidents* using both *service* and *type* including their interaction. Obtain the model summary. Compare this model to the one with just *service*. Do you need to keep the interaction? Do you need to keep *type*? Perform appropriate procedures to assess (you may need to fit other models to answer the questions).
+
+SOLUTION:
+
+```{r}
+
+```
+
+> part d: For your preferred model (from above), save predictions from the model using *predict* on the full data set of two different types - once with type = "link" and one with type = "response". Show the first 5 predictions of each type. (Note type here is not the ship type, but type of prediction!) Explain the difference between the prediction types, how you can map back and forth between them, and why that is the case.
+
+SOLUTION:
+
+```{r}
+
+```
+
+\newpage
+
+## Additional 2 - Soil predictions
+
+We used this data set before, and will try new prediction methods on it here.
+
+The data comes from a Kaggle competition: https://www.kaggle.com/c/afsis-soil-properties. The original data set contained 3600 variables, 3599 possible predictors (really, 3578 and some other variables) and a response, Sand. The 3599 predictors were reduced to 106 that can "best" distinguish between the two levels of Depth (another variable in the data set). The resulting data set of 107 variables (106 predictors and the response variable, Sand) was saved in the data set "newsoil". The row numbers should be removed as demonstrated below. We want to use this data set due to the large number of predictors to see what our shrinkage methods do.
+
+```{r}
+newsoil <- read.csv("https://awagaman.people.amherst.edu/stat495/newsoil.csv",
+                    header = T)
+newsoil <- select(newsoil, -X)
+```
+
+Our focus is on predicting the response variable Sand, using the selected variables from previous work.
+
+Trees are a prediction method that have an inherent variable selection mechanism. Not all predictors get used in the tree! In this way, you could imagine comparing the solution here to automated variable selection and lasso solutions.
+
+For this problem, we won't use a training/test set or CV, just so you can focus on understanding the components of a tree and its options.
+
+> part a: Considering that we want to predict the variable *Sand*, will we be constructing a classification or regression tree? Why?
+
+SOLUTION:
+
+```{r}
+
+```
+
+> part b: Fit an appropriate tree with no control options set (default tree) using *rpart*, obtain the summary using *printcp*, and plot the resulting tree. How many variables were used in the tree construction?
+
+SOLUTION:
+
+```{r}
+
+```
+
+> part c: Fit a second tree with control options set as follows: control = c(cp=0, minsplit = 20). Obtain the summary using *printcp*. (Plotting the tree would show something you can't really read, so don't worry about that.) How many variables were used in the tree construction?
+
+SOLUTION:
+
+```{r}
+
+```
+
+> part d: The difference between the trees in parts b and c is a change in the control parameters. The default minsplit IS 20, so that actually didn't change between them. What did change between them? What was the impact in the tree generated? Explain.
+
+SOLUTION:
+
+```{r}
+
+```
+
+> part e: Explain how to use the tree from part b (smaller tree) to obtain a prediction for observation 495, walking through the tree splits until the prediction is reached.
+
+SOLUTION:
+
+```{r}
+#| eval: false #remove when you get here and pick an option below
+
+# accessing the observation
+newsoil[495, you can put something here to get selected variables]
+# or do it using slice and select
+newsoil |>
+  select(something goes here) |>
+  slice(495)
+```
+
+> part f: What is the residual for observation 495 using the tree from part b?
+
+SOLUTION:
+
+```{r}
+newsoil |>
+  select(Sand) |>
+  slice(495)
+```
+
+\newpage
+
+## Additional 3 - Tailored Project Reflection
+
+Think about your recently submitted tailored project. Write a reflection (more than a paragraph but doesn't need to be more than a page) that addresses the following questions:
+
+-   Summarize your accomplishments. Did you accomplish what you set out to do? What, if anything, did you adjust along the way?\
+-   Does the project contribute to your portfolio in the way that you hoped? Explain.\
+-   What, if anything, was left undone, and why?\
+-   What would you want to do differently next time (can be specific to this project or thinking broadly about managing a project in general) and why?\
+-   What are you most proud of in regard to the project? Why?

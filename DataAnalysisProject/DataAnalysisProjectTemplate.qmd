@@ -1,0 +1,123 @@
+---
+title: "Data Analysis Project"
+author: "YourNameGoesHere"
+date: today
+format: pdf
+editor: visual
+---
+
+```{r}
+#| label: load-packages
+#| include: false
+
+library(mosaic)
+library(tidyverse)
+```
+
+### Project - Due Friday, Oct. 24th by midnight to Gradescope
+
+# Practicing Academic Integrity
+
+If you worked with others or used resources outside of provided course material, such as Generative AI (anything besides our textbook, course materials in the repo, labs, R help menu) to help complete this assignment, please acknowledge them below using a bulleted list. Remember that according to our class framework, if you engage with Generative AI tools, the tool and date of use must be listed here, and then a complete record of the chat history must be appended to the assignment.
+
+<!-- ~~~~~~~~~~~~~~~~ YOU MAY BEGIN EDITING BELOW THIS LINE ~~~~~~~~~~~~~~~~ -->
+
+*I acknowledge the following individuals with whom I worked on this assignment:*
+
+Name(s) and how they assisted you
+
+-   
+
+*I used the following sources to help complete this assignment:*
+
+Source(s) and where used in your submission
+
+-   
+
+\newpage
+
+## Instructions for your submission
+
+Your submission should include the following sections (along with all code necessary to reproduce your results):
+
+-   Introduction and Exploratory Data Analysis - could be two separate sections
+-   Your final GLM and relevant details
+-   Your final Tree and relevant details (can be before or after your GLM)
+-   Your Model Comparison (can be woven in sections above)
+-   Your Conclusion
+
+Descriptions of the purpose for each section follow. Do not use this as a set of check boxes for the assignment. Instead, the idea here is to explain why you'd write each section, and you can work out what needs to be in each in order to fulfill that purpose.
+
+-   Introduction - The real estate developer has interests, but will you be able to address them? How do you understand the tasks you are presented with? It's important to state what you will be doing in the analysis, so the reader can make sure their understanding lines up with what you will be doing. The reader also needs an introduction to your data, either in this section, or below. They need enough detail to be able to determine if your actions later in the analysis are reasonable.
+
+-   Exploratory Data Analysis - You are the analyst here. That means you can use variable transformations, subsets of observations, and employ other modeling/analytic practices (e.g. training/testing data sets) at your discretion to aid in your analysis, so long as you explain your rationale for them. The reader needs to know what you found when looking at the data and what you decided to do about it, because this has impacts on the rest of your analysis. Remember our lessons from the first classes - be sure you look at the data! Here's your chance to share what you found based on how it impacts your analysis.
+
+-   GLM and Tree sections - These are new techniques. By having each in their own section, you can focus on your explanation for them one at a time. They can be in any order. The developer does not know what these are - you need to explain them at least enough they can follow your discussion. You have options that you need to pick for the different techniques (various tuning parameters) - for example, are you using a classification or a regression tree? What tree stopping options are being used? What input variables are you using and why? What type of GLM are you using? How will you be measuring performance? Be sure you discuss what options you are selecting and what made you choose those values. Helping explain this shows your understanding of the techniques. (Adding this level of detail is a feature of this assignment that makes it a little different from the example data analysis articles you looked at.)
+
+You also want these sections to show off your ability to build models. It is not appropriate to only fit kitchen sink models or accept all default settings without exploring to see if that is really what is best for the task at hand. Your write-up should make it clear what you explored, but you don't have to show every model you considered. You can do a lot in sentences discussing your process. How you got to your final model should be clear.
+
+Finally, remember to check out your "best" model for each technique. Did you check reasonable diagnostics? Does the model make sense? Are variables behaving as you expect? If you focus solely on model performance, that's missing the point. For example, you might find a model has very little error because a variant of the response was accidentally included as a predictor. You are responsible for checking over the model before reporting it. Your write-up should convey that you've done this (the reader can't read your mind to know you did it).
+
+-   Model Comparison - There are several ways to compare the models - performance, interpretability, variables involved, etc. Remember you are trying to address the real estate developer's questions of interest. You may do that with a focus on just one model, or maybe you found a way to combine results from a "best" GLM and a "best" tree. The idea for this section is that you need to convey the process used to pick a final model(s) to use to answer those questions, with justification for your choices. This section can be woven in the tree/GLM sections so it may not be a separate section.
+
+-   Conclusion - This section should be a stand alone summary of your analysis. It is where you get to state your final model and a quick summary of the process used to get there. You also need to address the developer's questions (if not done before), and this is your last place to do that! Remember to flush out the details here. If your final sentence is "Model 5 is the model I choose and it answers your questions", does it? Are you doing your job as the analyst to leave things at that? For that matter, what is Model 5?
+
+-   Printing Trees - It is fine to print your trees out to separate .pdfs if you want to for some reason (just be sure to include them in your submission!). Please do show your code though (so no echo = FALSE) and remember that your work should be reproducible.
+
+-   Length - Your submission should be as long as it needs to be, but not unnecessarily long. Plots, etc. are encouraged to help illustrate points, but don't include output that isn't needed. For example, a histogram or densityplot and favstats for each variable is something good to explore, but you shouldn't put that in your submission for every variable. You might need plots to point out outliers you are removing, or maybe you show one plot and then say others were similar. I encourage you to do any additional work in a separate .Qmd from your submission.
+
+-   Audience - For purposes of this submission, remember that the audience is the real estate developer, so you'll probably need to include some explanations that you'd leave out of another assignment. For example, the developer isn't going to know what a GLM is, or what type you are using, or why you'd use it. You should think about where that information should go, and do your best to explain what you need in order to report your findings. Similarly, assume that you found this data to assist the developer and they need basic details about it to understand the variables. They didn't hand it over to you.
+
+You may remove these instructions if desired for your submission, but must leave the page on Academic Integrity above. The template with sections for the report is below.
+
+\newpage
+
+# Introduction
+
+-   Geography of the real estate project
+
+-   Explain the research question
+
+-   How the models we're using answer the question
+
+\newpage
+
+# Exploratory Data Analysis
+
+```{r}
+#| include: false
+# Can be included with the introduction
+
+kchouse <- read.csv("https://awagaman.people.amherst.edu/stat495/kc_house_data.csv",
+                    header = T)
+```
+
+\newpage
+
+# GLM and Results
+
+```{r, include = FALSE}
+# Can be before or after your Tree
+# You should pick what you want to present first
+```
+
+\newpage
+
+# Tree and Results
+
+```{r, include = FALSE}
+# Can be before or after your GLM
+# You should pick what you want to present first
+```
+
+\newpage
+
+# Model Comparison
+
+```{r, include = FALSE}
+# Can be woven in sections above; doesn't have to be it's own section
+```
+
+\newpage
+
+# Conclusion
