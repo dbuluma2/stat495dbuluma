@@ -1,0 +1,157 @@
+---
+title: "Midterm Practice Questions"
+format: pdf
+editor: visual
+---
+
+```{r}
+#| include: false
+
+library(mosaic)
+library(glmnet)
+library(ISLR)
+library(rpart)
+library(rpart.plot)
+options(digits = 6)
+```
+
+## Add 1
+
+A random variable $X$ is a member of an exponential family if its density $f(x| \theta)$ can be written as:
+
+$$
+f(x | \theta) = a(\theta)b(x) \exp \left[ c(\theta) d(x) \right], 
+$$
+
+where $a()$ and $c()$ are functions only of the parameter $\theta$, and $b()$ and $d()$ are functions of $x$.
+
+Verify that the Binomial distribution is an exponential family. Note, $X \sim Bin(n,p)$ has pmf given by:
+
+$$
+P(X=x|p) =(n \; \mbox{choose} \; x)p^x(1-p)^{n-x}.
+$$
+
+## Add 2
+
+Describe how to obtain a bootstrap distribution for a chosen statistic and obtain a (say) 95 percent confidence interval for its related parameter of interest.
+
+## Add 3
+
+Explain the plug-in principle in relation to obtaining the standard error of a sample proportion.
+
+## Add 4
+
+Explain what a Bayesian conjugate family is and what its benefits are.
+
+## Add 5
+
+Using the Chapter 8 Lab data set for context, explain how to perform a permutation test to see whether the mean age differs for individuals with monthly income \> 7500 versus individuals with less than that monthly income.
+
+```{r}
+credit <- read.csv("https://awagaman.people.amherst.edu/stat495/creditsample.csv", header = T)
+```
+
+## Add 6
+
+The diabetes data set (loaded below) is used to demonstrate ridge regression in Chapter 7. We want to try to verify the textbook results. Note that they did not use a training/test split so we are using the entire data set too.
+
+```{r}
+diabetes <- read.csv("http://web.stanford.edu/~hastie/CASI_files/DATA/diabetes.csv", header = TRUE)
+diabetes <- select(diabetes, -X)
+```
+
+The data was pre-processed. The text states that the predictors were standardized to mean 0 and sum of squares 1, and the response had it's mean subtracted off (i.e. it was centered), but not scaled. So, we do that just to match (clumsily).
+
+```{r}
+n <- nrow(diabetes)
+diabetes2 <- mutate(diabetes, prog = scale(prog, scale = FALSE),
+                    age = scale(age)/sqrt(n-1),
+                    sex = scale(sex)/sqrt(n-1),
+                    bmi = scale(bmi)/sqrt(n-1),
+                    map = scale(map)/sqrt(n-1),
+                    tc = scale(tc)/sqrt(n-1),
+                    ldl = scale(ldl)/sqrt(n-1),
+                    hdl = scale(hdl)/sqrt(n-1),
+                    tch = scale(tch)/sqrt(n-1),
+                    ltg = scale(ltg)/sqrt(n-1),
+                    glu = scale(glu)/sqrt(n-1))
+```
+
+(a) Use OLS to predict *prog* using *diabetes2*. Do you obtain the same results as in Table 7.3?\
+(b) Explain what cross-validation is (generally), and how it can be used to help choose a lambda in ridge regression.\
+(c) Use CV with ridge regression to select your lambda using an appropriate grid. What lambda is selected?\
+(d) Use ridge regression with lambda = 0.1. Do you obtain the same results as in Table 7.3?
+(e) Implement LASSO with CV to select your lambda using an appropriate grid. What lambda is selected?
+(f) Implement a regression tree to predict *prog*. What cp corresponds to the default tree?
+(g) Explain why we don't need a *glm* here to predict *prog*.
+(h) Which model of these do you prefer? How do the fits differ? (Hint: Besides comparing coefficients/involved variables, you can compare MSEs.)
+
+## Add 7
+
+The Spam email data set (loaded below) is used to demonstrate logistic regression and classification trees in Chapter 8. Note that while you'd usually want a training/test set here, the book used the entire data set, so you should do that to try to verify their work.
+
+```{r}
+spam <- read.csv("http://web.stanford.edu/~hastie/CASI_files/DATA/SPAM.csv", header = TRUE)
+```
+
+(a) Why should we not use OLS to predict *spam*?
+(b) Use logistic regression to predict *spam*. Verify you obtain the results in Table 8.3.
+(c) Obtain a confusion matrix for the logistic regression. How well is the model doing?
+(d) Use a classification tree to predict *spam*. Attempt to obtain the tree in Figure 8.7. Note that you may need to prune or adjust control parameters to obtain this tree. If you cannot obtain the tree, obtain one you want to work with for part e below.
+(e) Obtain a confusion matrix for your classification tree. How do your error rates compare to those reported in Figure 8.7?
+(f) Which method do you prefer for predicting *spam*?
+
+## CASI 8.6
+
+```{r}
+galaxy <- read.table("http://web.stanford.edu/~hastie/CASI_files/DATA/galaxy.txt", header = TRUE)
+```
+
+Data set description: Table of counts of galaxies binned into categories defined by redshift and magnitude. The column labels are log-redshift values, and the row labels magnitude.
+
+Fit the Poisson regression model (8.39) to the galaxy data.
+
+(Note that some data wrangling is required based on how the data is provided.)
+
+## Add 8
+
+```{r}
+data(Credit)
+Credit <- select(Credit, -ID)
+```
+
+You may want to look over the help file for this data set. Note that the number of observations stated there is inaccurate. Our goal is to predict Balance. Do not worry about transforming Balance or any of the other predictors here.
+
+(a) Create an appropriate training/test split using a 75/25 percent split.
+(b) Perform an regression using an automated variable selection algorithm of your choice and choose a model based on an appropriate descriptive statistic. Compute the test MSE.
+(c) Perform the lasso and choose a model based on an appropriate descriptive statistic. Compute the test MSE.
+(d) Fit an elastic-net penalty with alpha = 0.5, and choose a model based on an appropriate descriptive statistic. Compute the test MSE.\
+(e) How do your models compare? Which model do you prefer? Why? (Should be able to compare coefficients.)\
+(f) Plot the complete lasso solution path. Describe what happens in the figure.
+
+## Add 9
+
+The tree here is fit with rpart outside of the *train* framework from *caret* so we can play with other tuning parameters.
+
+```{r, fig.width = 6, fig.height = 4}
+data(iris)
+glimpse(iris)
+
+# for parts a and b
+iris.control <- rpart.control(minbucket = 10, minsplit = 30, cp = 0)
+iris.rpart <- rpart(Petal.Length ~ . - Species, data = iris, method = "anova",
+                  control = iris.control)
+rpart.plot(iris.rpart)
+
+# for part c
+iris[121,]
+
+# to help with part d sketch
+favstats(~ Petal.Width, data = iris)
+favstats(~ Sepal.Length, data = iris)
+```
+
+(a) Is this a classification or a regression tree? How do you know?
+(b) Explain what the minbucket and minsplit control options do.
+(c) What is the residual for observation 121? (Remember residual = observed - predicted response value)
+(d) Only 2 variables are used in the tree. Sketch the hypercubes formed in 2-D space, labeling them with their predicted response values.

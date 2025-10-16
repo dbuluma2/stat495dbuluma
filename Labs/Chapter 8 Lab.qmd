@@ -1,0 +1,81 @@
+---
+title: "Chapter 8 Lab"
+format: pdf
+editor: visual
+---
+
+```{r}
+#| include: false
+
+library(mosaic)
+library(tidyverse)
+library(caret)
+library(rsample)
+library(rpart)
+library(GGally)
+library(lmtest) # for likelihood ratio tests
+```
+
+Now it's your turn to practice with GLMs and regression trees. The idea is to practice the methods and interpreting the results. You can pursue the questions below in any order, after doing Question 0, but may want to consult with others around you so you can assist each other.
+
+Be sure you are comfortable with the commands and reading output both within the *train* framework but also outside of it.
+
+# Data Set
+
+For these problems we will be working with the Give Me Some Credit data set hosted by Kaggle. Reference for data: https://www.kaggle.com/c/GiveMeSomeCredit/data
+
+We are only using a (random) subset of the training data set (20% is 30000 observations), so as not to bog down our computers. I am hosting this random subset online for our use.
+
+```{r}
+credit <- read.csv("https://awagaman.people.amherst.edu/stat495/creditsample.csv", 
+                   header = T)
+credit <- select(credit, -X) #remove row indices
+```
+
+You may opt to use rename to shorten the names of some the variables.
+
+The data set contains the following variables:
+
+-   SeriousDlqin2yrs - Person experienced 90 days past due delinquency or worse - Y/N\
+-   RevolvingUtilizationOfUnsecuredLines - Total balance on credit cards and personal lines of credit except real estate and no installment debt like car loans divided by the sum of credit limits - percentage\
+-   age - Age of borrower in years - integer\
+-   NumberOfTime30-59DaysPastDueNotWorse - Number of times borrower has been 30-59 days past due but no worse in the last 2 years - integer\
+-   DebtRatio - Monthly debt payments, alimony,living costs divided by monthly gross income - percentage\
+-   MonthlyIncome - Monthly income - real\
+-   NumberOfOpenCreditLinesAndLoans - Number of Open loans (installment like car loan or mortgage) and Lines of credit (e.g. credit cards) - integer\
+-   NumberOfTimes90DaysLate - Number of times borrower has been 90 days or more past due - integer
+-   NumberRealEstateLoansOrLines - Number of mortgage and real estate loans including home equity lines of credit - integer\
+-   NumberOfTime60-89DaysPastDueNotWorse - Number of times borrower has been 60-89 days past due but no worse in the last 2 years - integer\
+-   NumberOfDependents - Number of dependents in family excluding themselves (spouse, children etc.) - integer
+
+## Question 0
+
+You should create a training/test split for use in model evaluation below.
+
+```{r}
+
+```
+
+## Question 1
+
+Use a regression tree to predict DebtRatio. How well does the tree do? Try out some of the tree control options.
+
+```{r}
+
+```
+
+## Question 2
+
+Use poisson regression to predict the NumberOfOpenCreditLinesAndLoans. Is the overall model useful?
+
+```{r}
+
+```
+
+## Question 3
+
+Use logistic regression and a classification tree to predict SeriousDlqin2yrs. This was the original Kaggle challenge. How do the models compare? How well is each doing? Which do you prefer?
+
+```{r}
+
+```

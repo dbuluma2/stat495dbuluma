@@ -21,9 +21,9 @@ Name(s) and how they assisted you
 
 Source(s) and where used in your submission
 
-- I used ChatGPT to ask many questions on how to use Tableau, ask for help formatting of html code for readability, and seek feedback on whether prose or list would be better for my writeup: https://chatgpt.com/share/68e48cb1-caa4-800c-96ca-a8012a717612
-- I used my STAT 231 blog project and STAT 230 project as a refresher for some code syntaxes.
-- I watched many demos on the Tableau Public website to learn how to make dashboards.
+-   I used ChatGPT to ask many questions on how to use Tableau, ask for help formatting of html code for readability, and seek feedback on whether prose or list would be better for my writeup: https://chatgpt.com/share/68e48cb1-caa4-800c-96ca-a8012a717612
+-   I used my STAT 231 blog project and STAT 230 project as a refresher for some code syntaxes.
+-   I watched many demos on the Tableau Public website to learn how to make dashboards.
 
 \newpage
 
@@ -40,12 +40,12 @@ This project investigates sales performance patterns in an e-commerce dataset by
 
 The repository also includes all supporting files necessary for reproducibility:
 
-- **`data.csv`**: Original raw e-commerce dataset (pre-cleaning). 
-- **`clean_ecommerce.csv`**: Cleaned version used for regression and visualization. 
-- **`TPproject.qmd`**: Quarto source file for the HTML report which includes R code and written sections. 
-- **`header_image`**: Cover image used in the HTML report for visual presentation. 
-- **`TPproject_files`**: Automatically generated folder containing dependencies when rendering the HTML. 
-- **`TP_README.pdf`**: This document, describing contents and access instructions.
+-   **`data.csv`**: Original raw e-commerce dataset (pre-cleaning).
+-   **`clean_ecommerce.csv`**: Cleaned version used for regression and visualization.
+-   **`TPproject.qmd`**: Quarto source file for the HTML report which includes R code and written sections.
+-   **`header_image`**: Cover image used in the HTML report for visual presentation.
+-   **`TPproject_files`**: Automatically generated folder containing dependencies when rendering the HTML.
+-   **`TP_README.pdf`**: This document, describing contents and access instructions.
 
 ## Accessing the Blog Report
 
