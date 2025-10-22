@@ -124,6 +124,8 @@ unique(kchouse$waterfront)
 
 ```{r}
 summary(kchouse)
+filter(kchouse, bedrooms == 33 | price == 7700000)
+#drop this record?
 ```
 
 Some key observations that stand out are:
@@ -304,7 +306,7 @@ glm_full <- glm(
 )
 
 # Check for multicollinearity
-
+summary(glm_full)
 vif_values <- vif(glm_full)
 vif_values
 ```
@@ -317,7 +319,14 @@ The AIC (Akaike Information Criterion) balances model fit and complexity, a lowe
 ```{r}
 # Stepwise model selection using AIC
 glm_step <- stepAIC(glm_full, direction = "both", trace = FALSE)
-
+glm_int <- glm(
+  high_price ~ bedrooms + bathrooms + sqft_living + sqft_lot +
+    floors + grade + yr_built + has_renovated * condition  + waterfront_flag,
+  data = house_train,
+  family = binomial
+)
+summary(glm_int)
+anova(glm_step, glm_int)
 # Extract and display best model
 best_model <- formula(glm_step)
 summary(glm_step)
@@ -337,6 +346,7 @@ house_test$high_price <- factor(house_test$high_price,
 ```
 
 ```{r}
+#ask if this is redundant work
 set.seed(22)
 glm_cv <- train(
   best_model,
