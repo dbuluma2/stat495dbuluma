@@ -26,6 +26,8 @@ library(rpart)
 library(rpart.plot)
 ```
 
+
+
 ### Project - Due Friday, Oct. 24th by midnight to Gradescope
 
 # Practicing Academic Integrity
@@ -90,6 +92,8 @@ You may remove these instructions if desired for your submission, but must leave
 
 # Exploratory Data Analysis
 
+
+
 ```{r}
 #| include: false
 # Can be included with the introduction
@@ -98,13 +102,21 @@ kchouse <- read.csv("https://awagaman.people.amherst.edu/stat495/kc_house_data.c
                     header = T)
 ```
 
+
+
 I started by examining the structure and basic characteristics of the dataset to understand its scale and completeness before modeling. The dataset contains 21,597 records and 21 variables that describe property attributes such as living area, lot size, number of rooms, and quality ratings, along with geographic and temporal identifiers.
+
+
 
 ```{r}
 glimpse(kchouse)
 ```
 
+
+
 The dataset has no missing values.
+
+
 
 ```{r}
 sum(is.na(kchouse))
@@ -126,11 +138,15 @@ unique(kchouse$waterfront)
 summary(kchouse)
 ```
 
+
+
 Some key observations that stand out are:
 
 1.  Sale prices range from about \$78,000 to \$7.7 million, with a median of \$450,000 and a mean of \$540,000. Roughly half of all homes fall above the \$500,000 threshold, meaning the “high-price” and “not-high-price” classes will be reasonably balanced for classification.
 2.  Most homes have 3 bedrooms and 2 bathrooms, which is typical of most family houses. However, there are some striking outliers such as a property with 33 bedrooms and a lot over 1.6 million sqft (\~ 38 acres). These extreme values will be monitored as analysis continues.
 3.  The properties were built between 1900 and 2015. Notably very few have been renovated, which suggests that whether a house has been renovated could hold predictive value. To capture potential effects of property upgrades, we created a binary variable `has_renovated` indicating whether a home had any recorded renovation (`yr_renovated > 0`). Only 4% of the properties have been renovated and the boxplot shows that renovated homes tend to command slightly higher prices on average, suggesting that renovation status could be a useful predictor of high-price classification
+
+
 
 ```{r}
 kchouse <- kchouse |> 
@@ -148,7 +164,11 @@ ggplot(kchouse, aes(x = has_renovated, y = price)) +
 
 ```
 
+
+
 4.  The `date` variable was read as text rather than a proper date format. After conversion, it reveals sales primarily between May 2014 and May 2015.
+
+
 
 ```{r}
 kchouse <- kchouse |> 
@@ -156,7 +176,11 @@ kchouse <- kchouse |>
     summary(kchouse$date)
 ```
 
+
+
 5.  One property had 33 bedrooms, yet only costs \$640,000 and has 1.75 bathrooms and 1,620 square feet of living area. This combination is unrealistic and inconsistent with the rest of the dataset. To prevent this anomalous record from biasing the regression results, it was removed from the dataset prior to modeling.
+
+
 
 ```{r}
 # to examine the outlier record
@@ -167,7 +191,11 @@ kchouse <- kchouse |>
      filter(bedrooms != 33)
 ```
 
+
+
 Next, the target variable `highprice` was created to distinguish homes selling above versus below \$500,000. Out of 21,597 home sales, about 42% sold for more than \$500,000, while 58% sold for less. This indicates that most homes in King County were still below the half-million threshold during the 2014–2015 period, but the high-price segment was substantial. Although, the target variable is not severely imbalanced enough to cause modeling issues, we'll account for this difference during model evaluation.
+
+
 
 ```{r}
 kchouse <- kchouse |> 
@@ -189,7 +217,11 @@ ggplot(kchouse, aes(x = high_price, fill = high_price)) +
   )
 ```
 
+
+
 ## Spatial Data
+
+
 
 ```{r}
 mean_lat <- mean(kchouse$lat)
@@ -208,7 +240,11 @@ leaflet(kchouse) |>
   )
 ```
 
+
+
 The spatial visualization reveals a distinct clustering of high-priced homes (red) along Seattle’s waterfronts and around Lake Washington, while lower-priced homes (blue) dominate inland and southern areas such as Renton and Kent. This geographic pattern aligns with the region’s economic landscape urban neighborhoods near downtown Seattle and the Eastside (e.g., Bellevue and Kirkland) host major technology hubs and high-income employment centers, driving up property demand and prices. To capture the influence of water proximity observed on the map, I created a categorical indicator variable, `waterfront_flag`, distinguishing between “Waterfront” and “Not Waterfront” properties. The variable is stored as a factor to ensure it is correctly treated as a categorical predictor in subsequent modeling.
+
+
 
 ```{r}
 kchouse <- kchouse |> 
@@ -220,6 +256,8 @@ ggplot(kchouse, aes(x = waterfront_flag , y = price)) +
   labs(title = "Price Comparison: Waterfront vs. Not Waterfront",
        x = "", y = "Price ($)")
 ```
+
+
 
 The boxplot comparing waterfront and non-waterfront properties shows a substantial price gap between the two groups. Waterfront homes have a notably higher median sale price and a broader interquartile range, with many properties exceeding \$2 million. In contrast, most non-waterfront homes cluster below \$1 million, with a few extreme luxury outliers. This reinforces the insight from the spatial map. The clear separation between the two distributions further justifies including the waterfront_flag variable as a categorical predictor in the modeling phase.
 
@@ -235,13 +273,19 @@ Finally, I visualized pairwise relationships among the most relevant numeric fea
 
 -   `sqft_living15` and `sqft_lot15` - 2015 measurements highly correlated (\>0.7) with their original counterparts, excluded to avoid redundancy and multicollinearity.
 
+
+
 ```{r}
 cor(kchouse$sqft_living, kchouse$sqft_living15)
 cor(kchouse$sqft_lot, kchouse$sqft_lot15)
 ```
 
+
+
 -   `view` - excluded due to lack of measurement context. It is uncertain whether the “view” rating reflects a physical inspection, an online listing impression. Including it without clarity could introduce noise rather than meaningful information.
 -   `has_renovated`, `high_price`, and `waterfront_flag` are categorical indicators which have already been explored above.
+
+
 
 ```{r warning=FALSE}
 num_vars <- kchouse |> 
@@ -258,6 +302,8 @@ ggpairs(
 )
 ```
 
+
+
 The correlation matrix reveals several strong relationships between predictors and the target variable. `sqft_living` and `grade` have the strongest correlations with `price` ($\approx$ 0.70 and 0.67), indicating that larger and higher-quality homes sell for significantly more. `yr_built`, `condition`, and `sqft_lot` have relatively low correlations with `price`, implying limited direct influence on value. The pairwise plots also reveal several instances of potential multicollinearity among `sqft_living`, `bathrooms`, and `bedrooms`. This is expected as all variables provide overlapping information on the home size. Variables showing excessive correlation (e.g., VIF \> 5) may be dropped in the next phase to improve model stability and interpretability.
 
 \newpage
@@ -265,6 +311,8 @@ The correlation matrix reveals several strong relationships between predictors a
 ## Training and Testing Setup
 
 The variables (`id`, `date`, `price`, `zipcode`, `lat`, `long`, `view`, `yr_renovated`, `waterfront`) were removed due to reasons explained in the previous section.
+
+
 
 ```{r}
 kchouse_clean <- kchouse |> 
@@ -288,11 +336,17 @@ myControl <- trainControl(method = "repeatedcv",
 tally(~ high_price, data = house_train, format = "count")
 ```
 
+
+
 Baseline misclassification rate computation:
+
+
 
 ```{r}
 6335/(6335+8782)
 ```
+
+
 
 If we classified all properties in the training set to below \$500K (the majority class), our error rate on training would be 41.9%. Our models need to do better than this.
 
@@ -304,6 +358,8 @@ Before fitting the model, we checked for multicollinearity, a situation where pr
 
 We used the `alias()` function to detect perfect linear relationships among predictors and found that `sqft_living`, `sqft_above`, and `sqft_basement` were perfectly correlated (`sqft_living = sqft_above + sqft_basement`). To prevent aliasing, only `sqft_living` was retained, as it represents the total interior space and captures the same information. After cleaning the dataset and removing redundant variables (`id`, `date`, `lat`, `long`, `zipcode`, `view`, `price`, and the aliased columns), the model predictors included: bedrooms, bathrooms, sqft_living, sqft_lot, floors, condition, grade, yr_built, has_renovated, waterfront_flag'
 
+
+
 ```{r}
 pre_glm_full <- glm(
   high_price ~ .,
@@ -313,7 +369,11 @@ pre_glm_full <- glm(
 alias(pre_glm_full)
 ```
 
+
+
 New full model after dropping the two variables.
+
+
 
 ```{r}
 glm_full <- glm(
@@ -330,9 +390,13 @@ vif_values
 
 ```
 
+
+
 The Variance Inflation Factor (VIF) quantifies how much variance in a coefficient is inflated due to multicollinearity. A VIF value above 5 typically signals problematic correlation. In this case, all predictors had VIF values below 5, suggesting that multicollinearity was not a concern after removing redundant variables.
 
 To simplify the model while maintaining predictive power, stepwise selection using AIC was applied. The AIC (Akaike Information Criterion) balances model fit and complexity, a lower AIC is better and preferred.
+
+
 
 ```{r}
 # Stepwise model selection using AIC
@@ -350,9 +414,13 @@ best_model <- formula(glm_step)
 summary(glm_step)
 ```
 
+
+
 The stepwise AIC procedure automatically removed `has_renovated` as it did not significantly contribute to predicting `high_price`. The resulting model retained predictors that are the strongest indicators of a house being high-priced.
 
 To assess generalization performance, we used 10-fold cross-validation repeated 5 times to ensure that performance metrics are not dependent on a single random data split. The same training/test and CV framework will later be used for the decision tree model, ensuring fair comparison.
+
+
 
 ```{r}
 house_train$high_price <- factor(house_train$high_price,
@@ -378,6 +446,8 @@ glm_cv <- train(
 glm_cv
 ```
 
+
+
 For this model, the mean accuracy was approximately 80%, indicating strong predictive ability relative to the baseline classification rate of 41.9%.
 
 #more tests to be done to find better model e.g interactions
@@ -387,6 +457,8 @@ For this model, the mean accuracy was approximately 80%, indicating strong predi
 \newpage
 
 # Tree and Results
+
+
 
 ```{r, include = FALSE}
 # Can be before or after your GLM
@@ -427,14 +499,21 @@ confusionMatrix(predict(kchouse.rpart, newdata = house_test, type = "class"), ho
 
 ```
 
+
+
 About 79.2% of all test samples were classified correctly. This is much higher than the baseline “No Information Rate” (which is 0.5809), meaning the model performs much better than guessing the majority class. The model achieved slightly lower than the logistic regression, but provided better interpretability through explicit decision rules. \newpage
 
 # Model Comparison
+
+
 
 ```{r, include = FALSE}
 # Can be woven in sections above; doesn't have to be it's own section
 ```
 
+
+
 \newpage
 
 # Conclusion
+
