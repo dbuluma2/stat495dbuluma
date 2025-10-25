@@ -44,31 +44,39 @@ Name(s) and how they assisted you
 
 Source(s) and where used in your submission
 
--   
+-   I used my STAT 230 Notes and Project to refresh on logistic regression procedures and interpretation.
+-   I used my STAT 231 Shiny assignments to refresh on leaflet.
+-   I used Googled:
+
+1.  Researching the meaning of coefficients in logistic regression outputs. How overlapping predictors impact the coefficients.
+
+2.  How to find out perfect linear relationships among predictors (aliasing).
+
+3.  The meaning of AIC and how it impacts models.
+
+4.  Other potential reasons why a model may not generalize well on unseen data (my glm model didn't)
+
+5.  How to attach a png and pdf file into R.
+
+6.  StepAIC function for logistic regression.
+
+7.  To learn more about why variables with perfect linear relationships affect model fitting.
 
 \newpage
 
 # Abstract
 
-This report was prepared for a real estate developer seeking to identify the key factors that predict whether homes in King County, Washington sell for more than \$500,000. Using data from over 21,000 property sales between May 2014 and May 2015, I compared two predictive approaches: a logistic regression model (GLM) and a decision tree (CART). While both achieved around 81% training accuracy, only the decision tree maintained strong performance on new data (81.4% test accuracy). The analysis revealed that construction grade, year built, and living area are the strongest predictors of high-value homes. These findings provide a practical, interpretable model for pricing predictions and clear guidance that newer, higher-quality, and larger homes are most likely to exceed the \$500,000 threshold.
+This report was prepared for a real estate developer seeking to identify the key factors that predict whether homes in King County, Washington sell for more than \$500,000. Using data from over 21,000 property sales between May 2014 and May 2015, I compared a logistic regression model (GLM) and a decision tree (CART). While both achieved around 81% training accuracy, only the decision tree maintained strong performance on new data . The analysis revealed that construction grade, year built, and living area are the strongest predictors of high value homes. These findings provide an intepretable model for pricing predictions and a conclusion that newer, higher quality, and larger homes are most likely to exceed the \$500,000 threshold.
 
 # Introduction
 
-I conducted this analysis to help a real estate developer understand the factors that influence housing prices in King County, Washington. Specifically, the goal was to determine which property characteristics are most predictive of whether a home sells for more than \$500,000, and to develop models that can make such predictions for future listings.
+This analysis was conducted at the request of a real estate developer who wanted to understand the factors that influence housing prices in King County, Washington. Specifically, the goal was to develop a suitable model that uses property attributes to predict whether a home sells for more than \$500,000. The dataset I used contains over 21,000 residential property sales in King County between May 2014 and May 2015. Each record is described by features such as the number of bedrooms and bathrooms, square footage, lot size, year built, renovation history, and geographic coordinates.
 
-King County, located in the western region of Washington State, includes the Seattle metropolitan area, where housing prices vary widely based on property features and neighborhood characteristics. The dataset I used contains over 21,000 residential property sales, each described by features such as the number of bedrooms and bathrooms, square footage, lot size, year built, renovation history, and geographic coordinates (latitude and longitude). These location variables capture variation in housing values across neighborhoods and proximity to desirable features such as waterfronts and urban centers.
+That said, the main question I sought to answer was: *Which model best predicts whether a home will sell for more than \$500,000 in King County?*
 
-The main question I sought to answer was:
+A related goal was to identify which factors contribute most strongly to higher home values. To do this, I compared two different models. First, I used a Generalized Linear Model (GLM) with logistic regression to estimate the probability that a home sells above \$500,000. Second, I used a Decision Tree model, which provides an interpretable set of decision rules showing how combinations of features affect home prices. Both models were developed and evaluated within the same training/testing and cross-validation framework to ensure fair comparison and consistent performance evaluation.
 
-> What property features best predict whether a home will sell for more than \$500,000 in King County?
-
-A related goal was to create models that not only predict sale prices accurately but also explain which factors contribute most strongly to higher home values. To do this, I applied two complementary methods. First, I used a Generalized Linear Model (GLM) with logistic regression to estimate the probability that a home sells above \$500,000. Second, I used a Decision Tree model, which provides an interpretable set of decision rules showing how combinations of features—such as size, grade, and year built—affect home prices.
-
-Both models were developed and evaluated within the same training/testing and cross-validation framework to ensure fair comparison and consistent performance evaluation.
-
-In the sections that follow, I describe the dataset and the key cleaning steps I performed, including how I handled outliers such as a 33-bedroom record that did not align with other property characteristics. I then explore relationships between variables through visualization and correlation analysis before building and comparing the two predictive models. Finally, I interpret the results to identify the strongest predictors of high-value homes and discuss how the developer can apply these insights in practice.
-
-\newpage
+In the sections that follow, I describe the dataset and the key cleaning steps I performed. I then explore relationships between variables before building and comparing the two predictive models. Finally, I select the preferred model and interpret the results to identify the strongest predictors of high value homes and also discuss some applications of these insights.
 
 # Exploratory Data Analysis
 
@@ -80,25 +88,26 @@ kchouse <- read.csv("https://awagaman.people.amherst.edu/stat495/kc_house_data.c
                     header = T)
 ```
 
-I started by conducting exploratory data analysis (EDA) to understand the structure and relationships within the data before modeling. The dataset contains 21,597 home sales and 21 variables that describe property attributes such as living area, lot size, number of rooms, and quality ratings, along with geographic and temporal identifiers. (See Appendix A for basic data inspection and structure checks.)
-
-```{r}
-summary(kchouse)
-```
-
-### Key Observations
+I started by conducting exploratory data analysis to understand the structure and relationships within the data before modeling. The dataset contains 21,597 home sales and 21 variables that describe property attributes such as living area, lot size, number of rooms, quality ratings and geographic identifiers. (See Appendix A for basic data inspection and structure checks.)
 
 Some key initial observations that stand out are:
 
-1.  Sale prices range from about \$78,000 to \$7.7 million, with a median of \$450,000 and a mean of \$540,000. Roughly half of all homes fall above the \$500,000 threshold, meaning the “above 500k” and "below 500k” classes will be reasonably balanced for classification.
+1.  Sale prices range from about \$78,000 to \$7.7 million, with a median of \$450,000 and a mean of \$540,000. Roughly half of all homes fall above the \$500,000 threshold, meaning the “above 500k” and "below 500k” classes will be reasonably balanced.
 
-2.  Most homes have 3 bedrooms and 2 bathrooms, which is typical of standard family houses. However, one property with 33 bedrooms and a 1.75 bath, 1,620 sqft living space appeared to be an obvious data error. I removed this record prior to modeling to prevent it from distorting results (see Appendix B for code and justification). Another detail worth noting is that bathroom values such as 0.25 or 0.5 represent partial bathrooms and were preserved as they capture actual differences in home quality.
+2.  Most homes have 3 bedrooms and 2 bathrooms, which is typical of standard family houses. However, one property with 33 bedrooms, 1.75 bath and a 1,620 sqft living space appeared to be an obvious data entry error. I removed this record prior to modeling to prevent it from distorting results (see Appendix B for code and justification). Another detail worth noting is that bathroom values such as 0.25 or 0.5 represent partial bathrooms and were preserved as they capture actual differences in home quality.
 
-3.  The properties were built between 1900 and 2015. Notably very few have been renovated, which suggests that whether a house has been renovated could hold predictive value. I created a binary variable `has_renovated` indicating whether a home had any recorded renovation (`yr_renovated > 0`) to capture potential effects of property upgrades. Only 4% of the properties have been renovated and the box plot below shows that renovated homes tend to command slightly higher prices on average.
+```{r}
+# Remove the outlier
+kchouse <- kchouse |> 
+  filter(bedrooms != 33)
+```
+
+3.  The properties were built between 1900 and 2015. Notably very few have been renovated, which suggests that whether a house has been renovated could hold predictive value. I created an indicator variable `has_renovated` indicating whether a home had any recorded renovation (`yr_renovated > 0`) to capture potential effects of property upgrades. Only 4% of the properties have been renovated and the box plot below shows that renovated homes tend to command slightly higher prices on average.
 
 ```{r}
 kchouse <- kchouse |> 
-  mutate(has_renovated = factor(if_else(yr_renovated > 0, "Renovated", "Not Renovated")))
+  mutate(has_renovated = factor(if_else(yr_renovated > 0, 
+                                        "Renovated", "Not Renovated")))
 
 # Proportion of renovated homes
 count(kchouse, has_renovated) |> 
@@ -106,21 +115,22 @@ count(kchouse, has_renovated) |>
 
 ggplot(kchouse, aes(x = has_renovated, y = price)) +
   geom_boxplot() +
-  labs(title = "Price Comparison: Renovated vs. Not Renovated",
+  labs(title = "Renovated vs. Not Renovated",
        x = "", y = "Price ($)")
 
 ```
 
-4.  After converting the `date` variable to a proper date format, I found that nearly all transactions occurred between **May 2014 and May 2015**, representing roughly one year of housing market activity. (Appendix A includes the date conversion code.)
+4.  After converting the `date` variable to a proper date format, I found that nearly all transactions occurred between May 2014 and May 2015, representing roughly one year of housing market activity. (Appendix A includes the date conversion code.)
 
-### Target Variable Creation
+## Target Variable Creation
 
-Next, I created the target variable `above_500` to distinguish homes selling above versus below \$500,000. Out of 21,597 home sales, about 42% sold for more than \$500,000, while 58% sold for less. This indicates that more homes in King County were still below the half-million threshold during the 2014–2015 period, but the high-price segment was substantial.
+Next, I created the target variable `above_500` to distinguish homes selling above versus below \$500,000. Out of 21,597 home sales, about 42% sold for more than \$500,000, while 58% sold for less. This indicates that more homes in King County were still below the half-million threshold during the 2014–2015 period, but the above-500K segment was substantial.
 
 ```{r}
 # Create the variable
 kchouse_upg <- kchouse |> 
-               mutate(above_500 = factor( if_else(price > 500000, "Above500K", "Below500K")))
+               mutate(above_500 = factor( if_else(price > 500000, 
+                                                  "Above500K", "Below500K")))
 
 # Find Proportion of homes above 500k
 prop <- count(kchouse_upg, above_500) |> 
@@ -132,69 +142,69 @@ ggplot(kchouse_upg, aes(x = above_500, fill = above_500)) +
   theme_minimal() +
   labs(
     title = "Homes Above vs. Below $500K",
-    x = "",
+    x = "Classification",
     y = "Count",
     fill = "Price Category"
   )
 ```
 
-### Spatial Patterns
+## Spatial Patterns
 
 To understand geographic variation in home prices, I examined the spatial distribution of sales using longitude and latitude coordinates. The interactive map (see Appendix C for code) revealed clear geographic clustering.
 
-Homes priced above \$500K (shown in red) are concentrated along Seattle’s waterfronts and around Lake Washington while Homes priced below \$500K (shown in blue) are more prevalent inland and in southern neighborhoods such as Renton and Kent. This geographic pattern aligns with the region’s economic landscape urban neighborhoods near downtown Seattle and the Eastside (e.g., Bellevue and Kirkland) host major technology hubs and high-income employment centers, driving up property demand and prices.
+Homes priced above \$500K (shown in red) are concentrated along Seattle’s waterfronts and around Lake Washington while homes priced below \$500K (shown in blue) are more prevalent inland and in suburban neighborhoods such as Renton and Kent. This geographic pattern aligns with the region’s economic landscape. Urban neighborhoods near downtown Seattle and the Eastside (e.g. Bellevue and Kirkland) host major technology hubs and high-income employment centers, which drive up property demand and prices.
 
 To illustrate this, Figure 1 shows a static snapshot of the interactive map.
 
-![Spatial Distribution of Home Prices in King County](Map%20ScreenShot.png) *Figure 1: Red points indicate homes sold above \$500K; blue points represent homes sold below \$500K.*
+![Spatial Distribution of Home Prices in King County](Map%20ScreenShot.png) *Figure 1: Red points indicate homes sold above \$500K while blue points represent homes sold below \$500K.*
 
-To capture this spatial relationship in the model, I created a categorical variable `waterfront_flag`, distinguishing between “Waterfront” and “Not Waterfront” properties. The boxplot below further highlights the significant price difference between these two groups:
+To capture this spatial relationship in the model, I created an indicator variable `waterfront_flag`, distinguishing between “Waterfront” and “Not Waterfront” properties. The boxplot below further highlights the significant price difference between these two groups.
 
 ```{r}
-# Add variable to the dataset
+# Add binary variable to the dataset
 kchouse_upg <- kchouse_upg |> 
-        mutate(waterfront_flag = factor(if_else(waterfront > 0, "Waterfront", "Not Waterfront")))
+        mutate(waterfront_flag = factor(if_else(waterfront > 0, 
+                                            "Waterfront", "Not Waterfront")))
 
 ggplot(kchouse_upg, aes(x = waterfront_flag , y = price)) +
   geom_boxplot() +
-  labs(title = "Price Comparison: Waterfront vs. Not Waterfront",
+  labs(title = "Waterfront vs. Not Waterfront",
        x = "",
        y = "Price ($)")
 ```
 
-Waterfront homes have a notably higher median sale price and a broader interquartile range, with many properties exceeding \$2 million. In contrast, most non-waterfront homes cluster below \$1 million, with a few extreme luxury outliers. This reinforces the insight from the spatial map. The clear separation between the two distributions justifies including the waterfront_flag variable as a categorical predictor in the modeling phase.
+Waterfront homes have a notably higher median sale price and a broader interquartile range, with many properties exceeding \$2 million. In contrast, most non-waterfront homes cluster below \$1 million, with a few extreme luxury outliers. This reinforces the insight from the spatial map.
 
-### Pairwise Relationships
+## Pairwise Relationships
 
 Finally, I visualized pairwise relationships among the most relevant numeric features in the dataset to better understand how the main predictors relate to each other and to the target variable. This step helps identify strong linear associations, that is, cases where one variable tends to increase or decrease in a consistent way as another does (for example, larger homes generally have higher prices). It also helps detect multicollinearity, which occurs when two or more predictors are highly correlated with each other and therefore provide overlapping information. High multicollinearity can make it harder for statistical models to separate the individual effects of these variables, leading to less reliable estimates.
 
 (Full correlation plots are available in Appendix D.)
 
-The correlation matrix revealed that `sqft_living` and `grade` have the strongest positive relationships with price (correlations around 0.70 and 0.67). By contrast, `sqft_lot`, `condition`, and `yr_built` show weaker associations. `bedrooms`, `bathrooms`, and `sqft_living` are highly correlated with each other—expected since they all describe house size. `sqft_living15` and `sqft_lot15` which are 2015 measurements are highly correlated (\>0.7) with their original counterparts, therefore I'll drop them in the modeling phase to improve model stability and interpretability.
-
-\newpage
+The correlation matrix revealed that `sqft_living` and `grade` have the strongest positive relationships with price (correlations around 0.70 and 0.67). On the other hand, `sqft_lot`, `condition`, and `yr_built` show weaker associations. `bedrooms`, `bathrooms`, and `sqft_living` are highly correlated with each other which could be because they all describe house size. `sqft_living15` and `sqft_lot15` which are 2015 measurements are highly correlated (\>0.7) with their original counterparts, therefore I'll drop them in the modeling phase to improve model stability and interpretability.
 
 # Modeling Phase
 
 ## Training and Testing Setup
 
-Before building predictive models, I refined the dataset to include only the most relevant variables. Several variables were removed for clarity and to prevent redundancy or noise in the analysis:
+Before building predictive models, I refined the dataset to include only the most relevant variables. Several variables were removed for clarity and to prevent redundancy in the analysis:
 
 -   `id` – a unique identifier with no analytical meaning.
 -   `date` – represents the sale date and was not needed after confirming the time frame of the dataset.
 -   `zipcode`, `lat`, and `long` – spatial variables that were already explored in the spatial analysis section.
 -   `sqft_living15` and `sqft_lot15` – were highly correlated (\>0.7) with their counterparts `sqft_living` and `sqft_lot`.
--   `view` – excluded because the data documentation does not clearly define what “view” measures (for example, whether it refers to a physical property feature or a listing description). Including it could introduce unnecessary noise such as misclicks on website.
--   `price`, `yr_renovated`, `waterfront`, and the categorical flags (`has_renovated`, `above_500`, `waterfront_flag`) were excluded to avoid duplication or because they are used as outcome or derived variables.
--   I also used the `alias()` function to detect perfect linear relationships among predictors and found that `sqft_living`, `sqft_above`, and `sqft_basement` were perfectly correlated (`sqft_living = sqft_above + sqft_basement`). Because of this exact relationship, including all three causes the model to fail to fit properly (R returns aliased coefficients). To prevent this issue, I retained only `sqft_living`, as it represents the total interior living space and captures the same information contained in the other two variables. (See Appendix E.)
+-   `view` – excluded because the data documentation does not clearly define what “view” measures (for example, whether it refers to an in-house visit or online clicks). Including it could introduce unnecessary noise.
+-   `price`, `yr_renovated`, `waterfront` were excluded because price is the target variable and we use flags for the remaining two.
+-   I used the `alias()` function to detect perfect linear relationships among predictors and found that `sqft_living`, `sqft_above`, and `sqft_basement` were perfectly correlated (`sqft_living = sqft_above + sqft_basement`). Because of this exact relationship, including all three causes the model to fail to fit properly. To prevent this issue, I retained only `sqft_living`, as it represents the total interior living space and captures the same information contained in the other two variables. (See Appendix E.)
 
 ```{r}
 kchouse_clean <- kchouse_upg |> 
-  dplyr::select(-id, -date, -lat, -long, -zipcode, -price, -yr_renovated, -waterfront, 
-                -view, -sqft_living15, -sqft_lot15, -sqft_above,-sqft_basement)
+  dplyr::select(-id, -date, -lat, -long, -zipcode, -price, -yr_renovated, 
+                -waterfront, -view, -sqft_living15, -sqft_lot15, -sqft_above,
+                -sqft_basement)
 ```
 
-After removing these variables, I prepared the data for model training and testing. To evaluate how well each model performs on unseen data, the dataset was split into 70% training data that is used to fit the models and 30% testing data which is used to evaluate the performance of the model. A random seed was set to ensure the results are reproducible. I also applied stratified sampling on the `above_500` variable to keep the ratio of high and low-priced homes consistent between the two sets.
+After removing these variables, I prepared the data for model training and testing. To evaluate how well each model performs on unseen data, the dataset was split into 70% training data that is used to fit the models and 30% testing data which is used to evaluate the performance of the model. A random seed was set to ensure the results are reproducible. I also applied stratified sampling on the `above_500` variable to keep the ratio of high and low priced homes consistent between the two sets.
 
 ```{r}
 set.seed(22)
@@ -204,7 +214,7 @@ house_train <- training(split)
 house_test <- testing(split)
 ```
 
-To ensure I can compare between models and also improve reliability of my models, I used 10-fold cross-validation. This means that the process is repeated 10 times when training each model. The framework allows me to obtain consistent accuracy metrics for both the GLM and the Decision Tree models. Since the base `glm()` function in R only provides AIC as a measure of model fit, incorporating cross-validation through the `caret` framework ensures that accuracy and other metrics can be computed and compared directly across models.
+To ensure I can compare between models and also improve reliability of my models, I incorporated a 10-fold cross-validation framework. This means that the process is repeated 10 times when training each model therefore allowing me to obtain consistent accuracy metrics for both the GLM and the Decision Tree models. Since the base `glm()` function in R only provides AIC as a measure of model fit, incorporating cross-validation through the `caret` framework ensures that accuracy and other metrics can be computed and compared directly across models.
 
 ```{r}
 myControl <- trainControl(method = "repeatedcv", 
@@ -213,21 +223,21 @@ myControl <- trainControl(method = "repeatedcv",
                           classProbs = TRUE)
 ```
 
-Before fitting any models, I tallied the `class populations` in the training data to establish a baseline for comparison.
+Before fitting any models, I tallied the "class populations" in the training data to establish a baseline for comparison.
 
 ```{r}
 tally(~ above_500, data = house_train, format = "count")
 ```
 
-This means that we classified all properties in the training set as the majority class (Below \$500K), our baseline misclassification rate would be 41.9%. In other words, a model that predicts every home as below would incorrectly classify 41.9% of the properties. Therefore any model must perform better than this naive baseline to be considered useful.
+If we classified all properties in the training set as the majority class (Below \$500K), then our baseline misclassification rate would be 41.9%. In other words, a model that predicts every home as below \$500K would incorrectly classify 41.9% of the properties. Therefore any model must perform better than this naive baseline to be considered useful.
 
 ```{r}
-error_rate <- 6335/(6335+8782)
+misclassification_rate <- 6335/(6335+8782)
 ```
 
 ## GLM Model and Results
 
-After splitting the dataset into training and testing sets, the next step was to fit a logistic regression model to predict whether a house is classified as above \$500,000 or not. Logistic regression is appropriate because the response variable `above_500` is binary, taking two possible outcomes: “Above \$500K” or “Below \$500K.”
+After splitting the dataset into training and testing sets, the next step was to fit a logistic regression model to predict whether a house is classified as above \$500,000 or not. Logistic regression is appropriate here because the response variable `above_500` is binary and takes two possible outcomes: “Above \$500K” or “Below \$500K.”
 
 The final group of predictors included in the full model after cleaning the dataset are: `bedrooms`, `bathrooms`, `sqft_living`, `sqft_lot`, `floors`, `condition`, `grade`, `yr_built`, `has_renovated`, and `waterfront_flag`.
 
@@ -244,7 +254,7 @@ summary(glm_full)
 
 ### Stepwise Model Selection
 
-I then applied stepwise selection using AIC to simplify the model while maintaining predictive power. Stepwise selection is an automated variable selection process that iteratively adds or removes predictors based on their contribution to model fit which is measured by AIC. The Akaike Information Criterion (AIC) is a measure of model quality that balances goodness-of-fit with model simplicity i.e. lower AIC values indicate a better model that avoids overfitting.
+After obtaining the full model, I applied stepwise selection using AIC to simplify the model while maintaining predictive power. Stepwise selection is an automated variable selection process that iteratively adds or removes predictors based on their contribution to model fit which is measured by AIC. The Akaike Information Criterion (AIC) is a measure of model quality that balances goodness-of-fit with model simplicity i.e. lower AIC values indicate a better model that avoids overfitting.
 
 ```{r}
 # Stepwise model selection using AIC
@@ -255,11 +265,11 @@ best_model <- formula(glm_step)
 summary(glm_step)
 ```
 
-The stepwise procedure automatically removed `has_renovated`, which did not significantly improve model fit. The resulting model retained predictors that are the strongest indicators of a home being priced above half a million.
+The stepwise procedure automatically removed `has_renovated`, as it did not significantly improve model fit. Therefore the retained predictors are the strongest indicators of a home being priced above half a million.
 
 ### Interpreting Model Coefficients
 
-Each coefficient in logistic regression represents the change in the log-odds of being a high-priced home for a one-unit change in the predictor, keeping all others constant. While not every coefficient needs to be interpreted individually, it is important to understand the general direction of influence.
+Each coefficient in logistic regression represents the change in the log-odds of being a high-priced home (above \$500K) for a one-unit change in the predictor, keeping all others constant. While not every coefficient needs to be interpreted individually, it is important to understand the general direction of influence.
 
 Among the predictors, only `year built` and `bedrooms` have positive coefficients, indicating that newer homes and those with more bedrooms are more likely to sell for over \$500,000, all else equal. This suggests that both modern construction and larger size (in terms of rooms) are meaningful drivers of higher property value in King County.
 
@@ -267,7 +277,7 @@ Conversely, features such as bathrooms, sqft_living, floors, condition, and grad
 
 ### Cross-Validation and Model Accuracy
 
-To ensure that the performance of the model generalizes well to unseen data, I trained it within the same 10-fold repeated cross-validation framework defined earlier. This makes the GLM directly comparable to the decision tree model and a provides accuracy metrics which the standard `glm()` function does not compute by default (it only reports AIC).
+To ensure that the performance of the model generalizes well to unseen data, I trained it within the 10-fold repeated cross-validation framework defined earlier. This makes the GLM directly comparable to the decision tree model and a provides accuracy metrics which the standard `glm()` function does not compute by default (it only reports AIC).
 
 ```{r}
 set.seed(22)
@@ -281,7 +291,7 @@ glm_cv <- train(
 glm_cv
 ```
 
-For this model, the mean accuracy across folds was approximately 81%, a strong improvement over the baseline misclassification rate of 41.9% (which corresponds to a baseline accuracy of only 58.1%). This means the logistic regression model reduces classification errors by nearly half, showing that it captures meaningful relationships between housing features and sale prices.
+For this model, the mean accuracy across folds was approximately 81%, a strong improvement over the baseline misclassification rate of 41.9% (which corresponds to a baseline accuracy of only 58.1%). This means the logistic regression model reduces classification errors by nearly half.
 
 ### Testing on the Hold-Out Data
 
@@ -301,15 +311,13 @@ The resulting confusion matrix showed that the model’s overall accuracy droppe
 
 This performance gap suggests that the logistic regression model may be overfitting i.e. capturing patterns specific to the training data that do not generalize well to new observations. Another possible explanation is that the logit boundary between “Above \$500K” and “Below \$500K” homes is not easily separable by a linear model, since housing prices can depend on complex nonlinear interactions between features.
 
-While disappointing, this result is valuable as it highlights the limitations of the GLM for this dataset and justifies using a Decision Tree model, which can capture nonlinear relationships and variable interactions more effectively.
-
-\newpage
+This result highlights the limitations of the GLM for this dataset and justifies using a Decision Tree model, which can capture nonlinear relationships and variable interactions more effectively.
 
 # Tree and Results
 
-After fitting the logistic regression model, I trained a Classification and Regression Tree (CART) to capture non-linear relationships and interactions among predictors. Decision trees work by recursively splitting the dataset into smaller, more homogeneous groups based on the predictor that best separates the outcome variable. This makes them both predictive and interpretable, revealing how different property characteristics contribute to the likelihood of selling above \$500,000.
+After fitting the logistic regression model, I trained a Classification and Regression Tree (CART) to capture non-linear relationships and interactions among predictors. Decision trees work by recursively splitting the dataset into hypercubes based on the predictor that best separates the outcome variable. This makes them both predictive and easily interpretable.
 
-The model was trained using the same 10-fold cross-validation (repeated 10 times) framework as the logistic regression model to ensure comparability and reliability. The complexity parameter (cp), which controls the depth of the tree and helps prevent overfitting, was tuned over a grid of values ranging from 0.001 to 0.4.
+The model was trained using the same 10-fold cross-validation framework as the logistic regression model to ensure comparability and reliability. The complexity parameter (cp), which controls the depth of the tree and helps prevent overfitting, was tuned over a grid of values ranging from 0.001 to 0.3.
 
 ```{r}
 tree_grid <- expand.grid( cp =c(0.001, 0.01, 0.05, 0.1, 0.2, 0.3))
@@ -327,88 +335,92 @@ tree_model <- train(
 tree_model
 ```
 
-The best-performing tree was obtained with cp = 0.001, achieving an average cross-validated accuracy of 81.1%. As shown in the accuracy plot (included in Appendix F), performance declined sharply at higher cp values, confirming that a more detailed tree captured the data structure more effectively without excessive overfitting.
+The best performing tree was obtained with cp = 0.001, and it achieved an average accuracy of about 81%. The accuracy plot (included in Appendix F), shows how model accuracy changes across different cp values.
 
 To visualize the final model, I refit the tree using the selected cp value and displayed the structure.
 
 ```{r}
-kchouse.rpart <- rpart(above_500 ~ bedrooms + bathrooms + sqft_living + sqft_lot +
-    floors + condition + grade + yr_built + has_renovated + waterfront_flag, 
+kchouse.rpart <- rpart(above_500 ~ bedrooms + bathrooms + sqft_living +
+                         sqft_lot + floors + condition + grade + yr_built + 
+                         has_renovated + waterfront_flag, 
                      data = house_train,
                      control = rpart.control(cp = 0.001))
 printcp(kchouse.rpart)
-#rpart.plot(kchouse.rpart)
-
 ```
 
-The final model used the following predictors: grade, sqft_living, bedrooms, floors, sqft_lot, and year built. These features were automatically selected because they provided the strongest information gain for classifying homes into high- or low-price categories.
+The final model used the predictors: `grade`, `sqft_living`, `bedrooms`, `floors`, `sqft_lot`, and `year_built`.
 
 ### Simplified Tree Interpretation
 
-Figure X below shows the simplified version of a decision tree used to classify homes as either above or below \$500,000 for illustration purposes. The complete tree, showing all splits and nodes, is included in Appendix A.
+The figure below shows the simplified version of a decision tree used to classify homes as either above or below \$500,000 for illustration purposes. The complete tree, showing all splits and nodes, is included in Appendix F.
 
 ```{r}
 #simplified version made by using higher cp value
-kchouse.rpart <- rpart(above_500 ~ bedrooms + bathrooms + sqft_living + sqft_lot +
-    floors + condition + grade + yr_built + has_renovated + waterfront_flag, 
+kchouse.rpartmini <- rpart(above_500 ~ bedrooms + bathrooms + sqft_living + 
+                         sqft_lot + floors + condition + grade + yr_built + 
+                         has_renovated + waterfront_flag, 
                      data = house_train,
                      control = rpart.control(cp = 0.01))
-rpart.plot(kchouse.rpart)
+rpart.plot(kchouse.rpartmini)
 ```
 
-The first split occurs on grade, the overall construction and design quality of the home. Properties with a grade of 8 or higher are predominantly high-value homes, while those rated lower tend to fall below the price threshold. Among the lower-grade homes, additional splits on year built and sqft_living show that newer and larger homes are more likely to be high-priced, even when the grade is modest.
+The first split occurs on grade which represents the overall construction and design quality of the home. Properties with a grade of 8 or higher are predominantly high priced homes, while those rated lower tend to fall below the price threshold. Among the lower grade homes, additional splits on `year_built` and `sqft_living` show that newer and larger homes are more likely to be high priced, even when the grade is modest.
 
-This simplified version highlights the most important and interpretable decision rules driving home values in King County. The complete tree, showing all splits and leaf nodes, is provided in Appendix F for reference.
+This simplified version highlights the most important decision rules driving home values in King County. The complete tree, showing all splits and leaf nodes, is provided in Appendix F for reference.
 
 ### Testing on the Hold-Out Data
 
-Similarly, to evaluate generalization beyond the training process, I applied the fitted model to the test set (`house_test`). This step confirms whether the model maintains accuracy on unseen data:
+Similarly, to evaluate generalization beyond the training process, I applied the fitted model to the test set. This step confirms whether the model maintains accuracy on unseen data:
 
 ```{r}
 # Predictions on test set
-confusionMatrix(predict(kchouse.rpart, newdata = house_test, type = "class"), house_test$above_500)
+confusionMatrix(predict(kchouse.rpart, 
+                        newdata = house_test, 
+                        type = "class"), 
+                house_test$above_500)
 
 ```
 
-The decision tree correctly classified about 81.4% of the homes in the test set. This performance is substantially higher than the baseline of 58%, meaning the model provides useful predictive power beyond guessing the majority class.
-
-\newpage
+The decision tree correctly classified about 81% of the homes in the test set. This performance is substantially higher than the baseline of 58%, meaning the model provides useful predictive power beyond guessing the majority class.
 
 # Model Comparison
 
-The logistic regression model achieved about 81% accuracy during training, indicating a good in-sample fit. However, when tested on unseen data, its accuracy dropped dramatically to 19%, suggesting that the model overfit the training data and failed to generalize.
+The logistic regression model achieved about 81% accuracy during training, which indicates a good in sample fit. However, when tested on unseen data, its accuracy dropped massively to 19%, suggesting that the model overfit the training data and failed to generalize.
 
-In contrast, the CART decision tree maintained high accuracy on both training (**81.1%**) and test (**81.4%**) data. This consistency demonstrates that the tree model generalized much better to new observations. The tree’s ability to capture non-linear patterns and interactions contributed to its superior performance.
+In contrast, the decision tree maintained high accuracy pf about 81% on both training and test data. This consistency demonstrates that the tree model generalized much better to new observations. The tree model's ability to capture non-linear patterns and interactions contributed to its superior performance.
 
-Furthermore, while logistic regression coefficients are statistically interpretable, the decision tree provides direct, rule-based insights for example:
+Furthermore, while logistic regression coefficients are statistically interpretable, the decision tree provides direct actionable insights for example:
 
-> If grade ≥ 8 → likely above \$500K; else if grade \< 8 and year built \< 1930 → likely below \$500K.
+> If grade is greater or equal to 8 → likely above \$500K.
 
-For practical decision-making by a real estate developer, these interpretable rules are far easier to apply than log-odds coefficients.
-
-In summary, the decision tree outperformed logistic regression both in predictive accuracy and interpretability, making it the more useful model for this task.
+For practical decision-making by a real estate developer, these interpretable rules are far easier to apply than log-odds coefficients. Thus, the decision tree outperforms logistic regression both in predictive accuracy and interpretability, making it the more useful model for this task.
 
 # Conclusion
 
-This analysis was carried out to help you understand which property characteristics most strongly predict whether a home in King County, Washington sells for more than \$500,000, and to provide a model that can reliably make those predictions.
+This analysis was carried out to provide a model that can reliably predict whether a home in King County, Washington sells for more than \$500,000, and to help you understand which property characteristics are strong predictors of the same.
 
-Based on the results, the decision tree model is the recommended approach. It generalizes well to new data, making it suitable for practical use in evaluating or pricing future listings. The analysis also revealed that the most influential factors in determining whether a home exceeds the \$500,000 threshold are: construction grade (quality and design), year built, living area size, lot size, and number of floors.
+Based on the results, the decision tree model is the recommended approach. It generalizes well to new data, making it suitable for practical use in evaluating future listings. The analysis also revealed that the most influential factors in determining whether a home exceeds the \$500,000 threshold are: property grade, year built, living area size, lot size, and number of floors.
 
 From these findings, I recommend the following actions:
 
-1.  Adopt the decision tree model for pricing predictions. It offers strong accuracy and provides clear, rule-based outputs that can be easily applied to new listings.
+1.  Adopt the decision tree model for pricing predictions. It offers strong accuracy and provides actionable outputs that can be easily applied to new listings.
 
-2.  Prioritize quality and modernization in new developments. Homes with a construction grade of 8 or higher and modern design features are far more likely to reach the high-value market segment.
+2.  Prioritize quality and modernization in new acquisitions/developments. Homes with a construction grade of 8 or higher and modern design features are more likely to reach the above \$500K threshold.
 
 3.  Focus on newer and more spacious properties. Homes built more recently and those with larger living spaces are associated with higher prices.
+
+4.  Consider the potential of waterfront locations. Although the “waterfront” variable did not emerge as statistically significant in the model, EDA suggests that waterfront properties typically command higher selling prices.
 
 # **Appendices**
 
 ## **Appendix A. Data Structure and Inspection Code**
 
-The following code was used to examine the dataset structure, confirm the number of records and variables, and check for missing values. These steps ensured that the data was clean and ready for analysis.
+The following code was used to examine the dataset structure, confirm the number of records and variables, and check for missing values.
 
 ```{r}
+# View key summary stats
+summary(kchouse)
+
 # View structure and data types
 glimpse(kchouse)
 
@@ -428,26 +440,20 @@ kchouse <- kchouse |>
 summary(kchouse$date)
 ```
 
-
 ## **Appendix B. Outlier Identification and Removal**
 
-During initial data exploration, one record displayed an unrealistic combination of features: a 33-bedroom home with only 1.75 bathrooms and 1,620 square feet of living space, priced at \$640,000. Such an observation is inconsistent with the rest of the data and could distort model estimates, so it was removed.
+During initial data exploration, one record displayed an unrealistic combination of features: a 33-bedroom home with only 1.75 bathrooms and 1,620 square feet of living space, priced at \$640,000. This record is inconsistent with the rest of the data and could distort model estimates, so it was removed.
 
 ```{r}
 # Inspect the outlier record
 filter(kchouse, bedrooms == 33)
-
-# Remove the outlier
-kchouse <- kchouse |> 
-  filter(bedrooms != 33)
 ```
-
 
 ## **Appendix C. Spatial Visualization Code**
 
 An interactive map was created using the leaflet package to display the geographic distribution of home sales. Each property is plotted by latitude and longitude, colored red if sold above \$500K and blue otherwise. A static screenshot of this map is provided in the main report (Figure 1).
 
-```{r}
+```{r warning=FALSE}
 mean_lat <- mean(kchouse$lat)
 mean_long <- mean(kchouse$long)
 
@@ -463,7 +469,6 @@ leaflet(kchouse) |>
     fillOpacity = 0.6
   )
 ```
-
 
 ## **Appendix D. Pairwise Correlation Visualization**
 
@@ -491,7 +496,7 @@ cor(kchouse_upg$sqft_lot, kchouse_upg$sqft_lot15)
 
 ## **Appendix E. Alias Diagnostics**
 
-This diagnostic was performed to detect perfect linear relationships (aliasing) among predictors, which can prevent model estimation in logistic regression.
+This diagnostic was performed to detect perfect linear relationships among predictors, which can prevent model estimation in logistic regression.
 
 ```{r}
 pre_kchouse_clean <- kchouse_upg |> 
@@ -500,7 +505,8 @@ pre_kchouse_clean <- kchouse_upg |>
 
 set.seed(22)
 
-pre_split <- initial_split(pre_kchouse_clean, prop = 0.70, strata = "above_500")
+pre_split <- initial_split(pre_kchouse_clean, prop = 0.70, 
+                           strata = "above_500")
 
 pre_house_train <- training(pre_split)
 pre_house_test  <- testing(pre_split)
@@ -517,7 +523,7 @@ The diagnostic revealed that `sqft_living`, `sqft_above`, and `sqft_basement` we
 
 ## **Appendix F. Tree Diagnostics and Visualizations**
 
-This appendix includes the decision tree accuracy plot (used for tuning the complexity parameter `cp`) and the \*\*full tree diagram generated by `rpart.plot()`. A simplified version of the tree was included in the main body of the report for interpretability.
+This appendix includes the decision tree accuracy plot (used for tuning the complexity parameter `cp`) and the full tree diagram generated by `rpart.plot()`. A simplified version of the tree was included in the main body of the report for interpretability.
 
 ```{r}
 # Cross-validation accuracy vs. complexity parameter
@@ -526,6 +532,6 @@ ggplot(tree_model)
 ```
 
 ```{r}
-# Full decision tree (included as a separate file)
+# Full decision tree (included in repo as a separate file)
 knitr::include_graphics("decision_tree_plot.pdf")
 ```
