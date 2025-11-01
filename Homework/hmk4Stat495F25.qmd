@@ -1,6 +1,6 @@
 ---
 title: "Homework 4 - Stat 495 - Fall 2025"
-author: "YourNameGoesHere"
+author: "Daizy Buluma"
 date: today
 format: pdf
 editor: visual
