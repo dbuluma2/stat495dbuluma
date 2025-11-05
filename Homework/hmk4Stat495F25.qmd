@@ -17,6 +17,7 @@ library(gbm)
 library(nnet)
 library(QSARdata)
 library(rsample)
+library(caret)
 ```
 
 ### Homework 4 - Due Monday, Nov. 3rd by midnight to Gradescope
@@ -107,7 +108,7 @@ split <- initial_split(mybbb2, prop = 0.70, strata = "Class")
 cross_train <- training(split)
 cross_test <- testing(split)
 
-tally(~ Class, data = cross_train, format = "count")
+#tally(~ Class, data = cross_train, format = "count")
 ```
 
 > part c. Create an appropriate model to predict Class with the training set using bagging with 1000 trees and otherwise with default settings for tuning parameter values.
@@ -122,8 +123,7 @@ bag_cross <- ranger(
   mtry = 49, #number of predictors
   num.trees = 1000
 )
-#summary(bag_cross)
-bag_cross
+#bag_cross
 ```
 
 > part d. Create an appropriate model to predict Class with the training set using a random forest with 1000 trees and otherwise with default settings for tuning parameter values.
@@ -137,7 +137,7 @@ rf_cross <- ranger(
   data = cross_train, 
   num.trees = 1000
 )
-rf_cross
+#rf_cross
 ```
 
 > part e. Create an appropriate model to predict Class with the training set using boosting with 500 trees and otherwise with default settings for tuning parameter values.
@@ -145,16 +145,16 @@ rf_cross
 SOLUTION:
 
 ```{r}
-cross_train$Class_num <- ifelse(cross_train$Class == "Crosses", 1, 0)
-cross_test$Class_num <- ifelse(cross_test$Class == "Crosses", 1, 0)
+cross_train$Classnum <- ifelse(cross_train$Class == "Crosses", 1, 0)
+cross_test$Classnum <- ifelse(cross_test$Class == "Crosses", 1, 0)
 
 set.seed(008)
 boost_cross <- gbm(
-  formula = Class_num ~ ., 
-  data = cross_train |> dplyr::select(-Class), 
+  formula = Classnum ~ ., 
+  data = cross_train|> dplyr::select(-Class), 
   n.trees = 500,
   distribution = "bernoulli") 
-boost_cross
+#boost_cross
 ```
 
 > part f. Parts c, d, and e only required you to fit models. Now we want to compare their performance. Use an appropriate measure to compare the three models in terms of their model performance based on the test set. Be sure your choice of measure is clear. Summarize your findings. Then discuss which model you would choose for predicting Class. Explain your choice. (You can use additional assessment items, but must have the test set comparison.)
@@ -174,32 +174,29 @@ confusionMatrix(bag_test_pred , cross_test$Class)
 rf_test_pred <- predict(rf_cross, cross_test)$predictions
 confusionMatrix(rf_test_pred , cross_test$Class)
 
-#for boosting
-boost_data_test <- cross_test %>% dplyr::select(-Class)
+#for boosting - 84%
+boost_data_test <- cross_test |>  dplyr::select(-Class)
 boost_test_pred <- predict(boost_cross, 
                            newdata = boost_data_test, 
                            n.trees = 500,
                            type = "response")
 
-# Convert predictions to factor with explicit mapping
+# Convert predicted probabilities to class labels
 boost_class <- factor(ifelse(boost_test_pred > 0.5, 1, 0),
                       levels = c(0,1),
                       labels = c("DoesNot", "Crosses"))
 
-# Convert true test labels using the SAME mapping
-boost_data_test$Class_num <- factor(boost_data_test$Class_num,
+# Ensure same factor format as predicted
+boost_data_test$Classnum <- factor(boost_data_test$Classnum,
                                     levels = c(0,1),
                                     labels = c("DoesNot", "Crosses"))
 
-
-
-# Confusion matrix
-confusionMatrix(boost_class, boost_data_test$Class_num, positive = "Crosses")
+confusionMatrix(boost_class, boost_data_test$Classnum, positive = "Crosses")
 ```
 
-```{r}
-cross_train <- cross_train %>% dplyr::select(-Class_num)
-cross_test  <- cross_test %>% dplyr::select(-Class_num)
+```{r include=FALSE}
+cross_train <- cross_train |>  dplyr::select(-Classnum)
+cross_test  <- cross_test |>  dplyr::select(-Classnum)
 ```
 
 \newpage
@@ -256,6 +253,7 @@ pred1 <- predict(nnet_cross, newdata = cross_test, type = "class")
 pred1 <- factor(pred1, levels = levels(cross_test$Class))
 confusionMatrix(pred1, cross_test$Class)
 
+
 # nnet_cross2
 pred2 <- predict(nnet_cross2, newdata = cross_test, type = "class")
 pred2 <- factor(pred2, levels = levels(cross_test$Class))
@@ -269,15 +267,15 @@ confusionMatrix(pred3, cross_test$Class)
 
 > part e. Fit a new neural net model with parameters chosen by you (you can even explore options we didn't use above), but must set the size of the hidden layer and ensure your model reaches convergence. What parameter values did you use? Does your model do better than your final model in part d.?
 
-SOLUTION: No, it achieves the same test accuracy.
+SOLUTION: I used size = 10, decay = 0.1, and maxit = 1000. The model converged but did not outperform the best model from part (d).
 
 ```{r}
 set.seed(008)
 nnet_cross4 <- nnet(
   Class ~ ., 
   data = cross_train, 
-  size = 12,
-  decay = 0.001,   
+  size = 10,
+  decay = 0.1,   
   maxit = 1000) 
 
 
@@ -286,9 +284,7 @@ pred4 <- predict(nnet_cross4, newdata = cross_test, type = "class")
 # Match factor levels
 pred4 <- factor(pred4, levels = levels(cross_test$Class))
 
-# Accuracy / confusion matrix
-conf_e <- confusionMatrix(pred4, cross_test$Class, positive = "Crosses")
-conf_e
+confusionMatrix(pred4, cross_test$Class, positive = "Crosses")
 ```
 
 \newpage
