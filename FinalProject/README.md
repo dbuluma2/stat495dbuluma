@@ -1,4 +1,4 @@
-# Final Project Title - Put your proposed title here
+# Final Project Title - k-Nearest Neighbors in Recommendation Systems
 
 This is a demo to show how to add a readme to a folder within git. The timeline below should be kept for your reference too. Feel free to delete items as they come due. And clean up this text!
 
