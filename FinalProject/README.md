@@ -1,14 +1,15 @@
 # Final Project Title - k-Nearest Neighbors in Recommendation Systems
 
-This is a demo to show how to add a readme to a folder within git. The timeline below should be kept for your reference too. Feel free to delete items as they come due. And clean up this text!
+
 
 
 
 SYNOPSIS:
 
-Put your synopsis here. This is a living document, meaning that you can make changes, edit, etc. based on
-conversations with me and as your work proceeds. Keeping this here in your repo will provide you with a quick reference for the
-overall project.
+For my project, I plan to explore the k-nearest neighbors (kNN) method within the context of recommendation systems, such as those used by platforms like Netflix or Spotify. My paper will begin by introducing the supervised and unsupervised learning frameworks that underlie recommendation engines, and then move into a detailed exposition of how kNN can be used for both user-based and item-based collaborative filtering. I will connect the exposition to examples from the literature, showing where kNN has been successfully implemented in real recommendation settings to make the ideas concrete.
+
+For the application, I plan to use a dataset reflecting user behavior or item preferences such as app usage or browsing history and build a simple recommendation engine using kNN. I also plan to compare kNN with at least one alternative recommendation approach (e.g., SVM-based classification, matrix factorization, or another suitable algorithm) to evaluate predictive performance and highlight when kNN may or may not be the best choice.
+
 
 
 
