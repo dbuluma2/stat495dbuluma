@@ -1,29 +1,44 @@
 ---
-title: "AnnotatedBibliography"
-format: html
+title: "Annotated Bibliography"
+author: "Daizy Buluma"
+format: pdf
 editor: visual
 ---
 
-## Annotated Bibliography
+# k-Nearest Neighbors in Recommendation Systems
 
-1.  Ricci, F., Rokach, L., & Shapira, B. (Eds.). (2022). *Recommender systems handbook* (3rd ed.). Springer. <https://doi.org/10.1007/978-1-0716-2197-4‌>
+1.  **Ricci, F., Rokach, L., & Shapira, B. (Eds.). (2022).** *Recommender systems handbook* (3rd ed.). Springer. <https://doi.org/10.1007/978-1-0716-2197-4‌>
 
-This handbook provides a comprehensive overview of the major recommender systems paradigms such as content-based filtering, collaborative filtering, and hybrid systems and discusses evaluation metrics, algorithms, and deployment challenges. For my project, this text forms the theoretical foundation for understanding the broader context in which kNN operates in recommendation engines. Will allow me to introduce the structure of recommender systems before zooming into the specific role of kNN.
+This handbook gives an overview of the main types of recommender systems, such as collaborative filtering, content-based methods, and hybrid models. It also talks about evaluation metrics and real-world challenges. This source will help me introduce recommender systems in general before narrowing down to kNN.
 
-2.  Aggarwal, C. C. (2016). *Recommender systems: The textbook*. Springer. <https://doi.org/10.1007/978-3-319-29659-3>
+2.  **Aggarwal, C. C. (2016).** *Recommender systems: The textbook*. Springer. <https://doi.org/10.1007/978-3-319-29659-3>
 
-Textbook provides a thorough and mathematically grounded introduction to recommender systems. The chapters on neighborhood-based collaborative filtering explicitly frame kNN techniques in terms of user–item matrices and similarity-based prediction rules. Could support both my exposition and application sections by helping me define key concepts and explain technical details of similarity computation.
+The textbook offers a mathematically rigorous introduction to recommender systems, with detailed chapters on neighborhood-based methods. It explains how kNN operates within user-item matrices and how similarity scores are computed. The math looks challenging, but I think once I work through it, it will help me explain both the theory behind kNN and the technical side in my project.
 
-3.  Ghosh, A. (2024, May 21). *Recommendation system: A complete guide*. LearnOpenCV. <https://learnopencv.com/recommendation-system/#aioseo-types-of-recommendation-system>
+3.  **Ghosh, A. (2024, May 21).** *Recommendation system: A complete guide*. LearnOpenCV. <https://learnopencv.com/recommendation-system/#aioseo-types-of-recommendation-system>
 
-This article gives a clear, beginner-friendly overview of how recommendation systems work, including content-based filtering, collaborative filtering, and hybrid approaches. It explains core ideas like user–item matrices and similarity measures, which are essential for understanding neighborhood-based methods such as kNN recommenders. The visuals and examples make the concepts easy to follow. I will use this source to introduce the basics of recommendation engines before connecting them to k-nearest neighbors in my exposition.
+This article gives a clear & beginner-friendly overview of how recommendation systems work. It explains core ideas are essential for understanding neighborhood-based methods such as kNN recommenders. The visuals and examples also make the concepts easy to follow. Will use this source to introduce the basics of recommendation engines before connecting them to k-nearest neighbors.
 
-4.  Cover, T. M., & Hart, P. E. (1967). Nearest neighbor pattern classification. *IEEE Transactions on Information Theory*, *13*(1), 21–27. <https://doi.org/10.1109/TIT.1967.1053964>
+4.  **Cover, T. M., & Hart, P. E. (1967).** Nearest neighbor pattern classification. *IEEE Transactions on Information Theory*, *13*(1), 21–27. <https://doi.org/10.1109/TIT.1967.1053964>
 
-This is the original k-nearest neighbors paper and introduces the theoretical properties of the 1-NN classifier, including asymptotic error bounds and the Bayes optimal relationship. It is a foundational source for understanding why kNN works mathematically. I will use this to anchor my exposition in the history of kNN and discuss the theoretical motivations before applying it to recommendation systems.
+This is the original k-nearest neighbors paper and introduces the theoretical properties of the 1-NN classifier. I will use this to anchor my exposition in the history of kNN and discuss the theoretical motivations before applying it to recommendation systems.
 
-5.  Kramer, O. (2013). *Dimensionality reduction with evolutionary algorithms*. Springer. <https://doi.org/10.1007/978-3-642-38652-7>
+5.  **Kramer, O. (2013).** *Dimensionality reduction with evolutionary algorithms*. Springer. <https://doi.org/10.1007/978-3-642-38652-7>
 
-This book discusses nearest-neighbor methods from a more advanced, high-dimensional perspective. It explains how kNN is used to build neighborhood graphs, the challenges of distance measures, and computational issues that arise in large datasets. I will use it to add theoretical depth to my exposition and to connect kNN to more complex tasks relevant to recommendation systems.
+This book discusses nearest-neighbor methods in high-dimensional settings and explains challenges related to distance metrics and computational complexity. Will potentially use this to add depth to the exposition and to connect kNN to issues that arise in real recommender systems.
 
-## 
+6.  **Hssina, B., Grota, A., & Erritali, M. (2021).** Recommendation system using the k-nearest neighbors and singular value decomposition algorithms. *International Journal of Electrical and Computer Engineering*, *11*(6), 5541–5548. <https://doi.org/10.11591/ijece.v11i6.pp5541-5548>
+
+This article develops a hybrid recommendation system using kNN and SVD. It compares neighborhood-based and matrix factorization methods. Will be useful in my project’s application section when discussing performance comparisons across algorithms.
+
+7.  **Nikolakopoulos, A. N., Ning, X., Desrosiers, C., & Karypis, G. (2021).** Trust your neighbors: A comprehensive survey of neighborhood-based methods for recommender systems. *arXiv preprint arXiv:2109.04584*. <https://arxiv.org/abs/2109.04584>
+
+This survey explores neighborhood-based recommendation techniques, emphasizing kNN's role in collaborative filtering. It compares user-based and item-based approaches and discusses similarity metrics like cosine and Pearson correlation. Ideal for explaining the theoretical and practical aspects of kNN.
+
+8.  **Airen, S., & Agrawal, J. (2022).** Movie recommender system using K-nearest neighbors variants. *National Academy Science Letters, 45*, 75–82. <https://doi.org/10.1007/s40009-021-01051-0>
+
+This paper applies several kNN variants to build a movie recommender system and compares how different distance metrics and weighting schemes affect accuracy. This shows an exmaple of how kNN is adapted in real recommendation settings and gives concrete examples of tuning choices I can discuss.
+
+9.  **Usha Rani, T., et al. (2023).** Book recommendation system by using K-nearest neighbors. *International Journal of Advanced Research in Science and Technology*. <https://www.ijarst.in/public/uploads/paper/551051715843807.pdf>
+
+This paper outlines a kNN-based book recommender system and compares it with content-based and hybrid methods. Could be relevant for discussing the pros and cons of kNN versus other recommendation strategies.
