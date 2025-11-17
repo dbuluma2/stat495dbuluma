@@ -1,0 +1,132 @@
+---
+title: "Annotated Bibliography"
+author: "Daizy Buluma"
+format: pdf
+editor: visual
+---
+
+# k-Nearest Neighbors in Recommendation Systems
+
+## Introduction
+
+-   Briefly introduce the problem of recommendation systems (e.g., Netflix, Spotify, TikTok).
+
+-   Explain why this problem interests me.
+
+-   Introduce the methods I will focus on:
+
+    -   **k-Nearest Neighbors (kNN)**
+    -   **A second method for comparison** (e.g., matrix factorization)
+
+-   State what project will do: exposition + application.
+
+## Background/Foundation reader needs
+
+-   Explain what supervised learning is
+
+<!-- -->
+
+-   Difference between *classification* and *regression*
+    -   What similarity-based learning means
+-   Why distance metrics matter (Euclidean / cosine)
+-   What a recommendation system is, broadly (user-based vs. item-based)
+
+## Exposition 
+
+### The k-Nearest Neighbors Algorithm
+
+1.  **What is kNN?**
+
+-   Instance-based/“lazy” learning
+-   Non-parametric nature
+
+2.  **What is it used for?**
+
+-   Classification
+-   Regression
+-   Similarity-based recommendation
+
+3.  **How does it work?**
+
+-   Choosing *k*
+-   Selecting distance metric
+-   Voting/averaging mechanism
+
+4.  **Technical details**
+
+-   Curse of dimensionality
+-   Scaling considerations
+-   Computational challenges with large datasets
+
+5.  **kNN for recommendation systems**
+
+-   User–user collaborative filtering
+-   Item–item similarity
+-   Why cosine similarity often replaces Euclidean distance
+
+6.  **Examples from the literature**
+
+-   Cite real recommendation system papers that use kNN or neighborhood-based methods.
+
+7.  **Maybe Toy Example?**
+    -   Create a tiny dataset (3–5 users and 3–5 items).
+    -   Demonstrate how kNN finds “neighbors” and predicts interest.
+    -   Show the distance calculations by hand.
+
+### **Additional Method for Comparison**
+
+-   A second similarity method (cosine similarity, nearest-neighbor collaborative filtering)
+-   What the method is
+-   Why it’s appropriate to compare
+-   How it differs from kNN for recommendations
+
+## Application
+
+1.  **Dataset Description**
+
+-   What dataset I chose
+-   The wrangling and cleaning needed
+
+2.  **Modeling Approach**
+
+-   How kNN was applied to build a recommender
+-   What choices were made for any hyperparameter
+
+3.  **Comparison Model**
+
+-   Apply chosen second method
+-   Explain differences in assumptions or goals
+
+4.  **Evaluation Metrics**
+
+-   Accuracy, RMSE, Precision\@k, Recall\@k, etc.
+
+5.  **Results & Interpretation**
+
+-   Visualizations
+-   Performance comparison
+-   Strengths and weaknesses of each method
+
+6.  **Discussion**
+
+-   Limitations
+
+-   How real recommendation engines go beyond kNN (matrix factorization, deep learning)
+
+    ## Conclusion
+
+<!-- -->
+
+-   Summarize about kNN and recommendation systems.
+-   Reflect on real-world applicability.
+-   Discuss what might explore next.
+
+##     References
+
+-   From annotated biblio
+
+##     Appendix
+
+-   Additional plots or tables
+
+-   Shiny app or mini web app link
