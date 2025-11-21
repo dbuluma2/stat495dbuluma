@@ -1,0 +1,546 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+  12pt]{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{5}
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+\addtolength{\oddsidemargin}{-.5in}%
+\addtolength{\evensidemargin}{-1in}%
+\addtolength{\textwidth}{1in}%
+\addtolength{\textheight}{1.7in}%
+\addtolength{\topmargin}{-1in}%
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage[]{natbib}
+\bibliographystyle{agsm}
+\usepackage{bookmark}
+
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Exploring k-Nearest Neighbors in Recommendation Systems},
+  pdfauthor={Daizy Buluma},
+  colorlinks=true,
+  linkcolor={blue},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
+  pdfcreator={LaTeX via pandoc}}
+
+
+
+\begin{document}
+
+
+\def\spacingset#1{\renewcommand{\baselinestretch}%
+{#1}\small\normalsize} \spacingset{1}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{\bf \textbf{Exploring k-Nearest Neighbors in Recommendation
+Systems}}
+\author{
+Daizy Buluma\\
+}
+\maketitle
+
+\bigskip
+\bigskip
+\begin{abstract}
+
+\end{abstract}
+
+
+\newpage
+\spacingset{1.9} % DON'T change the spacing!
+
+
+\section{\texorpdfstring{\textbf{Introduction}}{Introduction}}\label{introduction}
+
+Today's digital world is overflowing with information, making it nearly
+impossible for individuals to manually sift through the massive number
+of available options. As a result, recommender systems have become
+essential components of platforms such as Netflix, Amazon, Spotify, and
+TikTok. Their primary goal is to filter vast collections of items such
+as movies, products, songs, or videos, and present users with options
+they are most likely to enjoy. These systems work by analyzing users'
+preferences, past behaviors, and item characteristics through
+interaction data such as impressions, clicks, ratings, likes, and
+purchases (Ghosh, 2024).
+
+This paper focuses on the k-nearest neighbors (kNN) algorithm within the
+context of recommendation systems. Although kNN is one of the more
+straightforward algorithms in machine learning, it plays a foundational
+role in collaborative filtering methods. kNN identifies users or items
+that are most similar in behavior or preferences and bases predictions
+on these neighbors. Its simplicity and intuitive mechanics make it
+especially suitable for educational purposes and small scale
+recommendation tasks.
+
+Before exploring the details of kNN, this paper outlines the broader
+landscape of recommendation systems to provide a foundation for
+understanding how kNN fits into the larger family of recommendation
+systems. The discussion then introduces and contrasts a different
+recommendation approach, Singular Value Decomposition (SVD) to highlight
+the strengths and weaknesses of kNN in practice.
+
+Finally, the second half of the paper applies kNN to a real dataset to
+build and evaluate a simple interactive recommender system so as
+demonstrate how the method works in practice gauge its performance.
+
+\section{\texorpdfstring{\textbf{Overview of Recommender
+Systems}}{Overview of Recommender Systems}}\label{overview-of-recommender-systems}
+
+Recommendation systems work by estimating how much a user is likely to
+enjoy an item they have not yet interacted with. They do this by
+analyzing \textbf{user behavior}, such as past ratings or interactions
+and \textbf{item features}, such as genre, creator, or textual
+descriptions. The goal is to estimate a preference score,
+\({r}_{u,i}\)which measures how likely user u is to enjoy item i.
+Recommendations are then generated by selecting the items with the
+highest scores.
+
+To understand how k-nearest neighbors (kNN) fits into this broader
+landscape, it is useful to review two major families of recommendation
+approaches: \textbf{content-based approach} and \textbf{collaborative
+filtering} (There are hybrid recommenders too).
+
+\subsection{\texorpdfstring{\textbf{Content-Based
+Filtering}}{Content-Based Filtering}}\label{content-based-filtering}
+
+Content-based recommender systems generate suggestions by comparing the
+attributes of items a user previously liked to those of new items. These
+attributes might include genres, keywords, textual descriptions, or
+metadata. The item descriptions, which are labeled with ratings, are
+used as training data to create a user-specific classification or
+regression modeling problem. For each user, the training documents
+correspond to the descriptions of the items she has bought or rated
+(Aggarwal, 2016 p14). For example: If a shopper frequently purchases
+skincare products, the system recommends related cosmetic items.
+
+The underlying assumption is that user preferences are largely
+consistent, and similar items will yield similar satisfaction (Ghosh,
+2024). These models rely heavily on item features, making them effective
+in domains where rich metadata is available.
+
+\subsection{\texorpdfstring{\textbf{Collaborative
+Filtering}}{Collaborative Filtering}}\label{collaborative-filtering}
+
+Collaborative filtering takes a different approach by focusing on
+patterns of behavior across users rather than item attributes. The key
+assumption is that users who behaved similarly in the past will behave
+similarly in the future. The main challenge in designing collaborative
+filtering methods is that the underlying ratings matrices are sparse
+(most unspecified). However, in collaborative filtering methods, these
+unspecified ratings can be imputed because the observed ratings are
+often highly correlated across various users and items. There are two
+main subtypes:
+
+\subsubsection{\texorpdfstring{\textbf{a) Memory-Based
+Methods}}{a) Memory-Based Methods}}\label{a-memory-based-methods}
+
+Memory-based methods make predictions directly from observed ratings by
+identifying similarities among users or items. kNN is the most common
+example and can be further categorized into \textbf{user-based kNN} and
+\textbf{item-based kNN.} The advantages of memory-based techniques are
+that they are simple to implement and the resulting recommendations are
+often easy to explain. On the other hand, memory-based algorithms do not
+work very well with sparse ratings matrices (Aggarwal, p.~14 2016).
+
+\subsubsection{\texorpdfstring{\textbf{b) Model-Based
+Methods}}{b) Model-Based Methods}}\label{b-model-based-methods}
+
+Model-based approaches use machine learning techniques to uncover latent
+patterns in the rating matrix. Examples include Matrix factorization and
+SVD and Neural networka. They tend to outperform memory-based methods on
+large, sparse datasets but are less transparent to users and developers.
+Notably, many hybrid recommenders combine kNN with model-based
+techniques, such as SVD, to balance simplicity and predictive power
+(Hssina, 2021).
+
+\section{K-Nearest Neighbors in Recommendation
+Systems}\label{k-nearest-neighbors-in-recommendation-systems}
+
+This section provides a deeper exposition of how kNN works, beginning
+with motivation and intuition, then moving into supervised-learning kNN,
+and finally examining how the algorithm is adapted for recommendation
+systems. A worked toy example concludes the section to illustrate the
+computations concretely.
+
+\subsection{\texorpdfstring{\textbf{Motivation:} Why Neighbors Matter in
+Recommendations}{Motivation: Why Neighbors Matter in Recommendations}}\label{motivation-why-neighbors-matter-in-recommendations}
+
+The appeal of neighborhood‑based methods lies in their simplicity as
+people with similar tastes tend to enjoy similar things (Nikolakopoulos
+2021). If two users have consistently rated the same movies in
+comparable ways, then the films one user has enjoyed but the other has
+not yet seen become strong candidates for recommendation. This
+intuition, that preferences cluster and can be shared across neighbors,
+forms the foundation of k‑Nearest Neighbors (kNN) in recommender
+systems. By exploiting these local patterns, kNN can generate useful
+predictions without the need for complex modeling.
+
+\subsection{\texorpdfstring{\textbf{How kNN Works in Supervised
+Learning}}{How kNN Works in Supervised Learning}}\label{how-knn-works-in-supervised-learning}
+
+Before adapting k-nearest neighbors (kNN) to recommender systems, it
+helps to first understand how the algorithm works in its original
+setting. Unlike most algorithms we've seen before that estimate
+parameters or fit equations, kNN is a ``lazy learner''. It stores the
+training data and defers computation until a query arrives. When a new
+example is presented, the algorithm measures its similarity to all
+stored examples, selects the \emph{k} closest ones, and bases its
+prediction on their values.
+
+In classification tasks, the new example is assigned to the majority
+class among its neighbors. In regression, the prediction is the average
+of their values. Weighted variants of kNN give greater influence to
+closer neighbors, which reduces the impact of outliers. The choice of
+\emph{k} is critical to prevent over or under fitting. Too small a
+neighborhood makes the algorithm sensitive to noise, while too large a
+neighborhood can dilute meaningful signals.
+
+Because kNN does not assume any particular distribution of the data, it
+is considered non‑parametric. This flexibility makes it easy to apply,
+but it also introduces challenges in high‑dimensional spaces where
+distances lose contrast, a phenomenon known as the curse of
+dimensionality (Kramer, 2013, pg 19). (Still don't fully understand the
+phenomenon. will return to explain when I do)
+
+\subsection{\texorpdfstring{\textbf{How kNN Works in Recommender
+Systems}}{How kNN Works in Recommender Systems}}\label{how-knn-works-in-recommender-systems}
+
+In recommendation settings, the task is to predict missing entries in a
+sparse user--item matrix of size (number of users) × (number of items).
+Each row represents a user, each column an item, and most cells are
+empty because users interact with only a small fraction of available
+items. An illustrative example is:
+
+\begin{longtable}[]{@{}lllll@{}}
+\toprule\noalign{}
+User / Item & A & B & C & D \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+U1 & 4 & 4 & ? & 3 \\
+U2 & 4 & 5 & 2 & ? \\
+U3 & ? & 4 & 4 & 3 \\
+U4 & 2 & ? & 5 & ? \\
+\end{longtable}
+
+Since most cells are empty, kNN adapts by computing similarities only on
+overlapping ratings. This reliance on shared ratings is both a strength
+because it uses actual behavioral similarity and a weakness because
+sparsity may cause the similarities to be unreliable (Kramer). Two main
+variants are used:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{User‑based kNN:} The system identifies the \emph{k} users most
+  similar to the target user and infers preferences from their ratings.
+  For example, if User 1 and User 2 have rated many of the same items
+  similarly, then User 2's rating of a new item can help predict User
+  1's interest.
+\item
+  \textbf{Item‑based kNN:} Instead of comparing users, the system finds
+  items that consistently receive similar ratings across users. If Item
+  X and Item Y are rated alike by many users, then a user who liked Item
+  X is predicted to enjoy Item Y as well. Item‑based kNN is often more
+  stable because item relationships remain consistent even as new users
+  enter or leave the system. For this reason, modern commercial
+  recommenders tend to use item-based kNN over user-based
+  (\citet{ricci2022}).
+\end{itemize}
+
+\subsubsection{\texorpdfstring{\textbf{c) Similarity Metrics for
+Collaborative
+Filtering}}{c) Similarity Metrics for Collaborative Filtering}}\label{c-similarity-metrics-for-collaborative-filtering}
+
+In recommendation settings, not all distance metrics are equally
+effective. The most common are:
+
+\textbf{Cosine Similarity}
+
+Cosine similarity focuses on the angle between rating vectors rather
+than their magnitude:
+
+\(\text{sim}(i,j) = \frac{\sum_u r_{u,i}, r_{u,j}}{\sqrt{\sum_u r_{u,i}^2}\sqrt{\sum_u r_{u,j}^2}}\)
+
+It is widely used because it remains stable even when users use
+different rating scales (Aggarwal, 2016).
+
+\textbf{Pearson Correlation}
+
+Pearson correlation adjusts for user biases:
+
+\(\text{sim}(i,j) = \frac{ \sum_u (r_{u,i} - \bar r_u)(r_{u,j} - \bar r_u)} {\sqrt{\sum_u (r_{u,i}-\bar r_u)^2} \sqrt{\sum_u (r_{u,j}-\bar r_u)^2}}\)
+
+This metric reduces problems with users who rate too generously or too
+strictly.
+
+\textbf{Adjusted Cosine}
+
+Used mostly in item-based kNN, this version subtracts user means before
+computing cosine:
+
+\(\text{sim}(i,j)=\frac{\sum_u (r_{u,i}-\bar r_u)(r_{u,j}-\bar r_u)} {\sqrt{\sum_u (r_{u,i}-\bar r_u)^2}\sqrt{\sum_u (r_{u,j}-\bar r_u)^2}}\)
+
+It combines strengths of cosine and Pearson.
+
+\subsubsection{\texorpdfstring{\textbf{d) Prediction
+Formula}}{d) Prediction Formula}}\label{d-prediction-formula}
+
+Once similarities have been computed, prediction is done using weighted
+averages.
+
+\textbf{User-Based kNN}
+
+For predicting user (u)'s rating for item (i):
+
+\(\hat r_{u,i} = \frac{\sum_{v \in N_k(u)} \text{sim}(u,v), r_{v,i}} {\sum_{v \in N_k(u)} |\text{sim}(u,v)|}\)
+
+\textbf{Item-Based kNN}
+
+For predicting user (u)'s rating for item (i):
+
+\(\hat r_{u,i} = \frac{\sum_{j \in N_k(i)} \text{sim}(i,j), r_{u,j}} {\sum_{j \in N_k(i)} |\text{sim}(i,j)|}\)
+
+Both formulas emphasize closer neighbors more heavily.
+
+\subsubsection{\texorpdfstring{\textbf{c) Toy
+Example}}{c) Toy Example}}\label{c-toy-example}
+
+We finish with toy examples adapted from Agrawal's book to emphasize
+idea:
+
+Ratings:
+
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+User & A & B & C \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+U1 & 5 & 4 & ? \\
+U2 & 4 & 4 & 2 \\
+U3 & 1 & 1 & 1 \\
+\end{longtable}
+
+\textbf{Goal:} Predict U1's rating for Item C.
+
+\textbf{Step 1: Compute similarities}
+
+Compare Item A vs Item C using cosine similarity:
+
+A = (4,1) C = (2,1)
+
+\(\text{sim}(A,C) \approx 0.98\)
+
+Step 2: Weighted rating
+
+U1 rated:
+
+\begin{itemize}
+\tightlist
+\item
+  A = 5
+\item
+  B = 4
+\end{itemize}
+
+If A is most similar to C: \(\hat r_{U1,C} \approx 5 \times 0.98 = 4.9\)
+
+Thus U1 is very likely to enjoy Item C.
+
+\subsection{\texorpdfstring{\textbf{Strengths and Weaknesses of kNN in
+Recommendation
+Systems}}{Strengths and Weaknesses of kNN in Recommendation Systems}}\label{strengths-and-weaknesses-of-knn-in-recommendation-systems}
+
+\begin{itemize}
+\item
+  Easy to Understand and Explain
+\item
+  No Training Phase
+\item
+  Works Well for Small or Dense Dataset
+\end{itemize}
+
+\section{\texorpdfstring{\textbf{Comparison to a Model-Based Method
+(SVD)}}{Comparison to a Model-Based Method (SVD)}}\label{comparison-to-a-model-based-method-svd}
+
+\begin{itemize}
+\tightlist
+\item
+  What SVD does (very high level)
+\item
+  How it differs from kNN
+\item
+  Strengths and weaknesses of both
+\item
+  Maybe Table comparison ?
+\item
+  When to choose kNN vs SVD
+\item
+  Why SVD is dominant in large-scale systems
+\end{itemize}
+
+\section{\texorpdfstring{\textbf{Application: Building a Simple
+Recommendation Engine with
+kNN}}{Application: Building a Simple Recommendation Engine with kNN}}\label{application-building-a-simple-recommendation-engine-with-knn}
+
+\subsection{\texorpdfstring{\textbf{Dataset Description + Data
+Wrangling}}{Dataset Description + Data Wrangling}}\label{dataset-description-data-wrangling}
+
+\subsection{\texorpdfstring{\textbf{Implementing kNN + Model
+Evaluation}}{Implementing kNN + Model Evaluation}}\label{implementing-knn-model-evaluation}
+
+\subsection{\texorpdfstring{\textbf{Results +
+Interpretation}}{Results + Interpretation}}\label{results-interpretation}
+
+\section{\texorpdfstring{\textbf{Reflection
+(?)}}{Reflection (?)}}\label{reflection}
+
+\section{\texorpdfstring{\textbf{Conclusion}}{Conclusion}}\label{conclusion}
+
+\section{\texorpdfstring{\textbf{Appendix}}{Appendix}}\label{appendix}
+
+
+\renewcommand\refname{\textbf{References}}
+  \bibliography{bibliography.bib}
+
+
+
+\end{document}
