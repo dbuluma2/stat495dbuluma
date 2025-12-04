@@ -402,34 +402,85 @@ resistant to differences in rating scales. \textbf{Pearson correlation}
 adjusts for user biases by centering ratings around individual means.
 \textbf{Adjusted cosine similarity} , which is commonly used in
 item‑based kNN, subtracts user averages before computing similarity to
-reduce the effect of rating habits (\citet{aggarwal2016}). (Should I
-include the formulas for computing the 3 similarity metrics?)
+reduce the effect of rating habits (\citet{aggarwal2016}). The
+similarity scores typically range from -1 to 1. With -1 for vectors that
+are polar opposites, 0 where there is no correlation and 1 for perfectly
+similar vectors. (Should I include the formulas for computing the 3
+similarity metrics?)
 
 Once similarities are computed, predictions are made using weighted
-averages. For user‑based kNN, Aggarwal (\citet{aggarwal2016}) defines
-one formula for the predicted rating of user (u) for item (i) as:
+averages. In user-based approach, a simple average of is often
+misleading because different users have different rating scales. One
+user might rate movies from 3 to 5 stars, while another uses the full
+1-to-5 range. To account for this, we use the deviation from each user's
+average rating. For user‑based kNN, defines one formula for the
+predicted rating of user (u) for item (i) as:
 
 \[
-\hat{r}_{u,i} = \mu_u + \frac{\sum_{v \in P_k(u)} \text{sim}(u,v) \cdot (r_{v,i} - \mu_v)}{\sum_{v \in P_k(u)} |\text{sim}(u,v)|}
+P_{u,i} = \bar{r}_u + \frac{\sum_{v \in N} sim(u,v) \cdot (r_{v,i} - \bar{r}_v)}{\sum_{v \in N} |sim(u,v)|}
 \]
 
-Where; (need to explain what each variable in the formula means)
+Where;
 
-This version adjusts for differences in rating scale by centering
-ratings around each user's mean. For item‑based kNN, the formula is
-analogous (\citet{aggarwal2016}):
+\begin{itemize}
+\item
+  \(P_{u,i}\) is the predicted rating for the target user (u) on item
+  (i).
+\item
+  \(\bar{r}_u\) is user (u)'s average rating. We add it at the end so
+  that the prediction is returned to the user's original rating scale.
+\item
+  N is the neighborhood of users most similar to (u) who have rated item
+  (i).
+\item
+  \(\text{sim}(u,v)\) is the similarity score between the target user
+  (u) and a neighbor (v).
+\item
+  \(r_{v,i} - \bar{r}_v\) is neighbor (v)'s rating of item (i), centered
+  by subtracting their own average rating. This expresses how much
+  higher or lower than average the neighbor rated that item.
+\item
+  The denominator, \(\sum_{v \in N} |\text{sim}(u,v)|\), normalizes the
+  weighted sum so that the prediction isn't inflated by the number or
+  magnitude of similarity scores.
+\end{itemize}
+
+For item-based collaborative filtering, the logic mirrors the user-based
+approach but is slightly simpler. To predict user (u)'s rating for item
+(i), we look at the other items that user (u) has already rated. The
+prediction is formed by taking a weighted average of those ratings,
+where the weights come from the similarity between item (i) and each
+neighboring item.
+
+The formula is:
 
 \[
-\hat{r}_{u,i} = \frac{\sum_{j \in N_k(i)} \text{sim}(i,j) \cdot r_{u,j}}{\sum_{j \in N_k(i)} |\text{sim}(i,j)|}
+P_{u,i} = \frac{\sum_{j \in N} sim(i,j) \cdot r_{u,j}}{\sum_{j \in N} |sim(i,j)|}
 \]
 
-Where; (Also need to explain what each variable in the formula means)
+Where;
 
-Here, the prediction is a weighted average of the user's ratings on
-similar items.
+\begin{itemize}
+\item
+  \(P_{u,i}\) is the predicted rating for user (u) on item (i).
+\item
+  N is the set of items most similar to item (i) that user (u) has
+  already rated.
+\item
+  \(\text{sim}(i,j)\) is the similarity between the target item (i) and
+  a neighbor item (j).
+\item
+  \(r_{u,j}\) is the rating user (u) gave to item (j).
+\end{itemize}
 
-These formulas emphasize closer neighbors more heavily thus ensuring
-that predictions reflect the most relevant similarities.
+One important detail is that we do not need to adjust for user averages
+here. Because all ratings involved in the calculation come from the same
+user, their rating scale is already consistent across items. As a
+result, the weighted average directly reflects how much the user liked
+similar items, making the item-based formulation slightly simpler than
+the user-based version.
+
+Both formulas and breakdowns were derived from (\citet{apxml2025}).
 
 \subsubsection{\texorpdfstring{\textbf{Toy
 Example}}{Toy Example}}\label{toy-example}
@@ -449,17 +500,52 @@ U2 & 4 & 4 & 2 \\
 U3 & 1 & 1 & 1 \\
 \end{longtable}
 
-Suppose we want to predict U1's rating for Movie C. First, we compute
-the similarity between Movie A and Movie C using cosine similarity:
+\textbf{Entries:} Ratings on a 1--5 scale. The ``?'' is the missing
+rating we want to predict (U1's rating for Movie C).
+
+First, we compute the similarity between Movie C and movies that U1 has
+already rated (A and B) using cosine similarity.
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Movie A ratings vector:} {[}5, 4, 1{]} from U1, U2, U3\\
+\item
+  \textbf{Movie B ratings vector:} {[}4, 4, 1{]} from U1, U2, U3\\
+\item
+  \textbf{Movie C ratings vector:} {[}?, 2, 1{]} → U1's rating is
+  missing, so we only use U2 and U3: {[}2, 1{]}
+\end{itemize}
+
+Now,
+
+To compute \textbf{sim(A, C)}, we compare Movie A's ratings from U2 and
+U3 ({[}4, 1{]}) with Movie C's ratings from U2 and U3 ({[}2, 1{]}).
 
 \[
-\text{sim}(A,C) = \frac{(4 \cdot 2) + (1 \cdot 1)}{\sqrt{4^2+1^2} \cdot \sqrt{2^2+1^2}} \approx 0.98
+sim(A,C) = \frac{(4 \cdot 2) + (1 \cdot 1)}{\sqrt{4^2+1^2} \cdot \sqrt{2^2+1^2}} \approx 0.98
 \]
 
-Since U1 rated Movie A highly (5), and Movie A is very similar to Movie
-C, the predicted rating for U1 on Movie C is close to 5. This simple
-calculation illustrates how kNN leverages neighborhood information to
-fill in missing ratings.
+To compute \textbf{sim(B, C)}, we compare Movie B's ratings from U2 and
+U3 ({[}4, 1{]}) with Movie C's ratings from U2 and U3 ({[}2, 1{]}).
+
+\[
+sim(B,C) = \frac{(4 \cdot 2) + (1 \cdot 1)}{\sqrt{4^2+1^2} \cdot \sqrt{2^2+1^2}} \approx 0.96
+\]
+
+These values (0.98 and 0.96) show that Movies A and B are both highly
+similar to Movie C therefore we use their ratings to calculate the
+predicted rating for Movie C.
+
+Plugging in values into the Item-Based formula we get:
+
+\[
+P_{U1,C} = \frac{(0.98 \cdot 5) + (0.96 \cdot 4)}{0.98 + 0.96} = \frac{4.9 + 3.84}{1.94} \approx 4.55
+\]
+
+U1's predicted rating for Movie C is about 4.6 stars. The recommendation
+system system expects U1 to enjoy Movie C almost as much as Movies A and
+B.
 
 \subsection{\texorpdfstring{\textbf{Strengths and Weaknesses of kNN in
 Recommendation
@@ -483,21 +569,98 @@ approaches such as matrix factorization or deep learning
 \section{\texorpdfstring{\textbf{Comparison to a Model-Based Method
 (SVD)}}{Comparison to a Model-Based Method (SVD)}}\label{comparison-to-a-model-based-method-svd}
 
+While kNN provides an intuitive way to generate recommendations by
+looking at neighbors, it struggles with sparse data and scalability. To
+address these challenges, recommender systems often turn to
+\textbf{model-based methods}. One of the most influential is
+\textbf{Singular Value Decomposition (SVD)}, a matrix factorization
+technique that has become central to modern recommendation engines
+(Hssina et al.~2021; APXML 2025).
+
+\subsection{What SVD Does (High-Level)}\label{what-svd-does-high-level}
+
+SVD takes the large, sparse user--item ratings matrix (R) and decomposes
+it into three smaller matrices:
+
+\[
+R = U \cdot \Sigma \cdot V^T
+\]
+
 \begin{itemize}
 \tightlist
 \item
-  What SVD does (very high level) - Use Hssina's article for this
+  \textbf{U:} Represents users in terms of hidden ``taste dimensions''
+  (latent factors).\\
 \item
-  How it differs from kNN
+  \textbf{\(Sigma\):} Diagonal matrix of singular values, showing which
+  factors are most important.\\
 \item
-  Strengths and weaknesses of both
-\item
-  Maybe Table comparison ?
-\item
-  When to choose kNN vs SVD
-\item
-  Why SVD is dominant in large-scale systems
+  \textbf{\(V^T\):} Represents items in terms of the same latent
+  factors.
 \end{itemize}
+
+By keeping only the top k singular values, SVD compresses the ratings
+matrix into a lower-dimensional representation. This reveals hidden
+patterns of preference for example, one factor might capture a user's
+tendency toward action/sci‑fi movies, while another captures
+romance/musicals. Predictions for missing ratings are made by combining
+a user's latent profile with an item's latent profile.
+
+This approach differs fundamentally from kNN. While kNN Predictions rely
+on local neighborhoods and finds similar users or items directly from
+observed ratings, SVD learns a compressed representation of the entire
+dataset and its predictions come from latent factors rather than direct
+neighbors.
+
+kNN is transparent and easy to interpret (``your neighbor liked this, so
+you might too''), but it struggles with sparsity and scalability. SVD,
+by contrast, is less interpretable because latent factors are abstract,
+yet it generalizes better and scales efficiently to millions of users
+and items.
+
+The trade-offs between the two methods can be summarized as follows:
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.2241}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3966}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3793}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Aspect
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+kNN (Memory-Based)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+SVD (Model-Based)
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Mechanism} & Direct similarity between users/items & Factorizes
+ratings matrix: \(R = U \Sigma V^T\) \\
+\textbf{Data requirement} & Works directly on raw ratings & Needs enough
+data to learn latent factors \\
+\textbf{Scalability} & Struggles with millions of users/items &
+Efficient at large scale once trained \\
+\textbf{Cold start problem} & Severe (new users/items have no neighbors)
+& Still an issue, but generalizes better \\
+\textbf{Accuracy} & Good for small datasets, local patterns & Better for
+large datasets, global patterns \\
+\textbf{Interpretability} & Easy to explain (``neighbors liked it'') &
+Harder to explain (latent factors abstract) \\
+\end{longtable}
+
+For small educational datasets or applications where interpretability is
+paramount, kNN remains a useful choice. Its neighbor-driven reasoning
+makes it particularly suitable for teaching and for systems where
+transparency is valued. For commercial platforms like Netflix or
+Spotify, where accuracy and scalability matter most, SVD is the dominant
+approach. By compressing massive rating matrices into latent factors,
+SVD not only improves predictive accuracy but also makes large-scale
+recommendation feasible. In short, kNN thrives on simplicity and
+transparency, while SVD thrives on efficiency and predictive power,
+together illustrating the evolution of recommender systems from
+neighbor-driven reasoning to model-based learning.
 
 \section{\texorpdfstring{\textbf{Application: Building a Simple
 Recommendation Engine with
