@@ -208,6 +208,7 @@ The trade-offs between the two methods can be summarized as follows:
 For small educational datasets or applications where interpretability is paramount, kNN remains a useful choice. Its neighbor-driven reasoning makes it particularly suitable for teaching and for systems where transparency is valued. For commercial platforms like Netflix or Spotify, where accuracy and scalability matter most, SVD is the dominant approach. By compressing massive rating matrices into latent factors, SVD not only improves predictive accuracy but also makes large-scale recommendation feasible. In short, kNN thrives on simplicity and transparency, while SVD thrives on efficiency and predictive power, together illustrating the evolution of recommender systems from neighbor-driven reasoning to model-based learning.
 
 ## **Application: Building a Simple Recommendation Engine with kNN**
+Will use book dataset for this.
 
 ### **Dataset Description + Data Wrangling**
 
