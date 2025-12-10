@@ -196,7 +196,7 @@ as movies, products, songs, or videos, and present users with options
 they are most likely to enjoy. These systems work by analyzing users'
 preferences, past behaviors, and item characteristics through
 interaction data such as impressions, clicks, ratings, likes, and
-purchases (\citet{ghosh2024}).
+purchases \citep{ghosh2024}.
 
 This paper focuses on the k-nearest neighbors (kNN) algorithm within the
 context of recommendation systems. Although kNN is one of the more
@@ -575,12 +575,13 @@ address these challenges, recommender systems often turn to
 \textbf{model-based methods}. One of the most influential is
 \textbf{Singular Value Decomposition (SVD)}, a matrix factorization
 technique that has become central to modern recommendation engines
-(Hssina et al.~2021; APXML 2025).
+(\citet{hssina2021}; \citet{apxml2025}).
 
-\subsection{What SVD Does (High-Level)}\label{what-svd-does-high-level}
+\subsection{What SVD Does (Very
+High-Level)}\label{what-svd-does-very-high-level}
 
-SVD takes the large, sparse user--item ratings matrix (R) and decomposes
-it into three smaller matrices:
+SVD takes the large (millions of ratings), sparse user--item ratings
+matrix (R) and decomposes it into three smaller matrices:
 
 \[
 R = U \cdot \Sigma \cdot V^T
@@ -604,7 +605,8 @@ matrix into a lower-dimensional representation. This reveals hidden
 patterns of preference for example, one factor might capture a user's
 tendency toward action/sci‑fi movies, while another captures
 romance/musicals. Predictions for missing ratings are made by combining
-a user's latent profile with an item's latent profile.
+a user's latent profile with an item's latent profile
+(\citet{apxml2025}).
 
 This approach differs fundamentally from kNN. While kNN Predictions rely
 on local neighborhoods and finds similar users or items directly from
@@ -665,6 +667,8 @@ neighbor-driven reasoning to model-based learning.
 \section{\texorpdfstring{\textbf{Application: Building a Simple
 Recommendation Engine with
 kNN}}{Application: Building a Simple Recommendation Engine with kNN}}\label{application-building-a-simple-recommendation-engine-with-knn}
+
+Will use book dataset for this.
 
 \subsection{\texorpdfstring{\textbf{Dataset Description + Data
 Wrangling}}{Dataset Description + Data Wrangling}}\label{dataset-description-data-wrangling}

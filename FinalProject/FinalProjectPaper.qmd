@@ -15,7 +15,7 @@ bibliography: bibliography.bib
 
 ## **Introduction**
 
-Today’s digital world is overflowing with information, making it nearly impossible for individuals to manually sift through the massive number of available options. As a result, recommender systems have become essential components of platforms such as Netflix, Amazon, Spotify, and TikTok. Their primary goal is to filter vast collections of items such as movies, products, songs, or videos, and present users with options they are most likely to enjoy. These systems work by analyzing users’ preferences, past behaviors, and item characteristics through interaction data such as impressions, clicks, ratings, likes, and purchases (@ghosh2024).
+Today’s digital world is overflowing with information, making it nearly impossible for individuals to manually sift through the massive number of available options. As a result, recommender systems have become essential components of platforms such as Netflix, Amazon, Spotify, and TikTok. Their primary goal is to filter vast collections of items such as movies, products, songs, or videos, and present users with options they are most likely to enjoy. These systems work by analyzing users’ preferences, past behaviors, and item characteristics through interaction data such as impressions, clicks, ratings, likes, and purchases [@ghosh2024].
 
 This paper focuses on the k-nearest neighbors (kNN) algorithm within the context of recommendation systems. Although kNN is one of the more straightforward algorithms in machine learning, it plays a foundational role in collaborative filtering methods. kNN identifies users or items that are most similar in behavior or preferences and bases predictions on these neighbors. Its simplicity and intuitive mechanics make it especially suitable for educational purposes and small scale recommendation tasks.
 
@@ -31,9 +31,9 @@ To understand how k-nearest neighbors (kNN) fits into this broader landscape, we
 
 ### **Content-Based Filtering**
 
-Content-based recommender systems generate suggestions by comparing the attributes of items a user previously liked to those of new items. These attributes might include genres, keywords, textual descriptions, or metadata. The item descriptions, which are labeled with ratings, are used as training data to create a user-specific classification or regression modeling problem. As Aggarwal explains, for each user the training documents correspond to the descriptions of the items she has bought or rated (@aggarwal2016,p. 14). For example, if a shopper frequently purchases skincare products, the system recommends related cosmetic items.
+Content-based recommender systems generate suggestions by comparing the attributes of items a user previously liked to those of new items. These attributes might include genres, keywords, textual descriptions, or metadata. The item descriptions, which are labeled with ratings, are used as training data to create a user-specific classification or regression modeling problem. As Aggarwal explains, for each user the training documents correspond to the descriptions of the items she has bought or rated [@aggarwal2016,p. 14]. For example, if a shopper frequently purchases skincare products, the system recommends related cosmetic items.
 
-The underlying assumption is that user preferences are largely consistent, and similar items will yield similar satisfaction (@ghosh2024). These models rely heavily on item features, making them effective in domains where rich metadata is available.
+The underlying assumption is that user preferences are largely consistent, and similar items will yield similar satisfaction [@ghosh2024]. These models rely heavily on item features, making them effective in domains where rich metadata is available.
 
 ### **Collaborative Filtering**
 
@@ -41,11 +41,11 @@ Collaborative filtering takes a different approach by focusing on patterns of be
 
 #### **Memory-Based Methods**
 
-Memory-based methods make predictions directly from observed ratings by identifying similarities among users or items. kNN is the most common example and can be further categorized into user-based kNN and item-based kNN as we'll see in the next sections. The advantages of memory-based techniques are that they are simple to implement and the resulting recommendations are often easy to explain. On the other hand, memory-based algorithms do not work very well with sparse ratings matrices (@aggarwal2016).
+Memory-based methods make predictions directly from observed ratings by identifying similarities among users or items. kNN is the most common example and can be further categorized into user-based kNN and item-based kNN as we'll see in the next sections. The advantages of memory-based techniques are that they are simple to implement and the resulting recommendations are often easy to explain. On the other hand, memory-based algorithms do not work very well with sparse ratings matrices [@aggarwal2016].
 
 #### **Model-Based Methods**
 
-Model-based approaches use machine learning techniques to uncover latent patterns in the rating matrix. Examples include Matrix factorization, SVD and Neural networks. They tend to outperform memory-based methods on large, sparse datasets but are less transparent to users and developers. Notably, many hybrid recommenders combine kNN with model-based techniques, such as SVD, to balance simplicity and predictive power (@hssina2021).
+Model-based approaches use machine learning techniques to uncover latent patterns in the rating matrix. Examples include Matrix factorization, SVD and Neural networks. They tend to outperform memory-based methods on large, sparse datasets but are less transparent to users and developers. Notably, many hybrid recommenders combine kNN with model-based techniques, such as SVD, to balance simplicity and predictive power [@hssina2021].
 
 ## K-Nearest Neighbors in Recommendation Systems
 
@@ -53,7 +53,7 @@ This section provides a deeper exposition of how kNN works, beginning with motiv
 
 ### **Motivation:** Why Neighbors Matter in Recommendations
 
-The appeal of neighborhood‑based methods lies in their simplicity as people with similar tastes tend to enjoy similar things. If two users have consistently rated the same movies in comparable ways, then the films one user has enjoyed but the other has not yet seen become strong candidates for recommendation. This intuition, that preferences cluster and can be shared across neighbors, forms the foundation of k‑Nearest Neighbors (kNN) in recommender systems. By exploiting these local patterns, kNN can generate useful predictions without the need for complex modeling (@nikolakopoulos2021).
+The appeal of neighborhood‑based methods lies in their simplicity as people with similar tastes tend to enjoy similar things. If two users have consistently rated the same movies in comparable ways, then the films one user has enjoyed but the other has not yet seen become strong candidates for recommendation. This intuition, that preferences cluster and can be shared across neighbors, forms the foundation of k‑Nearest Neighbors (kNN) in recommender systems. By exploiting these local patterns, kNN can generate useful predictions without the need for complex modeling [@nikolakopoulos2021].
 
 ### **How kNN Works in Supervised Learning**
 
@@ -63,7 +63,7 @@ In classification tasks, the new example is assigned to the majority class among
 
 ![A simple illustration of kNN](images/knnimage1.png){width="300px" height="300px"}
 
-Because kNN does not assume any particular distribution of the data, it is considered non‑parametric. This flexibility makes it easy to apply, but it also introduces challenges in high‑dimensional spaces where distances lose contrast, a phenomenon known as the curse of dimensionality (@kramer2013, pg 19). (Still don't fully understand the phenomenon. will return to explain when I do)
+Because kNN does not assume any particular distribution of the data, it is considered non‑parametric. This flexibility makes it easy to apply, but it also introduces challenges in high‑dimensional spaces where distances lose contrast, a phenomenon known as the curse of dimensionality [@kramer2013, pg 19]. (Still don't fully understand the phenomenon. will return to explain when I do)
 
 ### **How kNN Works in Recommender Systems** {#sec-rec}
 
@@ -76,12 +76,12 @@ In recommendation settings, the task is to predict missing entries in a sparse u
 | U3          | ?   | 4   | 4   | 3   |
 | U4          | 2   | ?   | 5   | ?   |
 
-Since most cells are empty, kNN adapts by computing similarities only on overlapping ratings. This reliance on shared ratings is both a strength because it uses actual behavioral similarity and a weakness because sparsity may cause the similarities to be unreliable (@kramer2013). Two main variants are used:
+Since most cells are empty, kNN adapts by computing similarities only on overlapping ratings. This reliance on shared ratings is both a strength because it uses actual behavioral similarity and a weakness because sparsity may cause the similarities to be unreliable [@kramer2013]. Two main variants are used:
 
 -   **User‑based kNN:** The system identifies the *k* users most similar to the target user and infers preferences from their ratings. For example, if User 1 and User 2 have rated many of the same items similarly, then User 2’s rating of a new item can help predict User 1’s interest.
--   **Item‑based kNN:** Instead of comparing users, the system finds items that consistently receive similar ratings across users. If Item A and Item B are rated alike by many users, then a user who liked Item A is predicted to enjoy Item B as well. Item‑based kNN is often more stable because item relationships remain consistent even as new users enter or leave the system. For this reason, modern commercial recommenders tend to use item-based kNN over user-based (@ricci2022).
+-   **Item‑based kNN:** Instead of comparing users, the system finds items that consistently receive similar ratings across users. If Item A and Item B are rated alike by many users, then a user who liked Item A is predicted to enjoy Item B as well. Item‑based kNN is often more stable because item relationships remain consistent even as new users enter or leave the system. For this reason, modern commercial recommenders tend to use item-based kNN over user-based [@ricci2022].
 
-Similarity metrics are central to these computations. **Cosine similarity** measures the angle between rating vectors, which makes it resistant to differences in rating scales. **Pearson correlation** adjusts for user biases by centering ratings around individual means. **Adjusted cosine similarity** , which is commonly used in item‑based kNN, subtracts user averages before computing similarity to reduce the effect of rating habits (@aggarwal2016). The similarity scores typically range from -1 to 1. With -1 for vectors that are polar opposites, 0 where there is no correlation and 1 for perfectly similar vectors. (Should I include the formulas for computing the 3 similarity metrics?)
+Similarity metrics are central to these computations. **Cosine similarity** measures the angle between rating vectors, which makes it resistant to differences in rating scales. **Pearson correlation** adjusts for user biases by centering ratings around individual means. **Adjusted cosine similarity** , which is commonly used in item‑based kNN, subtracts user averages before computing similarity to reduce the effect of rating habits [@aggarwal2016]. The similarity scores typically range from -1 to 1. With -1 for vectors that are polar opposites, 0 where there is no correlation and 1 for perfectly similar vectors. (Should I include the formulas for computing the 3 similarity metrics?)
 
 Once similarities are computed, predictions are made using weighted averages. In user-based approach, a simple average of is often misleading because different users have different rating scales. One user might rate movies from 3 to 5 stars, while another uses the full 1-to-5 range. To account for this, we use the deviation from each user's average rating. For user‑based kNN, defines one formula for the predicted rating of user (u) for item (i) as:
 
@@ -123,7 +123,7 @@ Where;
 
 One important detail is that we do not need to adjust for user averages here. Because all ratings involved in the calculation come from the same user, their rating scale is already consistent across items. As a result, the weighted average directly reflects how much the user liked similar items, making the item-based formulation slightly simpler than the user-based version.
 
-Both formulas and breakdowns were derived from (@apxml2025).
+Both formulas and breakdowns were derived from [@apxml2025].
 
 #### **Toy Example**
 
@@ -175,10 +175,10 @@ However, kNN also has notable weaknesses. Its reliance on overlapping ratings ma
 
 ## **Comparison to a Model-Based Method (SVD)**
 
-While kNN provides an intuitive way to generate recommendations by looking at neighbors, it struggles with sparse data and scalability. To address these challenges, recommender systems often turn to **model-based methods**. One of the most influential is **Singular Value Decomposition (SVD)**, a matrix factorization technique that has become central to modern recommendation engines (Hssina et al. 2021; APXML 2025).
+While kNN provides an intuitive way to generate recommendations by looking at neighbors, it struggles with sparse data and scalability. To address these challenges, recommender systems often turn to **model-based methods**. One of the most influential is **Singular Value Decomposition (SVD)**, a matrix factorization technique that has become central to modern recommendation engines (@hssina2021; @apxml2025).
 
-### What SVD Does (High-Level)  
-SVD takes the large, sparse user–item ratings matrix \(R\) and decomposes it into three smaller matrices:
+### What SVD Does (Very High-Level)  
+SVD takes the large (millions of ratings), sparse user–item ratings matrix \(R\) and decomposes it into three smaller matrices:
 
 $$
 R = U \cdot \Sigma \cdot V^T
@@ -188,7 +188,7 @@ $$
 - **$Sigma$:** Diagonal matrix of singular values, showing which factors are most important.  
 - **$V^T$:** Represents items in terms of the same latent factors.  
 
-By keeping only the top k singular values, SVD compresses the ratings matrix into a lower-dimensional representation. This reveals hidden patterns of preference for example, one factor might capture a user’s tendency toward action/sci‑fi movies, while another captures romance/musicals. Predictions for missing ratings are made by combining a user’s latent profile with an item’s latent profile.
+By keeping only the top k singular values, SVD compresses the ratings matrix into a lower-dimensional representation. This reveals hidden patterns of preference for example, one factor might capture a user’s tendency toward action/sci‑fi movies, while another captures romance/musicals. Predictions for missing ratings are made by combining a user’s latent profile with an item’s latent profile (@apxml2025).
 
 This approach differs fundamentally from kNN. While kNN Predictions rely on local neighborhoods and finds similar users or items directly from observed ratings, SVD learns a compressed representation of the entire dataset and its predictions come from latent factors rather than direct neighbors.  
 
