@@ -139,19 +139,19 @@ We finish with a toy example adapted from Aggawral's book to emphasize idea. Con
 
 First, we compute the similarity between Movie C and movies that U1 has already rated (A and B) using cosine similarity.
 
-- **Movie A ratings vector:** [5, 4, 1] from U1, U2, U3  
-- **Movie B ratings vector:** [4, 4, 1] from U1, U2, U3  
-- **Movie C ratings vector:** [?, 2, 1] → U1’s rating is missing, so we only use U2 and U3: [2, 1]
+-   **Movie A ratings vector:** \[5, 4, 1\] from U1, U2, U3\
+-   **Movie B ratings vector:** \[4, 4, 1\] from U1, U2, U3\
+-   **Movie C ratings vector:** \[?, 2, 1\] → U1’s rating is missing, so we only use U2 and U3: \[2, 1\]
 
-Now, 
+Now,
 
-To compute **sim(A, C)**, we compare Movie A’s ratings from U2 and U3 ([4, 1]) with Movie C’s ratings from U2 and U3 ([2, 1]).
+To compute **sim(A, C)**, we compare Movie A’s ratings from U2 and U3 (\[4, 1\]) with Movie C’s ratings from U2 and U3 (\[2, 1\]).
 
 $$
 sim(A,C) = \frac{(4 \cdot 2) + (1 \cdot 1)}{\sqrt{4^2+1^2} \cdot \sqrt{2^2+1^2}} \approx 0.98
 $$
 
-To compute **sim(B, C)**, we compare Movie B’s ratings from U2 and U3 ([4, 1]) with Movie C’s ratings from U2 and U3 ([2, 1]).
+To compute **sim(B, C)**, we compare Movie B’s ratings from U2 and U3 (\[4, 1\]) with Movie C’s ratings from U2 and U3 (\[2, 1\]).
 
 $$
 sim(B,C) = \frac{(4 \cdot 2) + (1 \cdot 1)}{\sqrt{4^2+1^2} \cdot \sqrt{2^2+1^2}} \approx 0.96
@@ -177,33 +177,34 @@ However, kNN also has notable weaknesses. Its reliance on overlapping ratings ma
 
 While kNN provides an intuitive way to generate recommendations by looking at neighbors, it struggles with sparse data and scalability. To address these challenges, recommender systems often turn to **model-based methods**. One of the most influential is **Singular Value Decomposition (SVD)**, a matrix factorization technique that has become central to modern recommendation engines (@hssina2021; @apxml2025).
 
-### What SVD Does (Very High-Level)  
-SVD takes the large (millions of ratings), sparse user–item ratings matrix \(R\) and decomposes it into three smaller matrices:
+### What SVD Does (Very High-Level)
+
+SVD takes the large (millions of ratings), sparse user–item ratings matrix (R) and decomposes it into three smaller matrices:
 
 $$
 R = U \cdot \Sigma \cdot V^T
 $$
 
-- **U:** Represents users in terms of hidden “taste dimensions” (latent factors).  
-- **$Sigma$:** Diagonal matrix of singular values, showing which factors are most important.  
-- **$V^T$:** Represents items in terms of the same latent factors.  
+-   **U:** Represents users in terms of hidden “taste dimensions” (latent factors).\
+-   $Sigma$: Diagonal matrix of singular values, showing which factors are most important.\
+-   $V^T$: Represents items in terms of the same latent factors.
 
 By keeping only the top k singular values, SVD compresses the ratings matrix into a lower-dimensional representation. This reveals hidden patterns of preference for example, one factor might capture a user’s tendency toward action/sci‑fi movies, while another captures romance/musicals. Predictions for missing ratings are made by combining a user’s latent profile with an item’s latent profile (@apxml2025).
 
-This approach differs fundamentally from kNN. While kNN Predictions rely on local neighborhoods and finds similar users or items directly from observed ratings, SVD learns a compressed representation of the entire dataset and its predictions come from latent factors rather than direct neighbors.  
+This approach differs fundamentally from kNN. While kNN Predictions rely on local neighborhoods and finds similar users or items directly from observed ratings, SVD learns a compressed representation of the entire dataset and its predictions come from latent factors rather than direct neighbors.
 
 kNN is transparent and easy to interpret (“your neighbor liked this, so you might too”), but it struggles with sparsity and scalability. SVD, by contrast, is less interpretable because latent factors are abstract, yet it generalizes better and scales efficiently to millions of users and items.
 
 The trade-offs between the two methods can be summarized as follows:
 
-| Aspect                  | kNN (Memory-Based)                          | SVD (Model-Based)                          |
-|--------------------------|----------------------------------------------|--------------------------------------------|
-| **Mechanism**            | Direct similarity between users/items        | Factorizes ratings matrix: $R = U \Sigma V^T$ |
-| **Data requirement**     | Works directly on raw ratings                | Needs enough data to learn latent factors   |
-| **Scalability**          | Struggles with millions of users/items       | Efficient at large scale once trained       |
-| **Cold start problem**   | Severe (new users/items have no neighbors)   | Still an issue, but generalizes better      |
-| **Accuracy**             | Good for small datasets, local patterns      | Better for large datasets, global patterns  |
-| **Interpretability**     | Easy to explain (“neighbors liked it”)       | Harder to explain (latent factors abstract) |
+| Aspect | kNN (Memory-Based) | SVD (Model-Based) |
+|------------------|---------------------------|--------------------------|
+| **Mechanism** | Direct similarity between users/items | Factorizes ratings matrix: $R = U \Sigma V^T$ |
+| **Data requirement** | Works directly on raw ratings | Needs enough data to learn latent factors |
+| **Scalability** | Struggles with millions of users/items | Efficient at large scale once trained |
+| **Cold start problem** | Severe (new users/items have no neighbors) | Still an issue, but generalizes better |
+| **Accuracy** | Good for small datasets, local patterns | Better for large datasets, global patterns |
+| **Interpretability** | Easy to explain (“neighbors liked it”) | Harder to explain (latent factors abstract) |
 
 For small educational datasets or applications where interpretability is paramount, kNN remains a useful choice. Its neighbor-driven reasoning makes it particularly suitable for teaching and for systems where transparency is valued. For commercial platforms like Netflix or Spotify, where accuracy and scalability matter most, SVD is the dominant approach. By compressing massive rating matrices into latent factors, SVD not only improves predictive accuracy but also makes large-scale recommendation feasible. In short, kNN thrives on simplicity and transparency, while SVD thrives on efficiency and predictive power, together illustrating the evolution of recommender systems from neighbor-driven reasoning to model-based learning.
 
@@ -238,6 +239,7 @@ books <- books |>
 
 any(duplicated(books))
 ```
+
 ```{r}
 summary(ratings)
 head(ratings)
@@ -250,6 +252,7 @@ ratings <- ratings |>
     book_id = ISBN
   )
 ```
+
 ```{r}
 summary(users)
 head(users)
@@ -262,24 +265,29 @@ users <- users |>
     user_id = User.ID,
     location = Location)
 ```
+
 ```{r}
 #we then join the three datasets to get full ratings table to use for the analysis
 ratings_full <- ratings |> 
-  inner_join(books, by = "book_id") %>%
+  inner_join(books, by = "book_id")  |>  
   inner_join(users, by = "user_id")
 
 head(ratings_full)
 ```
+
 ```{r}
 summary(ratings_full)
 ```
+
 Ratings range from 0 to 10.
+
 ```{r, fig.cap = The spike at zero reflects implicit interactions rather than true ratings}
 ggplot(ratings_full, 
        aes(x=book_rating))+geom_histogram()
 
 table(ratings_full$book_rating)
 ```
+
 The histogram and summary statistics revealed that more than half of the ratings in the dataset were equal to zero. I interpreted these zero values not as genuine ratings, but as indicators that a user had interacted with a book without providing explicit feedback. In other words, a 0 marks presence in the system rather than an evaluation of preference. Because kNN and SVD rely on explicit numerical ratings to compute similarities and generate predictions, including these implicit entries would bias the distribution and distort accuracy measures such as RMSE and MAE. For this reason, I excluded all records with a rating of zero, ensuring that the recommender system is trained and evaluated only on explicit ratings within the 1–10 scale.
 
 ```{r}
@@ -291,7 +299,6 @@ ratings_clean <- ratings_full %>%
 summary(ratings_clean$book_rating)
 table(ratings_clean$book_rating)
 ```
-
 
 We then look at the number of users and books to determine the threshhold by which to filter. We only want to include active users and active books in the final recommendation dataset.
 
@@ -310,6 +317,7 @@ ggplot(user_counts, aes(n_user)) +
     y = "Count of Users"
   ) 
 ```
+
 ```{r}
 item_counts <- ratings_clean |> count(book_id, name = "n_item", sort = TRUE)
 head(item_counts)
@@ -325,6 +333,7 @@ ggplot(item_counts, aes(n_item)) +
     y = "Count of Books"
   ) 
 ```
+
 The visualization reveals that most books were rated only once or twice, while a small number of popular titles received hundreds of ratings. This long‑tailed distribution highlights item sparsity, which can undermine similarity calculations in collaborative filtering. To mitigate this, we introduced a threshold line at 10 ratings, excluding books with fewer than 10 ratings from the final dataset. This cutoff ensures that the recommender system is trained on items with sufficient feedback to support meaningful recommendations.
 
 ```{r}
@@ -361,11 +370,13 @@ summary_table <- rbind(
 summary_table
 
 ```
+
 The filtering process substantially reduced the dataset, as shown in Table above. Before applying thresholds, the dataset contained 68,091 users, 149,836 books and 383,842 ratings. After requiring each user and each book to have at least 10 ratings, the dataset was reduced to 6,318 users, 5,438 books, and 87,178 ratings. This reduction highlights the sparsity of the original dataset, where most users and books had very few ratings. By retaining only active users and active books, the final dataset provides a denser interaction matrix that supports more reliable similarity calculations and improves the robustness of the recommender system.
 
 ```{r}
 head(ratings_filtered )
 ```
+
 We retained the count columns in the dataset to provide transparency about user and to explore how activity levels influence recommendation performance in the coming steps.
 
 ratings dataset was transformed into a format suitable for recommender modeling (cite the lab site). Because recommender algorithms require a user–item matrix rather than a long table of ratings, the data was reshaped so that each row corresponds to a user, each column corresponds to a book, and the entries represent the ratings given.
@@ -381,7 +392,7 @@ rating_wide <- ratings_filtered |>
 rating_matrix <- as.matrix(rating_wide[,-1])
 
 # convert to realRatingMatrix
-#rating_matrix <- as(rating_matrix, "realRatingMatrix")
+rating_matrix <- as(rating_matrix, "realRatingMatrix")
 
 dim(rating_matrix)          
 rowCounts(rating_matrix)[1:10]  
