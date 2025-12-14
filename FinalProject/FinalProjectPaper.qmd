@@ -10,7 +10,7 @@ date: last-modified
 author:
   - name: Daizy Buluma
     acknowledgements: | 
-      The author gratefully acknowledges *Vanesa for her thoughtful peer review and constructive feedback. Sincere thanks are also extended to the author’s family for their unwavering support and encouragement throughout the process*.
+      The author gratefully acknowledges *Vanesa for her thoughtful peer review and constructive feedback. Sincere thanks are also extended to the author’s family for their unwavering support and encouragement throughout the process.
     affiliations:
       - name: Amherst College
         department: Department of Statistics

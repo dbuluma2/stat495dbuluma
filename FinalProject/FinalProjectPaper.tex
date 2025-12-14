@@ -198,6 +198,9 @@
 \hypersetup{
   pdftitle={Exploring k-Nearest Neighbors in Recommendation Systems},
   pdfauthor={Daizy Buluma},
+  pdfkeywords={Collaborative filtering, Similarity metrics, Cold start
+problem, Matrix factorization, Performance evaluation, Book-Crossing
+dataset},
   colorlinks=true,
   linkcolor={blue},
   filecolor={Maroon},
@@ -216,19 +219,38 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\date{December 14, 2025}
 \title{\bf \textbf{Exploring k-Nearest Neighbors in Recommendation
 Systems}}
 \author{
-Daizy Buluma\\
+Daizy Buluma\thanks{The author gratefully acknowledges \emph{Vanesa for
+her thoughtful peer review and constructive feedback. Sincere thanks are
+also extended to the author's family for their unwavering support and
+encouragement throughout the process}.}\\
+Department of Statistics, Amherst College\\
 }
 \maketitle
 
 \bigskip
 \bigskip
 \begin{abstract}
-
+Recommender systems help users navigate vast digital catalogs by
+predicting preferences. This paper examines k‑Nearest Neighbors (kNN) as
+a baseline collaborative filtering method, contrasting it with matrix
+factorization via Singular Value Decomposition (SVD). Using the
+Book‑Crossing dataset, preprocessing addressed sparsity and produced a
+denser ratings matrix for evaluation. Accuracy was assessed with RMSE,
+MAE and MSE across neighborhood sizes and similarity measures. Results
+show kNN offers transparency and pedagogical value, while SVD achieves
+superior predictive accuracy. An interactive Shiny app demonstrates kNN
+in practice.
 \end{abstract}
 
+\noindent%
+{\it Keywords:} Collaborative filtering, Similarity metrics, Cold start
+problem, Matrix factorization, Performance evaluation, Book-Crossing
+dataset
+\vfill
 
 \newpage
 \spacingset{1.9} % DON'T change the spacing!
@@ -805,7 +827,10 @@ neighbor-driven reasoning to model-based learning.
 Recommendation Engine with
 kNN}}{Application: Building a Simple Recommendation Engine with kNN}}\label{application-building-a-simple-recommendation-engine-with-knn}
 
-The dataset used in this study consists of three interconnected tables:
+The empirical analysis in this study relies on the Book‑Crossing
+dataset, originally compiled by Cai‑Nicolas Ziegler and later made
+available on Kaggle \citep{bkaggle}. It consists of three interconnected
+tables:
 
 \begin{itemize}
 \tightlist
@@ -821,17 +846,6 @@ The dataset used in this study consists of three interconnected tables:
   \textbf{Users dataset}: Provides demographic information for each
   user, including \texttt{user\_id}, age, and location.
 \end{itemize}
-
-Together, these tables form the basis for constructing a user--item
-ratings matrix. The ratings table links users to books, while the books
-and users tables provide contextual metadata. After joining the three
-datasets, the combined table contains over 380,000 ratings from
-approximately 68,000 users on nearly 150,000 books.
-
-This raw dataset is highly sparse which means most users rate only a
-handful of books, and most books receive very few ratings. Such sparsity
-is typical in recommendation systems and motivates the filtering and
-preprocessing steps described below.
 
 \subsection{\texorpdfstring{\textbf{Data
 Preprocessing}}{Data Preprocessing}}\label{data-preprocessing}
@@ -881,6 +895,14 @@ providing a unified view of user--book interactions.
 \end{Highlighting}
 \end{Shaded}
 
+After joining the three datasets, the combined table contains over 1
+million ratings from approximately 92,000 users on nearly 270,000 books.
+
+This raw dataset is highly sparse which means most users rate only a
+handful of books, and most books receive very few ratings. Such sparsity
+is typical in recommendation systems and motivates the filtering and
+preprocessing steps described below.
+
 Ratings in the full dataset range from 0 to 10. However summary
 statistics revealed that more than half of the ratings in the dataset
 were equal to zero.
@@ -912,7 +934,7 @@ To address sparsity, we only include users and books with sufficiently
 active profiles. This ensures that similarity calculations are based on
 sufficiently active profiles.
 
-\pandocbounded{\includegraphics[keepaspectratio]{FinalProjectPaper_files/figure-pdf/unnamed-chunk-7-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{FinalProjectPaper_files/figure-pdf/unnamed-chunk-8-1.pdf}}
 
 The histogram of ratings per user shows the distribution of how many
 books each user has rated in the dataset. Because the x‑axis is plotted
@@ -1135,7 +1157,7 @@ Model & RMSE & MSE & MAE \\
 \bottomrule\noalign{}
 \endlastfoot
 UBCF (Cosine, k=10) & 1.89 & 3.57 & 1.41 \\
-SVD (k=50) & 1.63 & 2.66 & 1.21 \\
+SVD (k=50) & 1.60 & 2.56 & 1.19 \\
 \end{longtable}
 
 As can be seen in the table above SVD achieved lower error values across
@@ -1282,7 +1304,7 @@ transparency about the raw data sources used in the study.}
 
 \subsection{Distribution Plots}\label{distribution-plots}
 
-\pandocbounded{\includegraphics[keepaspectratio]{FinalProjectPaper_files/figure-pdf/unnamed-chunk-19-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{FinalProjectPaper_files/figure-pdf/unnamed-chunk-20-1.pdf}}
 
 \emph{These plots highlight the long‑tailed distributions typical of
 recommendation datasets, motivating the filtering thresholds applied in
@@ -1318,7 +1340,7 @@ choice of UBCF with cosine similarity and k = 10.}
 \subsection{Full Comparison of UBCF
 vs.~SVD}\label{full-comparison-of-ubcf-vs.-svd}
 
-\pandocbounded{\includegraphics[keepaspectratio]{FinalProjectPaper_files/figure-pdf/unnamed-chunk-21-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{FinalProjectPaper_files/figure-pdf/unnamed-chunk-22-1.pdf}}
 
 \emph{This figure visually compares the predictive accuracy of UBCF and
 SVD across RMSE, MSE, and MAE.}
