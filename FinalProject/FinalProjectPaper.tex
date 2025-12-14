@@ -805,165 +805,46 @@ neighbor-driven reasoning to model-based learning.
 Recommendation Engine with
 kNN}}{Application: Building a Simple Recommendation Engine with kNN}}\label{application-building-a-simple-recommendation-engine-with-knn}
 
-\subsection{\texorpdfstring{\textbf{Dataset Description + Data
-Wrangling}}{Dataset Description + Data Wrangling}}\label{dataset-description-data-wrangling}
+The dataset used in this study consists of three interconnected tables:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Books dataset}: Contains metadata for each book, including
+  ISBN, title, and author.\\
+\item
+  \textbf{Ratings dataset}: Records user interactions with books, where
+  each entry includes a \texttt{user\_id}, \texttt{book\_id}, and a
+  numerical rating on a 0--10 scale. Ratings of zero represent implicit
+  interactions (presence in the system without explicit feedback).\\
+\item
+  \textbf{Users dataset}: Provides demographic information for each
+  user, including \texttt{user\_id}, age, and location.
+\end{itemize}
+
+Together, these tables form the basis for constructing a user--item
+ratings matrix. The ratings table links users to books, while the books
+and users tables provide contextual metadata. After joining the three
+datasets, the combined table contains over 380,000 ratings from
+approximately 68,000 users on nearly 150,000 books.
+
+This raw dataset is highly sparse which means most users rate only a
+handful of books, and most books receive very few ratings. Such sparsity
+is typical in recommendation systems and motivates the filtering and
+preprocessing steps described below.
+
+\subsection{\texorpdfstring{\textbf{Data
+Preprocessing}}{Data Preprocessing}}\label{data-preprocessing}
+
+We begin by loading the three source files --- books, ratings, and users
+--- and cleaning them to retain only the relevant attributes. For books,
+we keep the ISBN, title, and author; for ratings, we rename the columns
+to \texttt{user\_id}, \texttt{book\_id}, and \texttt{book\_rating}; and
+for users, we retain the \texttt{user\_id} and \texttt{location}.
+Duplicate entries are removed to ensure consistency.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{\#loading libraries}
-\FunctionTok{library}\NormalTok{(tidyverse)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
--- Attaching core tidyverse packages ------------------------ tidyverse 2.0.0 --
-v dplyr     1.1.4     v readr     2.1.6
-v forcats   1.0.1     v stringr   1.6.0
-v ggplot2   4.0.1     v tibble    3.3.0
-v lubridate 1.9.4     v tidyr     1.3.1
-v purrr     1.2.0     
--- Conflicts ------------------------------------------ tidyverse_conflicts() --
-x dplyr::filter() masks stats::filter()
-x dplyr::lag()    masks stats::lag()
-i Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{library}\NormalTok{(tidyr)}
-\FunctionTok{library}\NormalTok{(dplyr)}
-\FunctionTok{library}\NormalTok{(recommenderlab)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-Loading required package: Matrix
-
-Attaching package: 'Matrix'
-
-The following objects are masked from 'package:tidyr':
-
-    expand, pack, unpack
-
-Loading required package: arules
-
-Attaching package: 'arules'
-
-The following object is masked from 'package:dplyr':
-
-    recode
-
-The following objects are masked from 'package:base':
-
-    abbreviate, write
-
-Loading required package: proxy
-
-Attaching package: 'proxy'
-
-The following object is masked from 'package:Matrix':
-
-    as.matrix
-
-The following objects are masked from 'package:stats':
-
-    as.dist, dist
-
-The following object is masked from 'package:base':
-
-    as.matrix
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{books   }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"Data/books.csv"}\NormalTok{)}
-\NormalTok{ratings }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"Data/ratings.csv"}\NormalTok{)}
-\NormalTok{users   }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"Data/users.csv"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\#viewing the structure of the datasets}
-\FunctionTok{summary}\NormalTok{(books)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-     ISBN            Book.Title        Book.Author        Year.Of.Publication
- Length:271360      Length:271360      Length:271360      Length:271360      
- Class :character   Class :character   Class :character   Class :character   
- Mode  :character   Mode  :character   Mode  :character   Mode  :character   
-  Publisher         Image.URL.S        Image.URL.M        Image.URL.L       
- Length:271360      Length:271360      Length:271360      Length:271360     
- Class :character   Class :character   Class :character   Class :character  
- Mode  :character   Mode  :character   Mode  :character   Mode  :character  
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{head}\NormalTok{(books)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-        ISBN
-1 0195153448
-2 0002005018
-3 0060973129
-4 0374157065
-5 0393045218
-6 0399135782
-                                                                                          Book.Title
-1                                                                                Classical Mythology
-2                                                                                       Clara Callan
-3                                                                               Decision in Normandy
-4 Flu: The Story of the Great Influenza Pandemic of 1918 and the Search for the Virus That Caused It
-5                                                                             The Mummies of Urumchi
-6                                                                             The Kitchen God's Wife
-           Book.Author Year.Of.Publication                  Publisher
-1   Mark P. O. Morford                2002    Oxford University Press
-2 Richard Bruce Wright                2001      HarperFlamingo Canada
-3         Carlo D'Este                1991            HarperPerennial
-4     Gina Bari Kolata                1999       Farrar Straus Giroux
-5      E. J. W. Barber                1999 W. W. Norton &amp; Company
-6              Amy Tan                1991           Putnam Pub Group
-                                                   Image.URL.S
-1 http://images.amazon.com/images/P/0195153448.01.THUMBZZZ.jpg
-2 http://images.amazon.com/images/P/0002005018.01.THUMBZZZ.jpg
-3 http://images.amazon.com/images/P/0060973129.01.THUMBZZZ.jpg
-4 http://images.amazon.com/images/P/0374157065.01.THUMBZZZ.jpg
-5 http://images.amazon.com/images/P/0393045218.01.THUMBZZZ.jpg
-6 http://images.amazon.com/images/P/0399135782.01.THUMBZZZ.jpg
-                                                   Image.URL.M
-1 http://images.amazon.com/images/P/0195153448.01.MZZZZZZZ.jpg
-2 http://images.amazon.com/images/P/0002005018.01.MZZZZZZZ.jpg
-3 http://images.amazon.com/images/P/0060973129.01.MZZZZZZZ.jpg
-4 http://images.amazon.com/images/P/0374157065.01.MZZZZZZZ.jpg
-5 http://images.amazon.com/images/P/0393045218.01.MZZZZZZZ.jpg
-6 http://images.amazon.com/images/P/0399135782.01.MZZZZZZZ.jpg
-                                                   Image.URL.L
-1 http://images.amazon.com/images/P/0195153448.01.LZZZZZZZ.jpg
-2 http://images.amazon.com/images/P/0002005018.01.LZZZZZZZ.jpg
-3 http://images.amazon.com/images/P/0060973129.01.LZZZZZZZ.jpg
-4 http://images.amazon.com/images/P/0374157065.01.LZZZZZZZ.jpg
-5 http://images.amazon.com/images/P/0393045218.01.LZZZZZZZ.jpg
-6 http://images.amazon.com/images/P/0399135782.01.LZZZZZZZ.jpg
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{any}\NormalTok{(}\FunctionTok{is.na}\NormalTok{(books))}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-[1] FALSE
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\#wont be using images so I\textquotesingle{}ll drop the colums}
 \NormalTok{books }\OtherTok{\textless{}{-}}\NormalTok{ books }\SpecialCharTok{|\textgreater{}} 
          \FunctionTok{select}\NormalTok{(ISBN,Book.Title,Book.Author) }\SpecialCharTok{|\textgreater{}} 
          \FunctionTok{rename}\NormalTok{(}
@@ -972,139 +853,12 @@ The following object is masked from 'package:base':
            \AttributeTok{book\_id =}\NormalTok{ ISBN}
 \NormalTok{         )}
 
-\FunctionTok{any}\NormalTok{(}\FunctionTok{duplicated}\NormalTok{(books))}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-[1] FALSE
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{save}\NormalTok{(books, }\AttributeTok{file =} \StringTok{"books.RData"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{summary}\NormalTok{(ratings)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-    User.ID           ISBN            Book.Rating    
- Min.   :     2   Length:1149780     Min.   : 0.000  
- 1st Qu.: 70345   Class :character   1st Qu.: 0.000  
- Median :141010   Mode  :character   Median : 0.000  
- Mean   :140386                      Mean   : 2.867  
- 3rd Qu.:211028                      3rd Qu.: 7.000  
- Max.   :278854                      Max.   :10.000  
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{head}\NormalTok{(ratings)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-  User.ID       ISBN Book.Rating
-1  276725 034545104X           0
-2  276726 0155061224           5
-3  276727 0446520802           0
-4  276729 052165615X           3
-5  276729 0521795028           6
-6  276733 2080674722           0
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{any}\NormalTok{(}\FunctionTok{is.na}\NormalTok{(ratings))}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-[1] FALSE
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{any}\NormalTok{(}\FunctionTok{duplicated}\NormalTok{(ratings))}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-[1] FALSE
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \NormalTok{ratings }\OtherTok{\textless{}{-}}\NormalTok{ ratings }\SpecialCharTok{|\textgreater{}} 
   \FunctionTok{rename}\NormalTok{(}
     \AttributeTok{user\_id =}\NormalTok{ User.ID,}
     \AttributeTok{book\_rating =}\NormalTok{ Book.Rating,}
     \AttributeTok{book\_id =}\NormalTok{ ISBN}
 \NormalTok{  )}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{summary}\NormalTok{(users)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-    User.ID         Location              Age        
- Min.   :     1   Length:278858      Min.   :  0.00  
- 1st Qu.: 69715   Class :character   1st Qu.: 24.00  
- Median :139430   Mode  :character   Median : 32.00  
- Mean   :139430                      Mean   : 34.75  
- 3rd Qu.:209144                      3rd Qu.: 44.00  
- Max.   :278858                      Max.   :244.00  
-                                     NA's   :110762  
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{head}\NormalTok{(users)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-  User.ID                           Location Age
-1       1                 nyc, new york, usa  NA
-2       2          stockton, california, usa  18
-3       3    moscow, yukon territory, russia  NA
-4       4          porto, v.n.gaia, portugal  17
-5       5 farnborough, hants, united kingdom  NA
-6       6      santa monica, california, usa  61
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{any}\NormalTok{(}\FunctionTok{is.na}\NormalTok{(users))}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-[1] TRUE
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\#we have some null ages, so drop records where age }
-\FunctionTok{any}\NormalTok{(}\FunctionTok{duplicated}\NormalTok{(users))}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-[1] FALSE
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \NormalTok{users }\OtherTok{\textless{}{-}}\NormalTok{ users }\SpecialCharTok{|\textgreater{}}
   \FunctionTok{select}\NormalTok{(User.ID, Location) }\SpecialCharTok{|\textgreater{}} 
   \FunctionTok{rename}\NormalTok{(}
@@ -1113,93 +867,22 @@ The following object is masked from 'package:base':
 \end{Highlighting}
 \end{Shaded}
 
+The three datasets are then joined into a single ratings table,
+providing a unified view of user--book interactions.
+
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{\#we then join the three datasets to get full ratings table to use for the analysis}
 \NormalTok{ratings\_full }\OtherTok{\textless{}{-}}\NormalTok{ ratings }\SpecialCharTok{|\textgreater{}} 
-  \FunctionTok{inner\_join}\NormalTok{(books, }\AttributeTok{by =} \StringTok{"book\_id"}\NormalTok{)  }\SpecialCharTok{|\textgreater{}}  
-  \FunctionTok{inner\_join}\NormalTok{(users, }\AttributeTok{by =} \StringTok{"user\_id"}\NormalTok{)}
-
-\FunctionTok{head}\NormalTok{(ratings\_full)}
+  \FunctionTok{inner\_join}\NormalTok{(books, }
+             \AttributeTok{by =} \StringTok{"book\_id"}\NormalTok{)}\SpecialCharTok{|\textgreater{}}  
+  \FunctionTok{inner\_join}\NormalTok{(users, }
+             \AttributeTok{by =} \StringTok{"user\_id"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{verbatim}
-  user_id    book_id book_rating
-1  276725 034545104X           0
-2  276726 0155061224           5
-3  276727 0446520802           0
-4  276729 052165615X           3
-5  276729 0521795028           6
-6  276733 2080674722           0
-                                                      book_title
-1                                           Flesh Tones: A Novel
-2                                               Rites of Passage
-3                                                   The Notebook
-4                                                 Help!: Level 1
-5 The Amsterdam Connection : Level 4 (Cambridge English Readers)
-6                                    Les Particules Elementaires
-              author                      location
-1         M. J. Rose             tyler, texas, usa
-2         Judith Rae      seattle, washington, usa
-3    Nicholas Sparks h, new south wales, australia
-4      Philip Prowse          rijeka, n/a, croatia
-5        Sue Leather          rijeka, n/a, croatia
-6 Michel Houellebecq            paris, n/a, france
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{summary}\NormalTok{(ratings\_full)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-    user_id         book_id           book_rating      book_title       
- Min.   :     2   Length:1031136     Min.   : 0.000   Length:1031136    
- 1st Qu.: 70415   Class :character   1st Qu.: 0.000   Class :character  
- Median :141210   Mode  :character   Median : 0.000   Mode  :character  
- Mean   :140595                      Mean   : 2.839                     
- 3rd Qu.:211426                      3rd Qu.: 7.000                     
- Max.   :278854                      Max.   :10.000                     
-    author            location        
- Length:1031136     Length:1031136    
- Class :character   Class :character  
- Mode  :character   Mode  :character  
-                                      
-                                      
-                                      
-\end{verbatim}
-
-Ratings range from 0 to 10.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{ggplot}\NormalTok{(ratings\_full, }
-       \FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{book\_rating))}\SpecialCharTok{+}\FunctionTok{geom\_histogram}\NormalTok{()}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-`stat_bin()` using `bins = 30`. Pick better value `binwidth`.
-\end{verbatim}
-
-\begin{figure}[H]
-
-{\centering \pandocbounded{\includegraphics[keepaspectratio]{FinalProjectPaper_files/figure-pdf/unnamed-chunk-7-1.pdf}}
-
-}
-
-\caption{The spike at zero reflects implicit interactions rather than
-true ratings}
-
-\end{figure}%
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{table}\NormalTok{(ratings\_full}\SpecialCharTok{$}\NormalTok{book\_rating)}
-\end{Highlighting}
-\end{Shaded}
+Ratings in the full dataset range from 0 to 10. However summary
+statistics revealed that more than half of the ratings in the dataset
+were equal to zero.
 
 \begin{verbatim}
 
@@ -1207,49 +890,28 @@ true ratings}
 647294   1481   2375   5118   7617  45355  31687  66402  91804  60778  71225 
 \end{verbatim}
 
-The histogram and summary statistics revealed that more than half of the
-ratings in the dataset were equal to zero. I interpreted these zero
-values not as genuine ratings, but as indicators that a user had
-interacted with a book without providing explicit feedback. In other
-words, a 0 marks presence in the system rather than an evaluation of
-preference. Because kNN and SVD rely on explicit numerical ratings to
-compute similarities and generate predictions, including these implicit
-entries would bias the distribution and distort accuracy measures such
-as RMSE and MAE. For this reason, I excluded all records with a rating
-of zero, ensuring that the recommender system is trained and evaluated
-only on explicit ratings within the 1--10 scale.
+The zero values were intepreted as not genuine ratings, but as
+indicators that a user had interacted with a book without providing
+explicit feedback. In other words, a 0 marks presence in the system
+rather than an evaluation of preference. Because collaborative filtering
+relies explicit numerical ratings to compute similarities and generate
+predictions, including these implicit entries would bias the
+distribution and distort accuracy measures such as RMSE and MAE. For
+this reason, I excluded all records with a rating of zero.
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{\# Drop records with rating = 0}
-\NormalTok{ratings\_clean }\OtherTok{\textless{}{-}}\NormalTok{ ratings\_full }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{ratings\_clean }\OtherTok{\textless{}{-}}\NormalTok{ ratings\_full }\SpecialCharTok{|\textgreater{}} 
   \FunctionTok{filter}\NormalTok{(book\_rating }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{)}
-
-\CommentTok{\# Quick check}
-\FunctionTok{summary}\NormalTok{(ratings\_clean}\SpecialCharTok{$}\NormalTok{book\_rating)}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{verbatim}
-   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-  1.000   7.000   8.000   7.627   9.000  10.000 
-\end{verbatim}
+To address sparsity, we only include users and books with sufficiently
+active profiles. This ensures that similarity calculations are based on
+sufficiently active profiles.
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{table}\NormalTok{(ratings\_clean}\SpecialCharTok{$}\NormalTok{book\_rating)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-
-    1     2     3     4     5     6     7     8     9    10 
- 1481  2375  5118  7617 45355 31687 66402 91804 60778 71225 
-\end{verbatim}
-
-We then look at the number of users and books to determine the
-threshhold by which to filter. We only want to include active users and
-active books in the final recommendation dataset.
+\pandocbounded{\includegraphics[keepaspectratio]{FinalProjectPaper_files/figure-pdf/unnamed-chunk-7-1.pdf}}
 
 The histogram of ratings per user shows the distribution of how many
 books each user has rated in the dataset. Because the x‑axis is plotted
@@ -1265,97 +927,12 @@ set a threshold for ``active'' users, ensuring that the recommender
 system is trained on profiles with enough ratings to support meaningful
 recommendations.
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{user\_counts }\OtherTok{\textless{}{-}}\NormalTok{ ratings\_clean }\SpecialCharTok{|\textgreater{}} \FunctionTok{count}\NormalTok{(user\_id, }\AttributeTok{name =} \StringTok{"n\_user"}\NormalTok{, }\AttributeTok{sort =} \ConstantTok{TRUE}\NormalTok{)}
-\FunctionTok{head}\NormalTok{(user\_counts)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-  user_id n_user
-1   11676   6943
-2   98391   5691
-3  189835   1899
-4  153662   1845
-5   23902   1180
-6  235105   1020
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{ggplot}\NormalTok{(user\_counts, }\FunctionTok{aes}\NormalTok{(n\_user)) }\SpecialCharTok{+} 
-  \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{binwidth =} \DecValTok{1}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{scale\_x\_log10}\NormalTok{() }\SpecialCharTok{+}
-  \FunctionTok{geom\_vline}\NormalTok{(}\AttributeTok{xintercept =} \DecValTok{10}\NormalTok{, }\AttributeTok{linetype =} \StringTok{"dashed"}\NormalTok{, }\AttributeTok{color =} \StringTok{"red"}\NormalTok{, }\AttributeTok{size =} \DecValTok{1}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{labs}\NormalTok{(}
-    \AttributeTok{title =} \StringTok{"Distribution of Ratings per User"}\NormalTok{,}
-    \AttributeTok{x =} \StringTok{"Number of Ratings (log scale)"}\NormalTok{,}
-    \AttributeTok{y =} \StringTok{"Count of Users"}
-\NormalTok{  ) }
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
-i Please use `linewidth` instead.
-\end{verbatim}
-
-\pandocbounded{\includegraphics[keepaspectratio]{FinalProjectPaper_files/figure-pdf/unnamed-chunk-9-1.pdf}}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{item\_counts }\OtherTok{\textless{}{-}}\NormalTok{ ratings\_clean }\SpecialCharTok{|\textgreater{}} \FunctionTok{count}\NormalTok{(book\_id, }\AttributeTok{name =} \StringTok{"n\_item"}\NormalTok{, }\AttributeTok{sort =} \ConstantTok{TRUE}\NormalTok{)}
-\FunctionTok{head}\NormalTok{(item\_counts)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-     book_id n_item
-1 0316666343    707
-2 0971880107    581
-3 0385504209    487
-4 0312195516    383
-5 0060928336    320
-6 059035342X    313
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\# Histogram of ratings per book}
-\FunctionTok{ggplot}\NormalTok{(item\_counts, }\FunctionTok{aes}\NormalTok{(n\_item)) }\SpecialCharTok{+} 
-  \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{binwidth =} \DecValTok{1}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{scale\_x\_log10}\NormalTok{() }\SpecialCharTok{+}
-  \FunctionTok{geom\_vline}\NormalTok{(}\AttributeTok{xintercept =} \DecValTok{10}\NormalTok{, }\AttributeTok{linetype =} \StringTok{"dashed"}\NormalTok{, }\AttributeTok{color =} \StringTok{"red"}\NormalTok{, }\AttributeTok{size =} \DecValTok{1}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{labs}\NormalTok{(}
-    \AttributeTok{title =} \StringTok{"Distribution of Ratings per Book"}\NormalTok{,}
-    \AttributeTok{x =} \StringTok{"Number of Ratings (log scale)"}\NormalTok{,}
-    \AttributeTok{y =} \StringTok{"Count of Books"}
-\NormalTok{  ) }
-\end{Highlighting}
-\end{Shaded}
-
-\pandocbounded{\includegraphics[keepaspectratio]{FinalProjectPaper_files/figure-pdf/unnamed-chunk-10-1.pdf}}
-
-The visualization reveals that most books were rated only once or twice,
-while a small number of popular titles received hundreds of ratings.
-This long‑tailed distribution highlights item sparsity, which can
-undermine similarity calculations in collaborative filtering. To
-mitigate this, we introduced a threshold line at 10 ratings, excluding
-books with fewer than 10 ratings from the final dataset. This cutoff
-ensures that the recommender system is trained on items with sufficient
-feedback to support meaningful recommendations.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{names}\NormalTok{(ratings\_clean)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-[1] "user_id"     "book_id"     "book_rating" "book_title"  "author"     
-[6] "location"   
-\end{verbatim}
+This same pattern was found with the items with most books being rated
+only once or twice, while a small number of popular titles received
+hundreds of ratings. To mitigate this, we introduced a threshold line at
+10 ratings, excluding books with fewer than 10 ratings from the final
+dataset. This cutoff ensures that the recommender system is trained on
+items with sufficient feedback to support meaningful recommendations.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1367,80 +944,45 @@ feedback to support meaningful recommendations.
 \NormalTok{ratings\_filtered }\OtherTok{\textless{}{-}}\NormalTok{ ratings\_clean }\SpecialCharTok{|\textgreater{}}
   \FunctionTok{inner\_join}\NormalTok{(user\_counts }\SpecialCharTok{|\textgreater{}} \FunctionTok{filter}\NormalTok{(n\_user }\SpecialCharTok{\textgreater{}=}\NormalTok{ min\_user\_ratings), }\AttributeTok{by =} \StringTok{"user\_id"}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
   \FunctionTok{inner\_join}\NormalTok{(item\_counts }\SpecialCharTok{|\textgreater{}} \FunctionTok{filter}\NormalTok{(n\_item }\SpecialCharTok{\textgreater{}=}\NormalTok{ min\_item\_ratings), }\AttributeTok{by =} \StringTok{"book\_id"}\NormalTok{)}
-
-\CommentTok{\# Before filtering}
-\NormalTok{before\_summary }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
-  \AttributeTok{Users   =} \FunctionTok{n\_distinct}\NormalTok{(ratings\_clean}\SpecialCharTok{$}\NormalTok{user\_id),}
-  \AttributeTok{Books   =} \FunctionTok{n\_distinct}\NormalTok{(ratings\_clean}\SpecialCharTok{$}\NormalTok{book\_id),}
-  \AttributeTok{Ratings =} \FunctionTok{nrow}\NormalTok{(ratings\_clean)}
-\NormalTok{)}
-
-\CommentTok{\# After filtering}
-\NormalTok{after\_summary }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
-  \AttributeTok{Users   =} \FunctionTok{n\_distinct}\NormalTok{(ratings\_filtered}\SpecialCharTok{$}\NormalTok{user\_id),}
-  \AttributeTok{Books   =} \FunctionTok{n\_distinct}\NormalTok{(ratings\_filtered}\SpecialCharTok{$}\NormalTok{book\_id),}
-  \AttributeTok{Ratings =} \FunctionTok{nrow}\NormalTok{(ratings\_filtered)}
-\NormalTok{)}
-
-\CommentTok{\# Combine into one table}
-\NormalTok{summary\_table }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(}
-  \FunctionTok{cbind}\NormalTok{(}\AttributeTok{Stage =} \StringTok{"Before filtering"}\NormalTok{, before\_summary),}
-  \FunctionTok{cbind}\NormalTok{(}\AttributeTok{Stage =} \StringTok{"After filtering"}\NormalTok{,  after\_summary)}
-\NormalTok{)}
-
-\NormalTok{summary\_table}
 \end{Highlighting}
 \end{Shaded}
-
-\begin{verbatim}
-             Stage Users  Books Ratings
-1 Before filtering 68091 149836  383842
-2  After filtering  6318   5438   87178
-\end{verbatim}
 
 The filtering process substantially reduced the dataset, as shown in
-Table above. Before applying thresholds, the dataset contained 68,091
-users, 149,836 books and 383,842 ratings. After requiring each user and
-each book to have at least 10 ratings, the dataset was reduced to 6,318
-users, 5,438 books, and 87,178 ratings. This reduction highlights the
-sparsity of the original dataset, where most users and books had very
-few ratings. By retaining only active users and active books, the final
-dataset provides a denser interaction matrix that supports more reliable
-similarity calculations and improves the robustness of the recommender
-system.
+Table below.
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{head}\NormalTok{(ratings\_filtered )}
-\end{Highlighting}
-\end{Shaded}
+\begin{longtable}[]{@{}cccc@{}}
+\caption{Dataset size before and after filtering
+thresholds}\tabularnewline
+\toprule\noalign{}
+Stage & Users & Books & Ratings \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Stage & Users & Books & Ratings \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Before filtering & 68091 & 149836 & 383842 \\
+After filtering & 6318 & 5438 & 87178 \\
+\end{longtable}
 
-\begin{verbatim}
-  user_id    book_id book_rating                            book_title
-1  276822 0060096195          10                     The Boy Next Door
-2  276822 0375821813           9             Hoot (Newbery Honor Book)
-3  276822 0786817070          10   Artemis Fowl (Artemis Fowl, Book 1)
-4  276847 3404148576           8                            Nordermoor
-5  276847 3423071516          10                     Der Kleine Hobbit
-6  276847 3551551677          10 Harry Potter und der Stein der Weisen
-               author                           location n_user n_item
-1        Meggin Cabot           calgary, alberta, canada     13     53
-2        CARL HIAASEN           calgary, alberta, canada     13     10
-3         Eoin Colfer           calgary, alberta, canada     13     74
-4 Arnaldur Indridason köln, nordrhein-westfalen, germany     33     10
-5    J. R. R. Tolkien köln, nordrhein-westfalen, germany     33     13
-6   Joanne K. Rowling köln, nordrhein-westfalen, germany     33     15
-\end{verbatim}
+Before applying thresholds, the dataset contained 68,091 users, 149,836
+books and 383,842 ratings. After requiring each user and each book to
+have at least 10 ratings, the dataset was reduced to 6,318 users, 5,438
+books, and 87,178 ratings. This reduction highlights the sparsity of the
+original dataset, where most users and books had very few ratings. By
+retaining only active users and active books, the final dataset provides
+a denser interaction matrix that supports more reliable similarity
+calculations and improves the robustness of the recommender system.
 
-We retained the count columns in the dataset to provide transparency
-about user and to explore how activity levels influence recommendation
-performance in the coming steps.
+\subsection{\texorpdfstring{\textbf{Matrix
+Transformation}}{Matrix Transformation}}\label{matrix-transformation}
 
-ratings dataset was transformed into a format suitable for recommender
-modeling (cite the lab site). Because recommender algorithms require a
-user--item matrix rather than a long table of ratings, the data was
-reshaped so that each row corresponds to a user, each column corresponds
-to a book, and the entries represent the ratings given.
+Collaborative filtering requires a user--item matrix. The filtered
+ratings are reshaped into wide format, converted to a matrix, and then
+cast into a \texttt{realRatingMatrix} object, the format expected by
+\texttt{recommenderlab}.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1448,48 +990,15 @@ to a book, and the entries represent the ratings given.
 \NormalTok{rating\_wide }\OtherTok{\textless{}{-}}\NormalTok{ ratings\_filtered }\SpecialCharTok{|\textgreater{}}
   \FunctionTok{select}\NormalTok{(user\_id, book\_id, book\_rating) }\SpecialCharTok{|\textgreater{}}
   \FunctionTok{pivot\_wider}\NormalTok{(}\AttributeTok{names\_from =}\NormalTok{ book\_id, }\AttributeTok{values\_from =}\NormalTok{ book\_rating)}
-
 \CommentTok{\# convert to matrix (drop user\_id column)}
 \NormalTok{rating\_matrix }\OtherTok{\textless{}{-}} \FunctionTok{as.matrix}\NormalTok{(rating\_wide[,}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{])}
-
 \CommentTok{\# convert to realRatingMatrix}
 \NormalTok{rating\_matrix }\OtherTok{\textless{}{-}} \FunctionTok{as}\NormalTok{(rating\_matrix, }\StringTok{"realRatingMatrix"}\NormalTok{)}
-
-\FunctionTok{save}\NormalTok{(rating\_matrix, }\AttributeTok{file =} \StringTok{"rating\_matrix.RData"}\NormalTok{)}
-
-\FunctionTok{dim}\NormalTok{(rating\_matrix)          }
 \end{Highlighting}
 \end{Shaded}
 
-\begin{verbatim}
-[1] 6318 5438
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{rowCounts}\NormalTok{(rating\_matrix)[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{10}\NormalTok{]  }
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
- [1]  3  6  3  1  2  7  4 14  8  4
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{colCounts}\NormalTok{(rating\_matrix)[}\DecValTok{1}\SpecialCharTok{:}\DecValTok{10}\NormalTok{] }
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-0060096195 0375821813 0786817070 3404148576 3423071516 3551551677 3551551685 
-        33          6         55          5          4         10         10 
-3551551693 3551551936 002542730X 
-         7          8         50 
-\end{verbatim}
-
-\subsection{\texorpdfstring{\textbf{Implementing kNN + Model
-Evaluation}}{Implementing kNN + Model Evaluation}}\label{implementing-knn-model-evaluation}
+\subsection{\texorpdfstring{\textbf{Implementing kNN \& Model
+Evaluation}}{Implementing kNN \& Model Evaluation}}\label{implementing-knn-model-evaluation}
 
 Once the ratings matrix was transformed into a realRatingMatrix, the
 next step was to implement a k‑Nearest Neighbors recommender. In
@@ -1497,9 +1006,9 @@ recommenderlab, this is achieved with the Recommender() function,
 specifying ``UBCF'' (user‑based collaborative filtering) or ``IBCF''
 (item‑based collaborative filtering).
 
-To evaluate performance, two complementary schemes were employed. A
+To evaluate performance, two complementary schemes can be employed. A
 simple train/test split was first used to illustrate the mechanics of
-recommender evaluation: the model is trained on 80\% of the data,
+recommender evaluation: the model is trained on 70\% of the data,
 predictions are generated for the ``known'' portion of the test set, and
 accuracy is computed against the ``unknown'' ratings. This one‑time
 split provides a clear demonstration of how training, prediction, and
@@ -1509,24 +1018,23 @@ evaluation interact in practice.
 \begin{Highlighting}[]
 \CommentTok{\# Simple train/test split (80/20)}
 \FunctionTok{set.seed}\NormalTok{(}\DecValTok{495}\NormalTok{)}
-\NormalTok{scheme\_split }\OtherTok{\textless{}{-}} \FunctionTok{evaluationScheme}\NormalTok{(rating\_matrix, }\AttributeTok{method=}\StringTok{"split"}\NormalTok{, }\AttributeTok{train=}\FloatTok{0.8}\NormalTok{, }\AttributeTok{given=}\DecValTok{10}\NormalTok{, }\AttributeTok{goodRating=}\DecValTok{6}\NormalTok{)}
-
+\NormalTok{scheme\_split }\OtherTok{\textless{}{-}} \FunctionTok{evaluationScheme}\NormalTok{(rating\_matrix, }
+                                 \AttributeTok{method=}\StringTok{"split"}\NormalTok{, }
+                                 \AttributeTok{train=}\FloatTok{0.8}\NormalTok{, }
+                                 \AttributeTok{given=}\DecValTok{10}\NormalTok{, }
+                                 \AttributeTok{goodRating=}\DecValTok{6}\NormalTok{)}
 \CommentTok{\# Train UBCF on training set}
-\NormalTok{ubcf\_model }\OtherTok{\textless{}{-}} \FunctionTok{Recommender}\NormalTok{(}\FunctionTok{getData}\NormalTok{(scheme\_split, }\StringTok{"train"}\NormalTok{), }\AttributeTok{method=}\StringTok{"UBCF"}\NormalTok{,}
-                          \AttributeTok{parameter=}\FunctionTok{list}\NormalTok{(}\AttributeTok{nn=}\DecValTok{30}\NormalTok{, }\AttributeTok{method=}\StringTok{"Cosine"}\NormalTok{, }\AttributeTok{normalize=}\StringTok{"center"}\NormalTok{))}
-
+\NormalTok{ubcf\_model }\OtherTok{\textless{}{-}} \FunctionTok{Recommender}\NormalTok{(}\FunctionTok{getData}\NormalTok{(scheme\_split, }\StringTok{"train"}\NormalTok{), }
+                          \AttributeTok{method=}\StringTok{"UBCF"}\NormalTok{,}
+                          \AttributeTok{parameter=}\FunctionTok{list}\NormalTok{(}
+                            \AttributeTok{nn=}\DecValTok{30}\NormalTok{, }\AttributeTok{method=}\StringTok{"Cosine"}\NormalTok{, }\AttributeTok{normalize=}\StringTok{"center"}\NormalTok{))}
 \CommentTok{\# Predict ratings for known test set}
-\NormalTok{ubcf\_pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(ubcf\_model, }\FunctionTok{getData}\NormalTok{(scheme\_split, }\StringTok{"known"}\NormalTok{), }\AttributeTok{type=}\StringTok{"ratings"}\NormalTok{)}
-
+\NormalTok{ubcf\_pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(ubcf\_model, }\FunctionTok{getData}\NormalTok{(scheme\_split, }\StringTok{"known"}\NormalTok{), }
+                     \AttributeTok{type=}\StringTok{"ratings"}\NormalTok{)}
 \CommentTok{\# Evaluate against unknown ratings}
-\FunctionTok{calcPredictionAccuracy}\NormalTok{(ubcf\_pred, }\FunctionTok{getData}\NormalTok{(scheme\_split, }\StringTok{"unknown"}\NormalTok{))}
+\NormalTok{metrics }\OtherTok{\textless{}{-}} \FunctionTok{calcPredictionAccuracy}\NormalTok{(ubcf\_pred, }\FunctionTok{getData}\NormalTok{(scheme\_split, }\StringTok{"unknown"}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
-
-\begin{verbatim}
-    RMSE      MSE      MAE 
-1.896447 3.596512 1.427295 
-\end{verbatim}
 
 Because a single split can be sensitive to how the data is partitioned,
 the analysis relied primarily on k‑fold cross‑validation for robust
@@ -1540,48 +1048,53 @@ unseen data \citep{aggarwal2016, ricci2022}.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{\# 3{-}fold cross{-}validation for faster exploratory runs}
-\FunctionTok{set.seed}\NormalTok{(}\DecValTok{42}\NormalTok{)}
-\NormalTok{scheme\_cv\_light }\OtherTok{\textless{}{-}} \FunctionTok{evaluationScheme}\NormalTok{(rating\_matrix, }\AttributeTok{method=}\StringTok{"cross{-}validation"}\NormalTok{, }\AttributeTok{k=}\DecValTok{3}\NormalTok{, }\AttributeTok{given=}\DecValTok{10}\NormalTok{, }\AttributeTok{goodRating=}\DecValTok{6}\NormalTok{)}
+\CommentTok{\# 5{-}fold cross{-}validation for exploratory runs}
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{495}\NormalTok{)}
+\NormalTok{scheme\_cv\_light }\OtherTok{\textless{}{-}} \FunctionTok{evaluationScheme}\NormalTok{(rating\_matrix, }
+                                    \AttributeTok{method=}\StringTok{"cross{-}validation"}\NormalTok{, }
+                                    \AttributeTok{k=}\DecValTok{5}\NormalTok{, }
+                                    \AttributeTok{given=}\DecValTok{10}\NormalTok{, }
+                                    \AttributeTok{goodRating=}\DecValTok{6}\NormalTok{)}
 
 \CommentTok{\# Smaller grid: just two algorithms to compare}
 \NormalTok{algorithms\_grid\_light }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{(}
-  \StringTok{"UBCF\_cosine\_k10"} \OtherTok{=} \FunctionTok{list}\NormalTok{(}\AttributeTok{name=}\StringTok{"UBCF"}\NormalTok{, }\AttributeTok{param=}\FunctionTok{list}\NormalTok{(}\AttributeTok{nn=}\DecValTok{10}\NormalTok{, }\AttributeTok{method=}\StringTok{"Cosine"}\NormalTok{, }\AttributeTok{normalize=}\StringTok{"center"}\NormalTok{)),}
-  \StringTok{"UBCF\_pearson\_k30"} \OtherTok{=} \FunctionTok{list}\NormalTok{(}\AttributeTok{name=}\StringTok{"UBCF"}\NormalTok{, }\AttributeTok{param=}\FunctionTok{list}\NormalTok{(}\AttributeTok{nn=}\DecValTok{30}\NormalTok{, }\AttributeTok{method=}\StringTok{"Pearson"}\NormalTok{, }\AttributeTok{normalize=}\StringTok{"center"}\NormalTok{))}
+  \StringTok{"UBCF\_cosine\_k10"} \OtherTok{=} \FunctionTok{list}\NormalTok{(}\AttributeTok{name=}\StringTok{"UBCF"}\NormalTok{, }
+                           \AttributeTok{param=}\FunctionTok{list}\NormalTok{(}\AttributeTok{nn=}\DecValTok{10}\NormalTok{, }\AttributeTok{method=}\StringTok{"Cosine"}\NormalTok{, }
+                                      \AttributeTok{normalize=}\StringTok{"center"}\NormalTok{)),}
+  \StringTok{"UBCF\_pearson\_k30"} \OtherTok{=} \FunctionTok{list}\NormalTok{(}\AttributeTok{name=}\StringTok{"UBCF"}\NormalTok{, }
+                            \AttributeTok{param=}\FunctionTok{list}\NormalTok{(}\AttributeTok{nn=}\DecValTok{30}\NormalTok{, }\AttributeTok{method=}\StringTok{"Pearson"}\NormalTok{, }
+                                       \AttributeTok{normalize=}\StringTok{"center"}\NormalTok{))}
 \NormalTok{)}
-
-\CommentTok{\# Ratings{-}based CV only (skip top{-}N for now)}
-\FunctionTok{set.seed}\NormalTok{(}\DecValTok{42}\NormalTok{)}
-\NormalTok{cv\_results\_ratings\_light }\OtherTok{\textless{}{-}} \FunctionTok{evaluate}\NormalTok{(scheme\_cv\_light, algorithms\_grid\_light, }\AttributeTok{type=}\StringTok{"ratings"}\NormalTok{)}
+\CommentTok{\# Ratings{-}based CV }
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{495}\NormalTok{)}
+\NormalTok{cv\_results\_ratings\_light }\OtherTok{\textless{}{-}} \FunctionTok{evaluate}\NormalTok{(scheme\_cv\_light, }
+\NormalTok{                                     algorithms\_grid\_light, }
+                                     \AttributeTok{type=}\StringTok{"ratings"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
 UBCF run fold/sample [model time/prediction time]
-     1  [0.003sec/17.897sec] 
-     2  [0.001sec/17.481sec] 
-     3  [0.001sec/17.779sec] 
+     1  [0.002sec/8.11sec] 
+     2  [0.001sec/7.602sec] 
+     3  [0.002sec/7.444sec] 
+     4  [0.001sec/7.729sec] 
+     5  [0.002sec/8.061sec] 
 UBCF run fold/sample [model time/prediction time]
-     1  [0.001sec/7.223sec] 
-     2  [0.001sec/7.2sec] 
-     3  [0.002sec/7.335sec] 
+     1  [0.001sec/5.801sec] 
+     2  [0.001sec/5.513sec] 
+     3  [0.001sec/5.736sec] 
+     4  [0.001sec/5.429sec] 
+     5  [0.001sec/5.409sec] 
 \end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{\# Summarize RMSE/MAE}
-\NormalTok{ratings\_summary\_light }\OtherTok{\textless{}{-}} \FunctionTok{bind\_rows}\NormalTok{(}\FunctionTok{lapply}\NormalTok{(cv\_results\_ratings\_light, avg), }\AttributeTok{.id=}\StringTok{"model"}\NormalTok{)}
-\NormalTok{ratings\_summary\_light}
+\NormalTok{ratings\_summary\_light }\OtherTok{\textless{}{-}} \FunctionTok{bind\_rows}\NormalTok{(}\FunctionTok{lapply}\NormalTok{(cv\_results\_ratings\_light, avg), }
+                                   \AttributeTok{.id=}\StringTok{"model"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
-
-\begin{verbatim}
-# A tibble: 1 x 2
-  UBCF_cosine_k10[,"RMSE"] [,"MSE"] [,"MAE"] UBCF_pearson_k30[,"RMSE"] [,"MSE"]
-                     <dbl>    <dbl>    <dbl>                     <dbl>    <dbl>
-1                     1.99     3.98     1.48                      2.04     4.15
-# i 1 more variable: UBCF_pearson_k30[3] <dbl>
-\end{verbatim}
 
 Based on the exploratory cross‑validation results, user‑based
 collaborative filtering with cosine similarity and a neighborhood size
@@ -1594,9 +1107,12 @@ how well the chosen configuration generalizes to unseen data.
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{\# Evaluation scheme for reproducibility (train/test split)}
-\FunctionTok{set.seed}\NormalTok{(}\DecValTok{42}\NormalTok{)}
-\NormalTok{scheme\_final }\OtherTok{\textless{}{-}} \FunctionTok{evaluationScheme}\NormalTok{(rating\_matrix, }\AttributeTok{method=}\StringTok{"split"}\NormalTok{, }\AttributeTok{train=}\FloatTok{0.8}\NormalTok{, }\AttributeTok{given=}\DecValTok{10}\NormalTok{, }\AttributeTok{goodRating=}\DecValTok{6}\NormalTok{)}
-
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{495}\NormalTok{)}
+\NormalTok{scheme\_final }\OtherTok{\textless{}{-}} \FunctionTok{evaluationScheme}\NormalTok{(rating\_matrix, }
+                                 \AttributeTok{method=}\StringTok{"split"}\NormalTok{, }
+                                 \AttributeTok{train=}\FloatTok{0.8}\NormalTok{, }
+                                 \AttributeTok{given=}\DecValTok{10}\NormalTok{, }
+                                 \AttributeTok{goodRating=}\DecValTok{6}\NormalTok{)}
 \CommentTok{\# Train final model on training set}
 \NormalTok{final\_model\_eval }\OtherTok{\textless{}{-}} \FunctionTok{Recommender}\NormalTok{(}
   \FunctionTok{getData}\NormalTok{(scheme\_final, }\StringTok{"train"}\NormalTok{),}
@@ -1605,16 +1121,15 @@ how well the chosen configuration generalizes to unseen data.
 \NormalTok{)}
 
 \CommentTok{\# {-}{-}{-}{-} Ratings{-}based evaluation {-}{-}{-}{-}}
-\NormalTok{final\_pred\_ratings }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(final\_model\_eval, }\FunctionTok{getData}\NormalTok{(scheme\_final, }\StringTok{"known"}\NormalTok{), }\AttributeTok{type=}\StringTok{"ratings"}\NormalTok{)}
-\NormalTok{metrics\_ratings }\OtherTok{\textless{}{-}} \FunctionTok{calcPredictionAccuracy}\NormalTok{(final\_pred\_ratings, }\FunctionTok{getData}\NormalTok{(scheme\_final, }\StringTok{"unknown"}\NormalTok{))}
-\FunctionTok{print}\NormalTok{(metrics\_ratings)}
+\NormalTok{final\_pred\_ratings }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(}
+\NormalTok{  final\_model\_eval, }
+  \FunctionTok{getData}\NormalTok{(scheme\_final, }\StringTok{"known"}\NormalTok{), }
+  \AttributeTok{type=}\StringTok{"ratings"}\NormalTok{)}
+\NormalTok{metrics\_ratings }\OtherTok{\textless{}{-}} \FunctionTok{calcPredictionAccuracy}\NormalTok{(}
+\NormalTok{  final\_pred\_ratings, }
+  \FunctionTok{getData}\NormalTok{(scheme\_final, }\StringTok{"unknown"}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
-
-\begin{verbatim}
-    RMSE      MSE      MAE 
-1.879511 3.532562 1.379012 
-\end{verbatim}
 
 The final model (UBCF with cosine similarity, k = 10) achieved an RMSE
 of 1.88, MSE of 3.53, and MAE of 1.38 on the held‑out evaluation scheme.
@@ -1626,57 +1141,21 @@ a baseline matrix factorization method (SVD). This comparison highlights
 the relative strengths of neighborhood‑based collaborative filtering in
 capturing user preferences within the dataset.
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\# Train SVD model on training set}
-\NormalTok{svd\_model\_eval }\OtherTok{\textless{}{-}} \FunctionTok{Recommender}\NormalTok{(}
-  \FunctionTok{getData}\NormalTok{(scheme\_final, }\StringTok{"train"}\NormalTok{),}
-  \AttributeTok{method    =} \StringTok{"SVD"}\NormalTok{,}
-  \AttributeTok{parameter =} \FunctionTok{list}\NormalTok{(}\AttributeTok{normalize =} \StringTok{"center"}\NormalTok{, }\AttributeTok{k =} \DecValTok{50}\NormalTok{)  }\CommentTok{\# k = number of latent factors}
-\NormalTok{)}
-
-\CommentTok{\# Predict ratings for known test set}
-\NormalTok{svd\_pred\_ratings }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(svd\_model\_eval, }\FunctionTok{getData}\NormalTok{(scheme\_final, }\StringTok{"known"}\NormalTok{), }\AttributeTok{type=}\StringTok{"ratings"}\NormalTok{)}
-
-\CommentTok{\# Calculate ratings{-}based metrics}
-\NormalTok{metrics\_svd }\OtherTok{\textless{}{-}} \FunctionTok{calcPredictionAccuracy}\NormalTok{(svd\_pred\_ratings, }\FunctionTok{getData}\NormalTok{(scheme\_final, }\StringTok{"unknown"}\NormalTok{))}
-\FunctionTok{print}\NormalTok{(metrics\_svd)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-    RMSE      MSE      MAE 
-1.630159 2.657418 1.212858 
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\# {-}{-}{-}{-} Combine UBCF and SVD results {-}{-}{-}{-}}
-\NormalTok{comparison\_df }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
-  \AttributeTok{Model  =} \FunctionTok{c}\NormalTok{(}\StringTok{"UBCF Cosine k=10"}\NormalTok{, }\StringTok{"SVD k=50"}\NormalTok{),}
-  \AttributeTok{RMSE   =} \FunctionTok{c}\NormalTok{(metrics\_ratings[}\StringTok{"RMSE"}\NormalTok{], metrics\_svd[}\StringTok{"RMSE"}\NormalTok{]),}
-  \AttributeTok{MSE    =} \FunctionTok{c}\NormalTok{(metrics\_ratings[}\StringTok{"MSE"}\NormalTok{],  metrics\_svd[}\StringTok{"MSE"}\NormalTok{]),}
-  \AttributeTok{MAE    =} \FunctionTok{c}\NormalTok{(metrics\_ratings[}\StringTok{"MAE"}\NormalTok{],  metrics\_svd[}\StringTok{"MAE"}\NormalTok{])}
-\NormalTok{)}
-
-\FunctionTok{print}\NormalTok{(comparison\_df)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-             Model     RMSE      MSE      MAE
-1 UBCF Cosine k=10 1.879511 3.532562 1.379012
-2         SVD k=50 1.630159 2.657418 1.212858
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\# Plot comparison}
-\NormalTok{comparison\_long }\OtherTok{\textless{}{-}}\NormalTok{ comparison\_df }\SpecialCharTok{\%\textgreater{}\%}
-\NormalTok{  tidyr}\SpecialCharTok{::}\FunctionTok{pivot\_longer}\NormalTok{(}\AttributeTok{cols =} \FunctionTok{c}\NormalTok{(}\StringTok{"RMSE"}\NormalTok{,}\StringTok{"MSE"}\NormalTok{,}\StringTok{"MAE"}\NormalTok{),}
-                      \AttributeTok{names\_to =} \StringTok{"Metric"}\NormalTok{, }\AttributeTok{values\_to =} \StringTok{"Value"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
+\begin{longtable}[]{@{}cccc@{}}
+\caption{Performance comparison of UBCF and SVD models}\tabularnewline
+\toprule\noalign{}
+Model & RMSE & MSE & MAE \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Model & RMSE & MSE & MAE \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+UBCF (Cosine, k=10) & 1.89 & 3.57 & 1.41 \\
+SVD (k=50) & 1.63 & 2.66 & 1.21 \\
+\end{longtable}
 
 As can be seen in the table above SVD achieved lower error values across
 all metrics (RMSE = 1.63, MSE = 2.66, MAE = 1.21). These results confirm
@@ -1685,11 +1164,6 @@ factorization methods such as SVD typically outperform
 neighborhood‑based approaches in terms of predictive accuracy.
 Nevertheless, the kNN framework remains valuable for pedagogical
 purposes, as its mechanics are more transparent and intuitive.
-
-To illustrate how recommendation works in practice, we developed an
-interactive Shiny application that uses UCBF and cosine similarity,
-allowing users to explore how personalized book suggestions are
-generated.
 
 \subsection{\texorpdfstring{\textbf{Interactive Shiny
 Application}}{Interactive Shiny Application}}\label{interactive-shiny-application}
@@ -1706,13 +1180,12 @@ original 1--10 rating scale but serve as indicators of predicted
 interest, with higher values corresponding to stronger recommendations.
 
 The application also includes a User Lookup tab, which retrieves
-demographic information such as age and location from the users.csv
-file. This feature allows researchers to contextualize recommendation
-patterns by examining how user characteristics relate to the books
-suggested. Screenshots of both tabs are included in the appendix to
-demonstrate the workflow: one showing the recommendation interface with
-sliders and output table, and another highlighting the user lookup
-functionality.
+demographic information such as age and location from the users file.
+This feature allows researchers to contextualize recommendation patterns
+by examining how user characteristics relate to the books suggested.
+Screenshots of both tabs are included below to demonstrate the workflow:
+one showing the recommendation interface with sliders and output table,
+and another highlighting the user lookup functionality.
 
 \pandocbounded{\includegraphics[keepaspectratio]{images/recommendation.png}}
 Figure 5 illustrates the Recommendations tab, where users can adjust the
@@ -1724,11 +1197,13 @@ neighborhood size and number of recommendations.
 
 }
 
-\caption{Lookup Image}
+\caption{user lookup interface}
 
 \end{figure}%
 
 \section{\texorpdfstring{\textbf{Appendix}}{Appendix}}\label{appendix}
+
+\pandocbounded{\includegraphics[keepaspectratio]{FinalProjectPaper_files/figure-pdf/unnamed-chunk-18-1.pdf}}
 
 
 \renewcommand\refname{\textbf{References}}

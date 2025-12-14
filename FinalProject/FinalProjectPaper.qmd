@@ -238,9 +238,7 @@ For small educational datasets or applications where interpretability is paramou
 
 ## **Application: Building a Simple Recommendation Engine with kNN**
 
-### **Dataset Description + Data Wrangling**
-
-```{r}
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
 #loading libraries
 library(tidyverse)
 library(tidyr)
@@ -250,13 +248,21 @@ books   <- read.csv("Data/books.csv")
 ratings <- read.csv("Data/ratings.csv")
 users   <- read.csv("Data/users.csv")
 ```
+The dataset used in this study consists of three interconnected tables:
+
+- **Books dataset**: Contains metadata for each book, including ISBN, title, and author.  
+- **Ratings dataset**: Records user interactions with books, where each entry includes a `user_id`, `book_id`, and a numerical rating on a 0–10 scale. Ratings of zero represent implicit interactions (presence in the system without explicit feedback).  
+- **Users dataset**: Provides demographic information for each user, including `user_id`, age, and location.  
+
+Together, these tables form the basis for constructing a user–item ratings matrix. The ratings table links users to books, while the books and users tables provide contextual metadata. After joining the three datasets, the combined table contains over 380,000 ratings from approximately 68,000 users on nearly 150,000 books.  
+
+This raw dataset is highly sparse which means most users rate only a handful of books, and most books receive very few ratings. Such sparsity is typical in recommendation systems and motivates the filtering and preprocessing steps described below.
+
+### **Data Preprocessing**
+
+We begin by loading the three source files — books, ratings, and users — and cleaning them to retain only the relevant attributes. For books, we keep the ISBN, title, and author; for ratings, we rename the columns to `user_id`, `book_id`, and `book_rating`; and for users, we retain the `user_id` and `location`. Duplicate entries are removed to ensure consistency.
 
 ```{r}
-#viewing the structure of the datasets
-summary(books)
-head(books)
-any(is.na(books))
-#wont be using images so I'll drop the colums
 books <- books |> 
          select(ISBN,Book.Title,Book.Author) |> 
          rename(
@@ -265,81 +271,53 @@ books <- books |>
            book_id = ISBN
          )
 
-any(duplicated(books))
-save(books, file = "books.RData")
-```
-
-```{r}
-summary(ratings)
-head(ratings)
-any(is.na(ratings))
-any(duplicated(ratings))
 ratings <- ratings |> 
   rename(
     user_id = User.ID,
     book_rating = Book.Rating,
     book_id = ISBN
   )
-```
-
-```{r}
-summary(users)
-head(users)
-any(is.na(users))
-#we have some null ages, so drop records where age 
-any(duplicated(users))
 users <- users |>
   select(User.ID, Location) |> 
   rename(
     user_id = User.ID,
     location = Location)
-```
 
+```
+The three datasets are then joined into a single ratings table, providing a unified view of user–book interactions.
 ```{r}
-#we then join the three datasets to get full ratings table to use for the analysis
 ratings_full <- ratings |> 
-  inner_join(books, by = "book_id")  |>  
-  inner_join(users, by = "user_id")
-
-head(ratings_full)
+  inner_join(books, 
+             by = "book_id")|>  
+  inner_join(users, 
+             by = "user_id")
 ```
 
-```{r}
+```{r, echo=FALSE,include=FALSE}
 summary(ratings_full)
 ```
 
-Ratings range from 0 to 10.
-
-```{r, fig.cap="The spike at zero reflects implicit interactions rather than true ratings"}
-ggplot(ratings_full, 
-       aes(x=book_rating))+geom_histogram()
-
+Ratings in the full dataset range from 0 to 10. However summary statistics revealed that more than half of the ratings in the dataset were equal to zero.
+```{r, fig.cap="The spike at zero reflects implicit interactions rather than true ratings",echo=FALSE,message=FALSE}
 table(ratings_full$book_rating)
 ```
-
-The histogram and summary statistics revealed that more than half of the ratings in the dataset were equal to zero. I interpreted these zero values not as genuine ratings, but as indicators that a user had interacted with a book without providing explicit feedback. In other words, a 0 marks presence in the system rather than an evaluation of preference. Because kNN and SVD rely on explicit numerical ratings to compute similarities and generate predictions, including these implicit entries would bias the distribution and distort accuracy measures such as RMSE and MAE. For this reason, I excluded all records with a rating of zero, ensuring that the recommender system is trained and evaluated only on explicit ratings within the 1–10 scale.
+The zero values were intepreted as not genuine ratings, but as indicators that a user had interacted with a book without providing explicit feedback. In other words, a 0 marks presence in the system rather than an evaluation of preference. Because collaborative filtering relies explicit numerical ratings to compute similarities and generate predictions, including these implicit entries would bias the distribution and distort accuracy measures such as RMSE and MAE. For this reason, I excluded all records with a rating of zero.
 
 ```{r}
 # Drop records with rating = 0
-ratings_clean <- ratings_full %>%
+ratings_clean <- ratings_full |> 
   filter(book_rating > 0)
-
-# Quick check
-summary(ratings_clean$book_rating)
-table(ratings_clean$book_rating)
 ```
 
-We then look at the number of users and books to determine the threshhold by which to filter. We only want to include active users and active books in the final recommendation dataset.
+To address sparsity, we only include users and books with sufficiently active profiles. This ensures that similarity calculations are based on sufficiently active profiles.
 
-The histogram of ratings per user shows the distribution of how many books each user has rated in the dataset. Because the x‑axis is plotted on a log scale, we can see that the majority of users contributed only a small number of ratings, while a much smaller group of highly active users contributed thousands. This long‑tailed pattern is typical of recommendation datasets: most users interact with only a handful of items, whereas a few “power users” generate a disproportionately large number of ratings. The skewed distribution highlights the sparsity problem in collaborative filtering, since many users provide too little data to compute reliable similarities. It also motivates the decision to set a threshold for “active” users, ensuring that the recommender system is trained on profiles with enough ratings to support meaningful recommendations.
-
-```{r}
+```{r, echo=FALSE,warning=FALSE}
 user_counts <- ratings_clean |> count(user_id, name = "n_user", sort = TRUE)
-head(user_counts)
+
 ggplot(user_counts, aes(n_user)) + 
   geom_histogram(binwidth = 1) +
   scale_x_log10() +
-  geom_vline(xintercept = 10, linetype = "dashed", color = "red", size = 1) +
+  geom_vline(xintercept = 10, linetype = "dashed", color = "red") +
   labs(
     title = "Distribution of Ratings per User",
     x = "Number of Ratings (log scale)",
@@ -347,26 +325,15 @@ ggplot(user_counts, aes(n_user)) +
   ) 
 ```
 
-```{r}
-item_counts <- ratings_clean |> count(book_id, name = "n_item", sort = TRUE)
-head(item_counts)
+The histogram of ratings per user shows the distribution of how many books each user has rated in the dataset. Because the x‑axis is plotted on a log scale, we can see that the majority of users contributed only a small number of ratings, while a much smaller group of highly active users contributed thousands. This long‑tailed pattern is typical of recommendation datasets: most users interact with only a handful of items, whereas a few “power users” generate a disproportionately large number of ratings. The skewed distribution highlights the sparsity problem in collaborative filtering, since many users provide too little data to compute reliable similarities. It also motivates the decision to set a threshold for “active” users, ensuring that the recommender system is trained on profiles with enough ratings to support meaningful recommendations.
 
-# Histogram of ratings per book
-ggplot(item_counts, aes(n_item)) + 
-  geom_histogram(binwidth = 1) +
-  scale_x_log10() +
-  geom_vline(xintercept = 10, linetype = "dashed", color = "red", size = 1) +
-  labs(
-    title = "Distribution of Ratings per Book",
-    x = "Number of Ratings (log scale)",
-    y = "Count of Books"
-  ) 
+```{r, echo=FALSE,include=FALSE}
+item_counts <- ratings_clean |> count(book_id, name = "n_item", sort = TRUE)
 ```
 
-The visualization reveals that most books were rated only once or twice, while a small number of popular titles received hundreds of ratings. This long‑tailed distribution highlights item sparsity, which can undermine similarity calculations in collaborative filtering. To mitigate this, we introduced a threshold line at 10 ratings, excluding books with fewer than 10 ratings from the final dataset. This cutoff ensures that the recommender system is trained on items with sufficient feedback to support meaningful recommendations.
+This same pattern was found with the items with most books being rated only once or twice, while a small number of popular titles received hundreds of ratings. To mitigate this, we introduced a threshold line at 10 ratings, excluding books with fewer than 10 ratings from the final dataset. This cutoff ensures that the recommender system is trained on items with sufficient feedback to support meaningful recommendations.
 
 ```{r}
-names(ratings_clean)
 # Set thresholds 
 min_user_ratings <- 10   # active users
 min_item_ratings <- 10   # active books
@@ -375,112 +342,122 @@ min_item_ratings <- 10   # active books
 ratings_filtered <- ratings_clean |>
   inner_join(user_counts |> filter(n_user >= min_user_ratings), by = "user_id") |>
   inner_join(item_counts |> filter(n_item >= min_item_ratings), by = "book_id")
+```
 
-# Before filtering
+The filtering process substantially reduced the dataset, as shown in Table below.
+```{r, echo=FALSE,message=FALSE,warning=FALSE}
+library(knitr)
+# Build summary table
 before_summary <- data.frame(
   Users   = n_distinct(ratings_clean$user_id),
   Books   = n_distinct(ratings_clean$book_id),
   Ratings = nrow(ratings_clean)
 )
 
-# After filtering
 after_summary <- data.frame(
   Users   = n_distinct(ratings_filtered$user_id),
   Books   = n_distinct(ratings_filtered$book_id),
   Ratings = nrow(ratings_filtered)
 )
 
-# Combine into one table
 summary_table <- rbind(
   cbind(Stage = "Before filtering", before_summary),
   cbind(Stage = "After filtering",  after_summary)
 )
 
-summary_table
+# Nicely formatted output
+kable(summary_table, caption = "Dataset size before and after filtering thresholds",
+      align = "c")
 
 ```
 
-The filtering process substantially reduced the dataset, as shown in Table above. Before applying thresholds, the dataset contained 68,091 users, 149,836 books and 383,842 ratings. After requiring each user and each book to have at least 10 ratings, the dataset was reduced to 6,318 users, 5,438 books, and 87,178 ratings. This reduction highlights the sparsity of the original dataset, where most users and books had very few ratings. By retaining only active users and active books, the final dataset provides a denser interaction matrix that supports more reliable similarity calculations and improves the robustness of the recommender system.
+Before applying thresholds, the dataset contained 68,091 users, 149,836 books and 383,842 ratings. After requiring each user and each book to have at least 10 ratings, the dataset was reduced to 6,318 users, 5,438 books, and 87,178 ratings. This reduction highlights the sparsity of the original dataset, where most users and books had very few ratings. By retaining only active users and active books, the final dataset provides a denser interaction matrix that supports more reliable similarity calculations and improves the robustness of the recommender system.
 
+### **Matrix Transformation**
+
+Collaborative filtering requires a user–item matrix. The filtered ratings are reshaped into wide format, converted to a matrix, and then cast into a `realRatingMatrix` object, the format expected by `recommenderlab`.
 ```{r}
-head(ratings_filtered )
-```
-
-We retained the count columns in the dataset to provide transparency about user and to explore how activity levels influence recommendation performance in the coming steps.
-
-ratings dataset was transformed into a format suitable for recommender modeling (cite the lab site). Because recommender algorithms require a user–item matrix rather than a long table of ratings, the data was reshaped so that each row corresponds to a user, each column corresponds to a book, and the entries represent the ratings given.
-
-```{r}
-
 # reshape into wide format (users as rows, books as columns)
 rating_wide <- ratings_filtered |>
   select(user_id, book_id, book_rating) |>
   pivot_wider(names_from = book_id, values_from = book_rating)
-
 # convert to matrix (drop user_id column)
 rating_matrix <- as.matrix(rating_wide[,-1])
-
 # convert to realRatingMatrix
 rating_matrix <- as(rating_matrix, "realRatingMatrix")
+```
 
-save(rating_matrix, file = "rating_matrix.RData")
-
+```{r, echo=FALSE,include=FALSE}
 dim(rating_matrix)          
 rowCounts(rating_matrix)[1:10]  
 colCounts(rating_matrix)[1:10] 
 ```
 
-### **Implementing kNN + Model Evaluation**
+### **Implementing kNN & Model Evaluation**
 
 Once the ratings matrix was transformed into a realRatingMatrix, the next step was to implement a k‑Nearest Neighbors recommender. In recommenderlab, this is achieved with the Recommender() function, specifying "UBCF" (user‑based collaborative filtering) or "IBCF" (item‑based collaborative filtering).
 
-To evaluate performance, two complementary schemes were employed. A simple train/test split was first used to illustrate the mechanics of recommender evaluation: the model is trained on 80% of the data, predictions are generated for the “known” portion of the test set, and accuracy is computed against the “unknown” ratings. This one‑time split provides a clear demonstration of how training, prediction, and evaluation interact in practice.
+To evaluate performance, two complementary schemes can be employed. A simple train/test split was first used to illustrate the mechanics of recommender evaluation: the model is trained on 70% of the data, predictions are generated for the “known” portion of the test set, and accuracy is computed against the “unknown” ratings. This one‑time split provides a clear demonstration of how training, prediction, and evaluation interact in practice.
 
 ```{r,warning=FALSE,cache=TRUE}
 # Simple train/test split (80/20)
 set.seed(495)
-scheme_split <- evaluationScheme(rating_matrix, method="split", train=0.8, given=10, goodRating=6)
-
+scheme_split <- evaluationScheme(rating_matrix, 
+                                 method="split", 
+                                 train=0.8, 
+                                 given=10, 
+                                 goodRating=6)
 # Train UBCF on training set
-ubcf_model <- Recommender(getData(scheme_split, "train"), method="UBCF",
-                          parameter=list(nn=30, method="Cosine", normalize="center"))
-
+ubcf_model <- Recommender(getData(scheme_split, "train"), 
+                          method="UBCF",
+                          parameter=list(
+                            nn=30, method="Cosine", normalize="center"))
 # Predict ratings for known test set
-ubcf_pred <- predict(ubcf_model, getData(scheme_split, "known"), type="ratings")
-
+ubcf_pred <- predict(ubcf_model, getData(scheme_split, "known"), 
+                     type="ratings")
 # Evaluate against unknown ratings
-calcPredictionAccuracy(ubcf_pred, getData(scheme_split, "unknown"))
+metrics <- calcPredictionAccuracy(ubcf_pred, getData(scheme_split, "unknown"))
 ```
+
 Because a single split can be sensitive to how the data is partitioned, the analysis relied primarily on k‑fold cross‑validation for robust model selection. In this scheme, the dataset is divided into five folds; each fold is used once as a test set while the remaining folds serve as training data. Results are averaged across folds, providing a more reliable estimate of performance. Cross‑validation was used to compare different neighborhood sizes (k) and similarity measures (Cosine vs. Pearson), ensuring that the chosen configuration generalizes well to unseen data [@aggarwal2016; @ricci2022].
 
-```{r, warning=FALSE,cache=TRUE}
-# 3-fold cross-validation for faster exploratory runs
-set.seed(42)
-scheme_cv_light <- evaluationScheme(rating_matrix, method="cross-validation", k=3, given=10, goodRating=6)
+```{r, warning=FALSE,cache=TRUE,message=FALSE}
+# 5-fold cross-validation for exploratory runs
+set.seed(495)
+scheme_cv_light <- evaluationScheme(rating_matrix, 
+                                    method="cross-validation", 
+                                    k=5, 
+                                    given=10, 
+                                    goodRating=6)
 
 # Smaller grid: just two algorithms to compare
 algorithms_grid_light <- list(
-  "UBCF_cosine_k10" = list(name="UBCF", param=list(nn=10, method="Cosine", normalize="center")),
-  "UBCF_pearson_k30" = list(name="UBCF", param=list(nn=30, method="Pearson", normalize="center"))
+  "UBCF_cosine_k10" = list(name="UBCF", 
+                           param=list(nn=10, method="Cosine", 
+                                      normalize="center")),
+  "UBCF_pearson_k30" = list(name="UBCF", 
+                            param=list(nn=30, method="Pearson", 
+                                       normalize="center"))
 )
-
-# Ratings-based CV only (skip top-N for now)
-set.seed(42)
-cv_results_ratings_light <- evaluate(scheme_cv_light, algorithms_grid_light, type="ratings")
-
+# Ratings-based CV 
+set.seed(495)
+cv_results_ratings_light <- evaluate(scheme_cv_light, 
+                                     algorithms_grid_light, 
+                                     type="ratings")
 # Summarize RMSE/MAE
-ratings_summary_light <- bind_rows(lapply(cv_results_ratings_light, avg), .id="model")
-ratings_summary_light
+ratings_summary_light <- bind_rows(lapply(cv_results_ratings_light, avg), 
+                                   .id="model")
 ```
 
 Based on the exploratory cross‑validation results, user‑based collaborative filtering with cosine similarity and a neighborhood size of k = 10 was selected as the final model. To quantify its predictive accuracy, the model was evaluated using a held‑out scheme, yielding performance metrics such as RMSE, MAE, and Precision/Recall at different recommendation list lengths. These results provide a robust estimate of how well the chosen configuration generalizes to unseen data. 
-
-
 ```{r,cache=TRUE, warning=FALSE}
 # Evaluation scheme for reproducibility (train/test split)
-set.seed(42)
-scheme_final <- evaluationScheme(rating_matrix, method="split", train=0.8, given=10, goodRating=6)
-
+set.seed(495)
+scheme_final <- evaluationScheme(rating_matrix, 
+                                 method="split", 
+                                 train=0.8, 
+                                 given=10, 
+                                 goodRating=6)
 # Train final model on training set
 final_model_eval <- Recommender(
   getData(scheme_final, "train"),
@@ -489,13 +466,17 @@ final_model_eval <- Recommender(
 )
 
 # ---- Ratings-based evaluation ----
-final_pred_ratings <- predict(final_model_eval, getData(scheme_final, "known"), type="ratings")
-metrics_ratings <- calcPredictionAccuracy(final_pred_ratings, getData(scheme_final, "unknown"))
-print(metrics_ratings)
+final_pred_ratings <- predict(
+  final_model_eval, 
+  getData(scheme_final, "known"), 
+  type="ratings")
+metrics_ratings <- calcPredictionAccuracy(
+  final_pred_ratings, 
+  getData(scheme_final, "unknown"))
 ```
 The final model (UBCF with cosine similarity, k = 10) achieved an RMSE of 1.88, MSE of 3.53, and MAE of 1.38 on the held‑out evaluation scheme. These values indicate that predictions deviate from true ratings by approximately 1–2 points on average, which is consistent with performance reported in similar collaborative filtering studies. To contextualize these results, we compared the chosen kNN approach against a baseline matrix factorization method (SVD). This comparison highlights the relative strengths of neighborhood‑based collaborative filtering in capturing user preferences within the dataset.
 
-```{r,cache=TRUE}
+```{r,cache=TRUE,echo=FALSE,include=FALSE}
 # Train SVD model on training set
 svd_model_eval <- Recommender(
   getData(scheme_final, "train"),
@@ -511,37 +492,45 @@ metrics_svd <- calcPredictionAccuracy(svd_pred_ratings, getData(scheme_final, "u
 print(metrics_svd)
 ```
 
-```{r}
-# ---- Combine UBCF and SVD results ----
+```{r,echo=FALSE}
+#----Combine UBCF and SVD results ----
 comparison_df <- data.frame(
-  Model  = c("UBCF Cosine k=10", "SVD k=50"),
+  Model  = c("UBCF (Cosine, k=10)", "SVD (k=50)"),
   RMSE   = c(metrics_ratings["RMSE"], metrics_svd["RMSE"]),
   MSE    = c(metrics_ratings["MSE"],  metrics_svd["MSE"]),
   MAE    = c(metrics_ratings["MAE"],  metrics_svd["MAE"])
 )
-
-print(comparison_df)
-
-# Plot comparison
-comparison_long <- comparison_df %>%
-  tidyr::pivot_longer(cols = c("RMSE","MSE","MAE"),
-                      names_to = "Metric", values_to = "Value")
+# Nicely formatted table
+kable(comparison_df, caption = "Performance comparison of UBCF and SVD models",
+      digits = 2, align = "c")
 ```
 As can be seen in the table above SVD achieved lower error values across all metrics (RMSE = 1.63, MSE = 2.66, MAE = 1.21). These results confirm the broader finding in recommender system literature that matrix factorization methods such as SVD typically outperform neighborhood‑based approaches in terms of predictive accuracy. Nevertheless, the kNN framework remains valuable for pedagogical purposes, as its mechanics are more transparent and intuitive. 
-
-To illustrate how recommendation works in practice, we developed an interactive Shiny application that uses UCBF and cosine similarity, allowing users to explore how personalized book suggestions are generated.
 
 ### **Interactive Shiny Application**
 To illustrate how recommendation works in practice, we developed an interactive Shiny application that implements the final User‑Based Collaborative Filtering (UBCF) model with cosine similarity. The app provides a hands‑on interface where users can select a specific user ID, adjust the neighborhood size 
 $k$ and specify the number of recommendations to generate. The output is a ranked table of book titles and authors, accompanied by preference scores that reflect the relative strength of each recommendation. These scores are not bounded by the original 1–10 rating scale but serve as indicators of predicted interest, with higher values corresponding to stronger recommendations.
 
-The application also includes a User Lookup tab, which retrieves demographic information such as age and location from the users.csv file. This feature allows researchers to contextualize recommendation patterns by examining how user characteristics relate to the books suggested. Screenshots of both tabs are included in the appendix to demonstrate the workflow: one showing the recommendation interface with sliders and output table, and another highlighting the user lookup functionality.
+The application also includes a User Lookup tab, which retrieves demographic information such as age and location from the users file. This feature allows researchers to contextualize recommendation patterns by examining how user characteristics relate to the books suggested. Screenshots of both tabs are included below to demonstrate the workflow: one showing the recommendation interface with sliders and output table, and another highlighting the user lookup functionality.
 
-![Recommendations Image](images/recommendation.png)
+![recommendation interface](images/recommendation.png)
 Figure 5 illustrates the Recommendations tab, where users can adjust the neighborhood size and number of recommendations.
 
-![Lookup Image](images/userlookup.png)
+![user lookup interface](images/userlookup.png)
 
 ## **Appendix**
 
+```{r, echo=FALSE,warning=FALSE}
+#same test for items and reveals the same results
+
+# Histogram of ratings per book
+ggplot(item_counts, aes(n_item)) + 
+  geom_histogram(binwidth = 1) +
+  scale_x_log10() +
+  geom_vline(xintercept = 10, linetype = "dashed", color = "red", size = 1) +
+  labs(
+    title = "Distribution of Ratings per Book",
+    x = "Number of Ratings (log scale)",
+    y = "Count of Books"
+  ) 
+```
 ## **References**
