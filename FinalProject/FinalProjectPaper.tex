@@ -223,10 +223,10 @@ dataset},
 \title{\bf \textbf{Exploring k-Nearest Neighbors in Recommendation
 Systems}}
 \author{
-Daizy Buluma\thanks{The author gratefully acknowledges \emph{Vanesa for
-her thoughtful peer review and constructive feedback. Sincere thanks are
+Daizy Buluma\thanks{The author gratefully acknowledges Vanesa for her
+thoughtful peer review and constructive feedback. Sincere thanks are
 also extended to the author's family for their unwavering support and
-encouragement throughout the process}.}\\
+encouragement throughout the process.}\\
 Department of Statistics, Amherst College\\
 }
 \maketitle
@@ -303,7 +303,7 @@ details in section \ref{sec-rec} below.
 
 To understand how k-nearest neighbors (kNN) fits into this broader
 landscape, we will discuss two major families of recommendation
-approaches: content-based approach and collaborative filtering (there
+approaches: content-based approach and collaborative filtering (There
 are hybrid recommenders too which combine the two approaches).
 
 \subsection{\texorpdfstring{\textbf{Content-Based
@@ -389,11 +389,10 @@ Learning}}{How kNN Works in Supervised Learning}}\label{how-knn-works-in-supervi
 Before adapting kNN to recommender systems, it helps to first understand
 how the algorithm works in its original setting. Unlike most algorithms
 we've seen in class that estimate parameters or fit equations, kNN is a
-``lazy learner'' (from wikipedia-should i cite this or add to the
-integrity page). It stores the training data and defers computation
-until a query arrives. When a new example is presented, the algorithm
-measures its similarity to all stored examples, selects the \emph{k}
-closest ones, and bases its prediction on their values.
+``lazy learner''\citep{knn_lazy}. It stores the training data and defers
+computation until a query arrives. When a new example is presented, the
+algorithm measures its similarity to all stored examples, selects the
+\emph{k} closest ones, and bases its prediction on their values.
 
 In classification tasks, the new example is assigned to the majority
 class among its neighbors. In regression, the prediction is the average
@@ -409,7 +408,7 @@ neighborhood can dilute meaningful signals.
 
 }
 
-\caption{A simple illustration of kNN}
+\caption{A simple illustration of kNN\citep[source:][]{medium_knn}}
 
 \end{figure}%
 
@@ -417,8 +416,10 @@ Because kNN does not assume any particular distribution of the data, it
 is considered non‑parametric. This flexibility makes it easy to apply,
 but it also introduces challenges in high‑dimensional spaces where
 distances lose contrast, a phenomenon known as the curse of
-dimensionality \citep[pg 19]{kramer2013}. (Still don't fully understand
-the phenomenon. will return to explain when I do)
+dimensionality \citep[pg 19]{kramer2013}. The curse of dimensionality
+means that as the number of features grows, data points become
+increasingly sparse and distance measures lose meaning, making
+algorithms like kNN less effective\citep{geeksforgeeks_curse}.
 
 \subsection{\texorpdfstring{\textbf{How kNN Works in Recommender
 Systems}}{How kNN Works in Recommender Systems}}\label{sec-rec}
@@ -467,17 +468,25 @@ Two main variants are used:
   \citep{ricci2022}.
 \end{itemize}
 
-Similarity metrics are central to these computations. \textbf{Cosine
-similarity} measures the angle between rating vectors, which makes it
-resistant to differences in rating scales. \textbf{Pearson correlation}
-adjusts for user biases by centering ratings around individual means.
-\textbf{Adjusted cosine similarity} , which is commonly used in
+Similarity metrics are central to these computations. Euclidean distance
+provides the most straightforward measure of closeness between rating
+vectors, but it is sensitive to differences in rating scales and
+magnitudes. To address this, cosine similarity measures the angle
+between rating vectors, making it resistant to scale differences.
+Pearson correlation further adjusts for user biases by centering ratings
+around individual means. Adjusted cosine similarity, commonly used in
 item‑based kNN, subtracts user averages before computing similarity to
-reduce the effect of rating habits \citep{aggarwal2016}. The similarity
-scores typically range from -1 to 1. With -1 for vectors that are polar
-opposites, 0 where there is no correlation and 1 for perfectly similar
-vectors. (Should I include the formulas for computing the 3 similarity
-metrics?)
+reduce the effect of rating habits \citep{aggarwal2016}. In this paper,
+we use \textbf{cosine similarity}, defined as: \[
+\text{similarity} = \cos(\theta) = \frac{A \cdot B}{\|A\| \cdot \|B\|}
+\]
+
+where \(A \cdot B\) is the dot product of the vectors and \(\|A\|\),
+\(\|B\|\) are their magnitudes.
+
+The similarity scores typically range from -1 to 1, with -1 for vectors
+that are polar opposites, 0 where there is no correlation, and 1 for
+perfectly similar vectors\citep{apxml2025}.
 
 Once similarities are computed, predictions are made using weighted
 averages. In user-based approach, a simple average of is often
@@ -551,98 +560,66 @@ result, the weighted average directly reflects how much the user liked
 similar items, making the item-based formulation slightly simpler than
 the user-based version.
 
-Both formulas and breakdowns were derived from \citep{apxml2025}.
+Both formulas and breakdowns were sourced from \citep{apxml2025}.
 
 A critical design choice in kNN is the size of the neighborhood, denoted
-by k. The number of neighbors directly influences the bias--variance
-trade‑off in predictions. With very small k, the recommender becomes
-highly sensitive to noise in individual ratings, which can reduce
-accuracy. With very large k, the recommender averages across many
-dissimilar users or items, diluting meaningful signals. In practice, the
-optimal k is determined empirically by evaluating accuracy metrics such
-as RMSE (Root Mean Squared Error), MAE (Mean Absolute Error), Precision,
-and Recall across different values of k. Cross‑validation is commonly
-used to select k, ensuring that the chosen neighborhood size generalizes
-well to unseen data \citep{aggarwal2016, hahsler2022}.
+by \(k\). The number of neighbors directly influences the bias--variance
+trade‑off in predictions \citep{dsm_biasvariance}. With very small
+\(k\), the recommender becomes highly sensitive to noise in individual
+ratings, which can reduce accuracy. With very large \(k\), the
+recommender averages across many dissimilar users or items, diluting
+meaningful signals. In practice, the optimal \(k\) is determined
+empirically by evaluating accuracy metrics such as RMSE, MAE, Precision,
+and Recall across different values of \(k\) \citep{aggarwal2016}.
+Cross‑validation is commonly used to select \(k\), ensuring that the
+chosen neighborhood size generalizes well to unseen data
+\citep{linkedin_knn}.
 
-\section{\texorpdfstring{\textbf{Performance Metrics in Recommender
+\subsection{\texorpdfstring{\textbf{Performance Metrics in Recommender
 Systems}}{Performance Metrics in Recommender Systems}}\label{performance-metrics-in-recommender-systems}
 
-Evaluating recommender systems requires multiple complementary metrics,
-since a single measure rarely captures the full picture of performance.
-The choice of \emph{k} in kNN is closely linked to these metrics, as
-neighborhood size influences both prediction accuracy and recommendation
-quality.
+Evaluating recommender systems requires a suite of complementary
+metrics, since no single measure can fully capture performance. The
+choice of neighborhood size \(k\) in kNN is closely tied to these
+metrics, as it shapes both prediction accuracy and recommendation
+quality\citep{hssina2021}.
 
 \begin{itemize}
-\tightlist
 \item
   \textbf{Prediction Accuracy (ratings‑based):}\\
-  The first question is: \emph{does the system predict ratings
-  correctly?}
-
-  \begin{itemize}
-  \tightlist
-  \item
-    \textbf{RMSE (Root Mean Squared Error):} penalizes large errors more
-    heavily, making it sensitive to extreme mispredictions.\\
-  \item
-    \textbf{MAE (Mean Absolute Error):} interpretable as the average
-    deviation between predicted and actual ratings.\\
-    These metrics assess how close predicted ratings are to true
-    ratings. Smaller neighborhoods may reduce RMSE if neighbors are
-    highly similar, but risk instability; larger neighborhoods smooth
-    predictions but can inflate MAE by averaging across dissimilar users
-    \citep{aggarwal2016}.
-  \end{itemize}
+  This answers the question whether the system predicts ratings
+  correctly. Metrics such as \textbf{RMSE (Root Mean Squared Error)} and
+  \textbf{MAE (Mean Absolute Error)} are used for this purpose. RMSE
+  penalizes large errors more heavily, making it sensitive to extreme
+  mispredictions, while MAE provides an interpretable measure of the
+  average deviation between predicted and actual ratings. Smaller
+  neighborhoods may reduce RMSE when neighbors are highly similar, but
+  they risk instability; larger neighborhoods smooth predictions but can
+  inflate MAE by averaging across dissimilar users \citep{aggarwal2016}.
 \item
   \textbf{Recommendation Accuracy (top‑N lists):}\\
-  The second question is: \emph{does the system recommend items that
-  users actually like?}
-
-  \begin{itemize}
-  \tightlist
-  \item
-    \textbf{Precision:} the proportion of recommended items that are
-    truly relevant.\\
-  \item
-    \textbf{Recall:} the proportion of relevant items successfully
-    recommended.\\
-  \item
-    \textbf{F1 Score:} harmonic mean of precision and recall, balancing
-    both.\\
-    Here, \emph{k} influences the diversity and relevance of the
-    recommendation list. A small \emph{k} may yield highly precise but
-    narrow recommendations, while a large \emph{k} increases recall but
-    risks recommending irrelevant items \citep{ricci2022}.
-  \end{itemize}
+  Beyond rating prediction, recommender systems must generate useful
+  item suggestions. Here, metrics such as \textbf{Precision},
+  \textbf{Recall}, and the \textbf{F1 Score} are central. Precision
+  measures the proportion of recommended items that are truly relevant,
+  recall captures the proportion of relevant items successfully
+  recommended, and F1 balances the two. The choice of \(k\) directly
+  affects these outcomes: a small neighborhood may yield highly precise
+  but narrow recommendations, while a larger neighborhood increases
+  recall but risks introducing irrelevant items \citep{ricci2022}.
 \item
   \textbf{Ranking Quality:}\\
-  The third question is: \emph{are the most relevant items ranked near
-  the top of the list?}
-
-  \begin{itemize}
-  \tightlist
-  \item
-    \textbf{ROC curves and AUC:} visualize the trade‑off between true
-    positives and false positives.\\
-  \item
-    \textbf{Precision--Recall curves:} highlight performance in sparse
-    datasets where relevant items are rare.\\
-    These measures are particularly important in large catalogs, where
-    the majority of items are irrelevant to any given user
-    \citep{hahsler2022}.
-  \end{itemize}
+  Finally, recommendation quality depends not only on which items are
+  suggested but also on how they are ordered. Measures such as
+  \textbf{ROC curves and AUC} visualize the trade‑off between true
+  positives and false positives, while \textbf{Precision--Recall curves}
+  highlight performance in sparse datasets where relevant items are
+  rare. These ranking‑oriented metrics are particularly important in
+  large catalogs, where most items are irrelevant to any given user
+  \citep{hahsler2022}.
 \end{itemize}
 
-By reporting both prediction and recommendation accuracy, researchers
-can capture not only how well the system predicts ratings but also how
-useful its recommendations are to end‑users. Cross‑validation is
-typically used to select the optimal \emph{k} by comparing these metrics
-across folds, ensuring that the chosen neighborhood size generalizes
-well to unseen data \citep{hssina2021}.
-
-\subsubsection{\texorpdfstring{\textbf{Toy
+\subsection{\texorpdfstring{\textbf{Toy
 Example}}{Toy Example}}\label{toy-example}
 
 We finish with a toy example adapted from Aggawral's book to emphasize
@@ -722,50 +699,55 @@ ratings makes it vulnerable to sparsity, and its computational cost
 grows quickly with dataset size. In high‑dimensional rating matrices,
 distance metrics can become unreliable therefore reducing accuracy.
 These limitations explain why kNN is often used as a baseline method,
-while large‑scale commercial systems rely on more advanced model‑based
+while large‑scale commercial systems like Net-flix or Spotify, where
+accuracy and scalability matter most rely on more advanced model‑based
 approaches such as matrix factorization or deep learning
-(\citet{hssina2021}).
+\citep{hssina2021}.
 
 \section{\texorpdfstring{\textbf{Comparison to a Model-Based Method
 (SVD)}}{Comparison to a Model-Based Method (SVD)}}\label{comparison-to-a-model-based-method-svd}
 
 While kNN provides an intuitive way to generate recommendations by
-looking at neighbors, it struggles with sparse data and scalability. To
-address these challenges, recommender systems often turn to
-\textbf{model-based methods}. One of the most influential is
-\textbf{Singular Value Decomposition (SVD)}, a matrix factorization
-technique that has become central to modern recommendation engines
-(\citet{hssina2021}; \citet{apxml2025}).
+looking at neighbors, it struggles with sparse data and
+scalability\citep{aggarwal2016, ricci2022}. To address these challenges,
+recommender systems often turn to \textbf{model-based methods}. One of
+the most influential is \textbf{Singular Value Decomposition (SVD)}, a
+matrix factorization technique that has become central to modern
+recommendation engines.
 
 \subsection{What SVD Does (Very
 High-Level)}\label{what-svd-does-very-high-level}
 
 SVD takes the large (millions of ratings), sparse user--item ratings
-matrix (R) and decomposes it into three smaller matrices:
+matrix (R) and decomposes it into three smaller
+matrices\citep{apxml2025}:
 
 \[
-R = U \cdot \Sigma \cdot V^T
+R_{m \times n} = U_{m \times r} \cdot \Sigma_{r \times r} \cdot V^T_{r \times n}
 \]
 
 \begin{itemize}
 \tightlist
 \item
-  \textbf{U:} Represents users in terms of hidden ``taste dimensions''
-  (latent factors).\\
+  \(U_{m \times r}\): Represents the \(m\) users in terms of hidden
+  ``taste dimensions'' (latent factors). Each row corresponds to a
+  user's coordinates in the reduced latent space.
 \item
-  \(Sigma\): Diagonal matrix of singular values, showing which factors
-  are most important.\\
+  \(\Sigma_{r \times r}\): Diagonal matrix of singular values, showing
+  which factors are most important.
 \item
-  \(V^T\): Represents items in terms of the same latent factors.
+  \(V^T_{r \times n}\): Represents the \(n\) items in terms of the same
+  latent factors. Each column corresponds to an item's coordinates in
+  the latent space.
 \end{itemize}
 
 By keeping only the top k singular values, SVD compresses the ratings
-matrix into a lower-dimensional representation. This reveals hidden
-patterns of preference for example, one factor might capture a user's
-tendency toward action/sci‑fi movies, while another captures
-romance/musicals. Predictions for missing ratings are made by combining
-a user's latent profile with an item's latent profile
-(\citet{apxml2025}).
+matrix into a lower-dimensional representation\citep{apxml2025}. This
+reveals hidden patterns of preference for example, one factor might
+capture a user's tendency toward action/sci‑fi movies, while another
+captures romance/musicals. Predictions for missing ratings are made by
+combining a user's latent profile with an item's latent profile
+\citep{apxml2025}.
 
 This approach differs fundamentally from kNN. While kNN Predictions rely
 on local neighborhoods and finds similar users or items directly from
@@ -774,17 +756,17 @@ dataset and its predictions come from latent factors rather than direct
 neighbors.
 
 kNN is transparent and easy to interpret (``your neighbor liked this, so
-you might too''), but it struggles with sparsity and scalability. SVD,
-by contrast, is less interpretable because latent factors are abstract,
-yet it generalizes better and scales efficiently to millions of users
-and items.
+you might too''), but it struggles with sparsity and
+scalability\citep{ricci2022}. SVD, by contrast, is less interpretable
+because latent factors are abstract, yet it generalizes better and
+scales efficiently to millions of users and items.
 
 The trade-offs between the two methods can be summarized as follows:
 
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2535}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3803}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3662}}@{}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2639}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3750}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3611}}@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Aspect
@@ -811,51 +793,54 @@ large datasets, global patterns \\
 Harder to explain (latent factors abstract) \\
 \end{longtable}
 
-For small educational datasets or applications where interpretability is
-paramount, kNN remains a useful choice. Its neighbor-driven reasoning
-makes it particularly suitable for teaching and for systems where
-transparency is valued. For commercial platforms like Netflix or
-Spotify, where accuracy and scalability matter most, SVD is the dominant
-approach. By compressing massive rating matrices into latent factors,
-SVD not only improves predictive accuracy but also makes large-scale
-recommendation feasible. In short, kNN thrives on simplicity and
-transparency, while SVD thrives on efficiency and predictive power,
-together illustrating the evolution of recommender systems from
-neighbor-driven reasoning to model-based learning.
+The cold start problem arises when new users or items have too few
+ratings to support reliable recommendations. In kNN this issue is
+severe, since similarity requires overlapping ratings; SVD also faces
+cold start challenges but can generalize better once more data is
+available \citep{aggarwal2016}.
+
+\newpage
 
 \section{\texorpdfstring{\textbf{Application: Building a Simple
 Recommendation Engine with
 kNN}}{Application: Building a Simple Recommendation Engine with kNN}}\label{application-building-a-simple-recommendation-engine-with-knn}
 
-The empirical analysis in this study relies on the Book‑Crossing
-dataset, originally compiled by Cai‑Nicolas Ziegler and later made
-available on Kaggle \citep{bkaggle}. It consists of three interconnected
+This analysis uses the Book‑Crossing dataset, originally compiled by
+Cai‑Nicolas Ziegler and later made available on Kaggle \citep{bkaggle}.
+The implementation relies on the R package recommenderlab
+\citep{recommenderlabdocs}, which provides standardized data structures
+(realRatingMatrix) and functions for collaborative filtering, evaluation
+schemes, and model comparison. Code snippets for model training and
+evaluation were adapted from the official recommenderlab documentation
+\citep{recommenderlabdocs}. The dataset consists of three interconnected
 tables:
 
 \begin{itemize}
 \tightlist
 \item
   \textbf{Books dataset}: Contains metadata for each book, including
-  ISBN, title, and author.\\
+  ISBN, title, and author.
 \item
   \textbf{Ratings dataset}: Records user interactions with books, where
   each entry includes a \texttt{user\_id}, \texttt{book\_id}, and a
-  numerical rating on a 0--10 scale. Ratings of zero represent implicit
-  interactions (presence in the system without explicit feedback).\\
+  numerical rating on a 0--10 scale.
 \item
   \textbf{Users dataset}: Provides demographic information for each
   user, including \texttt{user\_id}, age, and location.
 \end{itemize}
 
+A snippet of these datasets can be found in section \ref{sec-data} of
+the appendix.
+
 \subsection{\texorpdfstring{\textbf{Data
 Preprocessing}}{Data Preprocessing}}\label{data-preprocessing}
 
-We begin by loading the three source files --- books, ratings, and users
---- and cleaning them to retain only the relevant attributes. For books,
-we keep the ISBN, title, and author; for ratings, we rename the columns
-to \texttt{user\_id}, \texttt{book\_id}, and \texttt{book\_rating}; and
-for users, we retain the \texttt{user\_id} and \texttt{location}.
-Duplicate entries are removed to ensure consistency.
+We begin by loading the three source files and cleaning them to retain
+only the relevant attributes. For books, we keep the ISBN, title, and
+author; for ratings, we rename the columns to \texttt{user\_id},
+\texttt{book\_id}, and \texttt{book\_rating}; and for users, we retain
+the \texttt{user\_id} and \texttt{location}. There were no duplicate
+entries or missing values.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -907,20 +892,87 @@ Ratings in the full dataset range from 0 to 10. However summary
 statistics revealed that more than half of the ratings in the dataset
 were equal to zero.
 
-\begin{verbatim}
+\begin{longtable}[]{@{}
+  >{\centering\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.1081}}
+  >{\centering\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0811}}
+  >{\centering\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0811}}
+  >{\centering\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0811}}
+  >{\centering\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0811}}
+  >{\centering\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0946}}
+  >{\centering\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0946}}
+  >{\centering\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0946}}
+  >{\centering\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0946}}
+  >{\centering\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0946}}
+  >{\centering\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0946}}@{}}
+\caption{Distribution of Ratings in the Book-Crossing
+Dataset}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\centering
+0
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+1
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+2
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+3
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+4
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+5
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+6
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+7
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+8
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+9
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+10
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\centering
+0
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+1
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+2
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+3
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+4
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+5
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+6
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+7
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+8
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+9
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+10
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+647294 & 1481 & 2375 & 5118 & 7617 & 45355 & 31687 & 66402 & 91804 &
+60778 & 71225 \\
+\end{longtable}
 
-     0      1      2      3      4      5      6      7      8      9     10 
-647294   1481   2375   5118   7617  45355  31687  66402  91804  60778  71225 
-\end{verbatim}
-
-The zero values were intepreted as not genuine ratings, but as
-indicators that a user had interacted with a book without providing
-explicit feedback. In other words, a 0 marks presence in the system
-rather than an evaluation of preference. Because collaborative filtering
-relies explicit numerical ratings to compute similarities and generate
-predictions, including these implicit entries would bias the
-distribution and distort accuracy measures such as RMSE and MAE. For
-this reason, I excluded all records with a rating of zero.
+The zero values were interpreted as indicators that a user had
+interacted with a book without providing explicit feedback and not as
+genuine ratings. In other words, a 0 denotes presence in the system
+rather than an expression of preference. Since collaborative filtering
+depends on explicit numerical ratings to compute similarities and
+generate predictions \citep{aggarwal2016}, including these implicit
+entries would skew the rating distribution and distort accuracy
+measures. To avoid this bias, all records with a rating of zero were
+excluded from the analysis.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -930,32 +982,28 @@ this reason, I excluded all records with a rating of zero.
 \end{Highlighting}
 \end{Shaded}
 
-To address sparsity, we only include users and books with sufficiently
-active profiles. This ensures that similarity calculations are based on
+Because the raw dataset is sparse, we only include users and books with
 sufficiently active profiles.
 
 \pandocbounded{\includegraphics[keepaspectratio]{FinalProjectPaper_files/figure-pdf/unnamed-chunk-8-1.pdf}}
 
-The histogram of ratings per user shows the distribution of how many
-books each user has rated in the dataset. Because the x‑axis is plotted
-on a log scale, we can see that the majority of users contributed only a
-small number of ratings, while a much smaller group of highly active
-users contributed thousands. This long‑tailed pattern is typical of
-recommendation datasets: most users interact with only a handful of
-items, whereas a few ``power users'' generate a disproportionately large
-number of ratings. The skewed distribution highlights the sparsity
-problem in collaborative filtering, since many users provide too little
-data to compute reliable similarities. It also motivates the decision to
-set a threshold for ``active'' users, ensuring that the recommender
-system is trained on profiles with enough ratings to support meaningful
-recommendations.
+The histogram above shows the distribution of how many books each user
+has rated in the dataset. Because the x‑axis is plotted on a log scale,
+we can see that the majority of users contributed only a small number of
+ratings, while a much smaller group of highly active users contributed
+thousands. This is because most users interact with only a handful of
+items, whereas a few users generate a disproportionately large number of
+ratings. This motivates the decision to set a threshold for ``active''
+users to ensure that the recommender system is trained on profiles with
+enough ratings to support meaningful recommendations.
 
 This same pattern was found with the items with most books being rated
 only once or twice, while a small number of popular titles received
-hundreds of ratings. To mitigate this, we introduced a threshold line at
-10 ratings, excluding books with fewer than 10 ratings from the final
-dataset. This cutoff ensures that the recommender system is trained on
-items with sufficient feedback to support meaningful recommendations.
+hundreds of ratings (See histogram in appendix \ref{sec-plot}). To
+mitigate this, we introduced a threshold line at 10 ratings, excluding
+books with fewer than 10 ratings from the final dataset. This cutoff
+ensures that the recommender system is trained on items with sufficient
+feedback to support meaningful recommendations.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -965,13 +1013,15 @@ items with sufficient feedback to support meaningful recommendations.
 
 \CommentTok{\# Filter ratings dataset to keep only active users and active books}
 \NormalTok{ratings\_filtered }\OtherTok{\textless{}{-}}\NormalTok{ ratings\_clean }\SpecialCharTok{|\textgreater{}}
-  \FunctionTok{inner\_join}\NormalTok{(user\_counts }\SpecialCharTok{|\textgreater{}} \FunctionTok{filter}\NormalTok{(n\_user }\SpecialCharTok{\textgreater{}=}\NormalTok{ min\_user\_ratings), }\AttributeTok{by =} \StringTok{"user\_id"}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
-  \FunctionTok{inner\_join}\NormalTok{(item\_counts }\SpecialCharTok{|\textgreater{}} \FunctionTok{filter}\NormalTok{(n\_item }\SpecialCharTok{\textgreater{}=}\NormalTok{ min\_item\_ratings), }\AttributeTok{by =} \StringTok{"book\_id"}\NormalTok{)}
+  \FunctionTok{inner\_join}\NormalTok{(user\_counts }\SpecialCharTok{|\textgreater{}} \FunctionTok{filter}\NormalTok{(n\_user }\SpecialCharTok{\textgreater{}=}\NormalTok{ min\_user\_ratings), }
+             \AttributeTok{by =} \StringTok{"user\_id"}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{inner\_join}\NormalTok{(item\_counts }\SpecialCharTok{|\textgreater{}} \FunctionTok{filter}\NormalTok{(n\_item }\SpecialCharTok{\textgreater{}=}\NormalTok{ min\_item\_ratings), }
+             \AttributeTok{by =} \StringTok{"book\_id"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 The filtering process substantially reduced the dataset, as shown in
-Table below.
+table below.
 
 \begin{longtable}[]{@{}cccc@{}}
 \caption{Dataset size before and after filtering
@@ -1005,7 +1055,7 @@ Transformation}}{Matrix Transformation}}\label{matrix-transformation}
 Collaborative filtering requires a user--item matrix. The filtered
 ratings are reshaped into wide format, converted to a matrix, and then
 cast into a \texttt{realRatingMatrix} object, the format expected by
-\texttt{recommenderlab}.
+\texttt{recommenderlab}\citep{recommenderlabdocs}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1029,33 +1079,41 @@ recommenderlab, this is achieved with the Recommender() function,
 specifying ``UBCF'' (user‑based collaborative filtering) or ``IBCF''
 (item‑based collaborative filtering).
 
-To evaluate performance, two complementary schemes can be employed. A
-simple train/test split was first used to illustrate the mechanics of
-recommender evaluation: the model is trained on 70\% of the data,
-predictions are generated for the ``known'' portion of the test set, and
-accuracy is computed against the ``unknown'' ratings. This one‑time
-split provides a clear demonstration of how training, prediction, and
-evaluation interact in practice.
+To evaluate performance, two complementary schemes can be used. The code
+snippet below illustrates a simple train/test split. The model is
+trained on 80\% of the data, predictions are generated for the ``known''
+portion of the test set, and accuracy is measured against the
+``unknown'' ratings.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{\# Simple train/test split (80/20)}
+\CommentTok{\# Set a random seed for reproducibility}
 \FunctionTok{set.seed}\NormalTok{(}\DecValTok{495}\NormalTok{)}
+\CommentTok{\# Define an evaluation scheme:}
+\CommentTok{\# method = "split": simple train/test split}
+\CommentTok{\# train = 0.8: use 80\% of the data for training}
+\CommentTok{\# given = 10: assume 10 ratings per user are known in the test set}
+\CommentTok{\# goodRating = 6: ratings \textgreater{}= 6 are considered relevant items}
 \NormalTok{scheme\_split }\OtherTok{\textless{}{-}} \FunctionTok{evaluationScheme}\NormalTok{(rating\_matrix, }
                                  \AttributeTok{method=}\StringTok{"split"}\NormalTok{, }
                                  \AttributeTok{train=}\FloatTok{0.8}\NormalTok{, }
                                  \AttributeTok{given=}\DecValTok{10}\NormalTok{, }
                                  \AttributeTok{goodRating=}\DecValTok{6}\NormalTok{)}
 \CommentTok{\# Train UBCF on training set}
+\CommentTok{\# nn = neighborhood size }
+\CommentTok{\# method = similarity measure}
+\CommentTok{\# normalize center ratings before similarity calculation}
 \NormalTok{ubcf\_model }\OtherTok{\textless{}{-}} \FunctionTok{Recommender}\NormalTok{(}\FunctionTok{getData}\NormalTok{(scheme\_split, }\StringTok{"train"}\NormalTok{), }
                           \AttributeTok{method=}\StringTok{"UBCF"}\NormalTok{,}
                           \AttributeTok{parameter=}\FunctionTok{list}\NormalTok{(}
                             \AttributeTok{nn=}\DecValTok{30}\NormalTok{, }\AttributeTok{method=}\StringTok{"Cosine"}\NormalTok{, }\AttributeTok{normalize=}\StringTok{"center"}\NormalTok{))}
-\CommentTok{\# Predict ratings for known test set}
+\CommentTok{\# Generate predicted ratings for the "known" portion of the test set}
 \NormalTok{ubcf\_pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(ubcf\_model, }\FunctionTok{getData}\NormalTok{(scheme\_split, }\StringTok{"known"}\NormalTok{), }
                      \AttributeTok{type=}\StringTok{"ratings"}\NormalTok{)}
-\CommentTok{\# Evaluate against unknown ratings}
-\NormalTok{metrics }\OtherTok{\textless{}{-}} \FunctionTok{calcPredictionAccuracy}\NormalTok{(ubcf\_pred, }\FunctionTok{getData}\NormalTok{(scheme\_split, }\StringTok{"unknown"}\NormalTok{))}
+\CommentTok{\# Evaluate prediction accuracy against the "unknown" ratings:}
+\CommentTok{\# This computes metrics such as RMSE, MSE, and MAE}
+\NormalTok{metrics }\OtherTok{\textless{}{-}} \FunctionTok{calcPredictionAccuracy}\NormalTok{(ubcf\_pred, }\FunctionTok{getData}\NormalTok{(scheme\_split, }
+                                                     \StringTok{"unknown"}\NormalTok{))}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1079,7 +1137,7 @@ unseen data \citep{aggarwal2016, ricci2022}.
                                     \AttributeTok{given=}\DecValTok{10}\NormalTok{, }
                                     \AttributeTok{goodRating=}\DecValTok{6}\NormalTok{)}
 
-\CommentTok{\# Smaller grid: just two algorithms to compare}
+\CommentTok{\# Compare two algorithms}
 \NormalTok{algorithms\_grid\_light }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{(}
   \StringTok{"UBCF\_cosine\_k10"} \OtherTok{=} \FunctionTok{list}\NormalTok{(}\AttributeTok{name=}\StringTok{"UBCF"}\NormalTok{, }
                            \AttributeTok{param=}\FunctionTok{list}\NormalTok{(}\AttributeTok{nn=}\DecValTok{10}\NormalTok{, }\AttributeTok{method=}\StringTok{"Cosine"}\NormalTok{, }
@@ -1099,13 +1157,12 @@ unseen data \citep{aggarwal2016, ricci2022}.
 \end{Highlighting}
 \end{Shaded}
 
-Based on the exploratory cross‑validation results, user‑based
-collaborative filtering with cosine similarity and a neighborhood size
-of k = 10 was selected as the final model. To quantify its predictive
-accuracy, the model was evaluated using a held‑out scheme, yielding
-performance metrics such as RMSE, MAE, and Precision/Recall at different
-recommendation list lengths. These results provide a robust estimate of
-how well the chosen configuration generalizes to unseen data.
+Based on the exploratory cross‑validation results (See appendix
+\ref{sec-res} ), user‑based collaborative filtering with cosine
+similarity and a neighborhood size of k = 10 was selected as the final
+model. To quantify its predictive accuracy, the model was evaluated
+using a train/test split. This provides an estimate of how well the
+chosen configuration generalizes to unseen data.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1135,9 +1192,9 @@ how well the chosen configuration generalizes to unseen data.
 \end{Shaded}
 
 The final model (UBCF with cosine similarity, k = 10) achieved an RMSE
-of 1.88, MSE of 3.53, and MAE of 1.38 on the held‑out evaluation scheme.
-These values indicate that predictions deviate from true ratings by
-approximately 1--2 points on average, which is consistent with
+of 1.89, MSE of 3.57, and MAE of 1.41 on the train/test evaluation
+scheme. These values indicate that predictions deviate from true ratings
+by approximately 1--2 points on average, which is consistent with
 performance reported in similar collaborative filtering studies. To
 contextualize these results, we compared the chosen kNN approach against
 a baseline matrix factorization method (SVD). This comparison highlights
@@ -1161,12 +1218,12 @@ SVD (k=50) & 1.60 & 2.56 & 1.19 \\
 \end{longtable}
 
 As can be seen in the table above SVD achieved lower error values across
-all metrics (RMSE = 1.63, MSE = 2.66, MAE = 1.21). These results confirm
-the broader finding in recommender system literature that matrix
-factorization methods such as SVD typically outperform
-neighborhood‑based approaches in terms of predictive accuracy.
-Nevertheless, the kNN framework remains valuable for pedagogical
-purposes, as its mechanics are more transparent and intuitive.
+all three metrics. These results confirm the broader finding in
+recommender system literature that matrix factorization methods such as
+SVD typically outperform neighborhood‑based approaches in terms of
+predictive accuracy. Nevertheless, the kNN framework remains valuable
+for pedagogical purposes, as its mechanics are more transparent and
+intuitive.
 
 \subsection{\texorpdfstring{\textbf{Interactive Shiny
 Application}}{Interactive Shiny Application}}\label{interactive-shiny-application}
@@ -1204,9 +1261,11 @@ neighborhood size and number of recommendations.
 
 \end{figure}%
 
+\newpage
+
 \section{\texorpdfstring{\textbf{Appendix}}{Appendix}}\label{appendix}
 
-\subsection{Dataset Samples}\label{dataset-samples}
+\subsection{Dataset Samples}\label{sec-data}
 
 \begin{longtable}[]{@{}
   >{\centering\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.0896}}
@@ -1302,7 +1361,7 @@ user\_id & location & age \\
 ratings, and users tables before preprocessing. They provide
 transparency about the raw data sources used in the study.}
 
-\subsection{Distribution Plots}\label{distribution-plots}
+\subsection{Distribution Plots}\label{sec-plot}
 
 \pandocbounded{\includegraphics[keepaspectratio]{FinalProjectPaper_files/figure-pdf/unnamed-chunk-20-1.pdf}}
 
@@ -1310,8 +1369,7 @@ transparency about the raw data sources used in the study.}
 recommendation datasets, motivating the filtering thresholds applied in
 preprocessing.}
 
-\subsection{Cross‑Validation Results
-Grid}\label{crossvalidation-results-grid}
+\subsection{Cross‑Validation Results Grid}\label{sec-res}
 
 \begin{longtable}[]{@{}lcc@{}}
 \caption{Cross-validation results for UBCF models}\tabularnewline
