@@ -66,7 +66,6 @@ book_lookup <- ratings_filtered |>
   select(book_id, book_title, author) |>
   distinct(book_id, .keep_all = TRUE)
 
-
 # Shiny UI with tabs
 ui <- fluidPage(
   titlePanel("Simple Interactive kNN Book Recommender"),
@@ -106,9 +105,7 @@ ui <- fluidPage(
   )
 )
 
-
 # Shiny server
-
 server <- function(input, output, session) {
   
   # Reactive recommender model based on current k
