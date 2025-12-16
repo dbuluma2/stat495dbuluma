@@ -192,10 +192,10 @@ U1’s predicted rating for Movie C is about 4.6 stars. The recommendation syste
 
 ### **Evaluating Performance of kNN Recommender Systems**
 
-Evaluating recommender systems requires a suite of complementary metrics, since no single measure can fully capture performance. The choice of neighborhood size $k$ in kNN is closely tied to these metrics, as it shapes both prediction accuracy and recommendation quality[@nikolakopoulos2021].
+Evaluating recommender systems requires a suite of complementary metrics, since no single measure can fully capture performance. The choice of neighborhood size $k$ in kNN is closely tied to these metrics, as it shapes both prediction accuracy and recommendation quality [@nikolakopoulos2021].
 
 -   **Prediction Accuracy (ratings‑based):**\
-    This answers the question whether the system predicts ratings correctly. Metrics such as **RMSE (Root Mean Squared Error)** and **MAE (Mean Absolute Error)** are used for this purpose. RMSE penalizes large errors more heavily which makes it sensitive to extreme mispredictions, while MAE provides an interpretable measure of the average deviation between predicted and actual ratings[@aggarwal2016]. Smaller neighborhoods may reduce RMSE when neighbors are highly similar, but they risk instability. Larger neighborhoods on the other hand smooth predictions but can inflate MAE by averaging across dissimilar users [@dsm_biasvariance].
+    This answers the question whether the system predicts ratings correctly. Metrics such as **RMSE (Root Mean Squared Error)** and **MAE (Mean Absolute Error)** are used for this purpose. RMSE penalizes large errors more heavily which makes it sensitive to extreme mispredictions, while MAE provides an interpretable measure of the average deviation between predicted and actual ratings [@aggarwal2016]. Smaller neighborhoods may reduce RMSE when neighbors are highly similar, but they risk instability. Larger neighborhoods on the other hand smooth predictions but can inflate MAE by averaging across dissimilar users [@dsm_biasvariance].
 
 -   **Recommendation Accuracy (top-N lists):**\
     Beyond rating prediction, recommender systems must generate useful item suggestions. Here, metrics such as **Precision**, **Recall**, and the **F1 Score** are used. Precision measures the proportion of recommended items that are truly relevant, recall captures the proportion of relevant items successfully recommended, and F1 balances the two [@aggarwal2016]. The choice of $k$ directly affects these outcomes: a small neighborhood may yield highly precise but narrow recommendations, while a larger neighborhood increases recall but risks introducing irrelevant items [@dsm_biasvariance; @linkedin_knn].
@@ -242,7 +242,7 @@ The trade-offs between the two methods can be summarized as follows[@apxml2025; 
 | **Accuracy** | Good for small datasets, local patterns | Better for large datasets, global patterns |
 | **Interpretability** | Easy to explain (“neighbors liked it”) | Harder to explain (latent factors abstract) |
 
-\*The cold start problem arises when new users or items have too few ratings to support reliable recommendations[@apxml2025].
+\*The cold start problem arises when new users or items have too few ratings to support reliable recommendations [@apxml2025].
 
 \newpage
 
@@ -266,7 +266,7 @@ users   <- read.csv("Data/users.csv")
 This analysis uses the Book‑Crossing dataset, originally compiled by Cai‑Nicolas Ziegler and later made available on Kaggle [@bkaggle]. The implementation relies on the R package recommenderlab (@recommenderlabdocs), which provides standardized data structures (realRatingMatrix) and functions for collaborative filtering, evaluation schemes, and model comparison. All code snippets for model training and evaluation in the following analysis were adapted from the official recommenderlab documentations [@recommenderlabdocs; @recommenderlabdocs2025]. The dataset consists of three interconnected tables:
 
 -   **Books dataset**: Contains metadata for each book, including ISBN, title, and author.
--   **Ratings dataset**: Records user interactions with books, where each entry includes a `user_id`, `book_id`, and a numerical rating on a 0–10 scale.
+-   **Ratings dataset**: Records user interactions with books, where each entry includes a `user_id`, `book_id`, and a numerical rating on a 0-10 scale.
 -   **Users dataset**: Provides demographic information for each user, including `user_id`, age, and location.
 
 A snippet of these datasets can be found in section \ref{sec-data} of the appendix.
@@ -592,9 +592,9 @@ To illustrate how recommendation works in practice, an interactive Shiny applica
 The application also includes a user lookup tab, which retrieves demographic information such as age and location from the users file. This feature allows the app users to contextualize recommendation patterns by examining how user characteristics relate to the books suggested. Screenshots of both tabs are included below to demonstrate the workflow: one showing the recommendation interface with sliders and output table, and another highlighting the user lookup functionality.
 The full code used to make the app can be found in the file **app.R** in the project repo however section \ref{sec-code8} illustrates a snippet. 
 
-![*Figure illustrates the Recommendations tab, where users can adjust neighborhood size and number of recommendations*](images/recommendation.png)
+![*Figure illustrates the Recommendations tab, where users can adjust neighborhood size and number of recommendations.*](images/recommendation.png)
 
-![*Figure illustrates the Lookup tab, where users can retrieve demographic information i.e. age and location*](images/userlookup.png)
+![*Figure illustrates the Lookup tab, where users can retrieve demographic information i.e. age and location.*](images/userlookup.png)
 
 \newpage
 
@@ -693,7 +693,7 @@ length(ratings_full$book_rating)
 summary(ratings_full)
 ```
 
-#### This snippet illustrates how the summary table of ratinhgs was made.{#sec-code3}
+#### This snippet illustrates how the summary table of ratings was made.{#sec-code3}
 ```{r,eval=FALSE}
 
 # Build frequency table
@@ -750,6 +750,7 @@ summary_table <- rbind(
   cbind(Stage = "After filtering",  after_summary)
 )
 
+# Format table nicely
 kable(summary_table, 
       caption = "Dataset size before and after filtering thresholds",
       align = "c")
@@ -787,6 +788,7 @@ comparison_df <- data.frame(
   MSE    = c(metrics_ratings["MSE"],  metrics_svd["MSE"]),
   MAE    = c(metrics_ratings["MAE"],  metrics_svd["MAE"])
 )
+# Format table nicely
 kable(comparison_df, 
       caption = "Performance comparison of UBCF and SVD models",
       digits = 2, align = "c")
@@ -798,14 +800,18 @@ kable(comparison_df,
 This snippet illustrates how the UBCF model is embedded in the Shiny app to allow interactive adjustment of neighborhood size and number of recommendations. The full code can be found in the file app.R in the project repo.
 
 ```{r, eval=FALSE}
+# Define the server logic for the Shiny app
 server <- function(input, output) {
+# Create a reactive expression that builds a UBCF model 
+# whenever the user changes the neighborhood size (k).
   model_reactive <- reactive({
     Recommender(rating_matrix, method = "UBCF",
                 parameter = list(nn = input$k, method = "Cosine", 
                                  normalize = "center"))
   })
-  
+# Render the recommendations as a table
   output$recommendations <- renderTable({
+# Generate predictions for the selected user id
     pred <- predict(model_reactive(), rating_matrix[input$user_id,], 
                     n = input$n)
     as(pred, "list")
@@ -813,19 +819,5 @@ server <- function(input, output) {
 }
 ```
 
-```{r, echo=FALSE,warning=FALSE,include=FALSE}
-#same test for items and reveals the same results
-
-# Histogram of ratings per book
-ggplot(item_counts, aes(n_item)) + 
-  geom_histogram(binwidth = 1) +
-  scale_x_log10() +
-  geom_vline(xintercept = 10, linetype = "dashed") +
-  labs(
-    title = "Distribution of Ratings per Book",
-    x = "Number of Ratings (log scale)",
-    y = "Count of Books"
-  ) 
-```
 
 ## **References**
