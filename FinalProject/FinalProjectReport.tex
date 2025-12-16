@@ -1,0 +1,1721 @@
+% Options for packages loaded elsewhere
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+  12pt]{article}
+\usepackage{xcolor}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{5}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{241,243,245}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.40,0.45,0.13}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\ExtensionTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.28,0.35,0.67}{#1}}
+\newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.46,0.62}{#1}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.07,0.07,0.07}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+
+
+
+
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+ 
+\usepackage[]{natbib}
+\bibliographystyle{agsm}
+
+
+\addtolength{\oddsidemargin}{-.5in}%
+\addtolength{\evensidemargin}{-1in}%
+\addtolength{\textwidth}{1in}%
+\addtolength{\textheight}{1.7in}%
+\addtolength{\topmargin}{-1in}%
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Exploring k-Nearest Neighbors in Recommendation Systems},
+  pdfauthor={Daizy Nerima Buluma},
+  pdfkeywords={Collaborative filtering, Cosine Similarity, Matrix
+factorization, Book-Crossing dataset},
+  colorlinks=true,
+  linkcolor={blue},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
+  pdfcreator={LaTeX via pandoc}}
+
+
+
+\begin{document}
+
+
+\def\spacingset#1{\renewcommand{\baselinestretch}%
+{#1}\small\normalsize} \spacingset{1}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\date{December 15, 2025}
+\title{\bf \textbf{Exploring k-Nearest Neighbors in Recommendation
+Systems}}
+\author{
+Daizy Nerima Buluma\thanks{The author gratefully acknowledges Vanesa for
+her thoughtful peer review and constructive feedback. Sincere thanks are
+also extended to the author's family for their unwavering support and
+encouragement throughout the process.}\\
+Department of Statistics, Amherst College\\
+}
+\maketitle
+
+\bigskip
+\bigskip
+\begin{abstract}
+Recommender systems help users navigate large digital catalogs by
+predicting individual preferences. This paper examines k-Nearest
+Neighbors (kNN) as a baseline collaborative filtering method and
+contrasts it with a model-based approach using Singular Value
+Decomposition (SVD). Results show that while kNN offers transparency and
+strong pedagogical value, SVD achieves superior predictive accuracy. The
+methods are applied to a real-world book-rating dataset to construct a
+simple kNN recommendation engine, with performance evaluated using RMSE,
+MSE, and MAE. To further enhance interpretability, an interactive Shiny
+application is developed that allows users to generate personalized
+recommendations and explore the effects of key model parameters.
+\end{abstract}
+
+\noindent%
+{\it Keywords:} Collaborative filtering, Cosine Similarity, Matrix
+factorization, Book-Crossing dataset
+\vfill
+
+\newpage
+\spacingset{1.9} % DON'T change the spacing!
+
+
+\section{\texorpdfstring{\textbf{Introduction}}{Introduction}}\label{introduction}
+
+Today's digital world is overflowing with information, making it nearly
+impossible for individuals to manually sift through the massive number
+of available options. As a result, recommender systems have become
+essential components of platforms such as Netflix, Amazon, Spotify, and
+TikTok. Their primary goal is to filter vast collections of items such
+as movies, products, songs, or videos, and present users with options
+they are most likely to enjoy. These systems work by analyzing users'
+preferences, past behaviors, and item characteristics through
+interaction data such as impressions, clicks, ratings, likes, and
+purchases \citep{ghosh2024}.
+
+This paper focuses on the k-nearest neighbors (kNN) algorithm within the
+context of recommendation systems. Although kNN is one of the more
+straightforward algorithms in machine learning, it plays a foundational
+role in collaborative filtering methods. kNN identifies users or items
+that are most similar in behavior or preferences and bases predictions
+on these neighbors. Its simplicity and intuitive mechanics make it
+especially suitable for educational purposes and small scale
+recommendation tasks.
+
+Before exploring the details of kNN, this paper outlines the broader
+landscape of recommendation systems to provide a foundation for
+understanding how kNN fits into the larger family of recommendation
+systems. The discussion then introduces and contrasts a different
+recommendation approach, Singular Value Decomposition (SVD) to highlight
+the strengths and weaknesses of kNN in practice.
+
+Finally, the second half of the paper applies kNN to a real dataset to
+build and evaluate a simple interactive recommender system so as
+demonstrate how the method works in practice and gauge its performance.
+
+\section{\texorpdfstring{\textbf{Overview of Recommender
+Systems}}{Overview of Recommender Systems}}\label{overview-of-recommender-systems}
+
+Recommendation systems work by estimating how much a user is likely to
+enjoy an item they have not yet interacted with. They do this by
+analyzing \textbf{user behavior}, such as past ratings or interactions
+and \textbf{item features}, such as genre, creator, or textual
+descriptions \citep{ghosh2024}. The goal is to estimate a preference
+score, \({r}_{u,i}\) which measures how likely user u is to enjoy item
+i. Preference score values, as you'll see later in the paper, vary based
+on the rating scales. Recommendations are then generated by selecting
+the items with the highest scores\citep{aggarwal2016}.
+
+To understand how k-nearest neighbors (kNN) fits into this broader
+landscape, we will discuss two major families of recommendation
+approaches: content-based approach and collaborative filtering. There
+are hybrid recommenders too discussed in (\citet{apxml2025}) paper which
+combine the two approaches.
+
+\subsection{\texorpdfstring{\textbf{Content-Based
+Filtering}}{Content-Based Filtering}}\label{content-based-filtering}
+
+Content-based recommender systems generate suggestions by comparing the
+attributes of items a user previously liked to those of new items
+\citep{ghosh2024}. These attributes might include genres, keywords,
+textual descriptions, or metadata. The item descriptions, which are
+labeled with ratings, are used as training data to create a
+user-specific classification or regression modeling problem. As
+(\citet{aggarwal2016},p.~14) explains, for each user the training
+documents correspond to the descriptions of the items she has bought or
+rated. For example, if a shopper frequently purchases skincare products,
+the system recommends related cosmetic items.
+
+The underlying assumption is that user preferences are largely
+consistent, and similar items will yield similar satisfaction
+\citep{ghosh2024}. These models rely heavily on item features, making
+them effective in domains where rich metadata is available.
+
+\begin{figure}[H]
+
+{\centering \pandocbounded{\includegraphics[keepaspectratio]{images/colabvcontent.png}}
+
+}
+
+\caption{Content-based vs.~Collaborative Filtering
+\citep[source:][]{sharma2020}}
+
+\end{figure}%
+
+\subsection{\texorpdfstring{\textbf{Collaborative
+Filtering}}{Collaborative Filtering}}\label{collaborative-filtering}
+
+Collaborative filtering takes a different approach by focusing on
+patterns of behavior across users rather than item attributes. The key
+assumption is that users who behaved similarly in the past will behave
+similarly in the future \citep{apxml2025}. The main challenge in
+designing collaborative filtering methods is that the underlying ratings
+matrices are sparse i.e.~most ratings are unspecified. However, in
+practice these unspecified ratings can be imputed because the observed
+ratings are often highly correlated across various users and items
+\citep{ricci2022}. There are two main subtypes:
+
+\subsubsection{\texorpdfstring{\textbf{Memory-Based
+Methods}}{Memory-Based Methods}}\label{memory-based-methods}
+
+Memory-based methods make predictions directly from observed ratings by
+identifying similarities among users or items. kNN is the most common
+example and can be further categorized into user-based kNN and
+item-based kNN as we'll see in the next sections. The advantages of
+memory-based techniques are that they are simple to implement and the
+resulting recommendations are often easy to explain
+\citep{aggarwal2016}.
+
+\subsubsection{\texorpdfstring{\textbf{Model-Based
+Methods}}{Model-Based Methods}}\label{model-based-methods}
+
+Model-based approaches use machine learning techniques to uncover latent
+patterns in the rating matrix. Examples include matrix factorization,
+SVD, and Neural networks \citep{apxml2025}. They tend to outperform
+memory-based methods on large, sparse datasets but are less transparent
+to users and developers. Notably, many hybrid recommenders combine kNN
+with model-based techniques, such as SVD, to balance simplicity and
+predictive power \citep{hssina2021}.
+
+\section{K-Nearest Neighbors in Recommendation
+Systems}\label{k-nearest-neighbors-in-recommendation-systems}
+
+This section provides a deeper exposition of how kNN works, beginning
+with motivation and intuition, then moving into supervised-learning kNN,
+and finally examining how the algorithm is adapted for recommendation
+systems. A worked toy example concludes the section to illustrate the
+computations concretely.
+
+\subsection{\texorpdfstring{\textbf{Motivation:} Why Neighbors Matter in
+Recommendations}{Motivation: Why Neighbors Matter in Recommendations}}\label{motivation-why-neighbors-matter-in-recommendations}
+
+The appeal of neighborhood‑based methods lies in their simplicity as
+people with similar tastes tend to enjoy similar things
+\citep{nikolakopoulos2021}. If two users have consistently rated the
+same movies in comparable ways, then the films one user has enjoyed but
+the other has not yet seen become strong candidates for recommendation.
+This intuition, that preferences cluster and can be shared across
+neighbors, forms the foundation of k‑Nearest Neighbors (kNN) in
+recommender systems. By exploiting these local patterns, kNN can
+generate useful predictions without the need for complex modeling
+\citep{nikolakopoulos2021}.
+
+\subsection{\texorpdfstring{\textbf{How kNN Works in Supervised
+Learning}}{How kNN Works in Supervised Learning}}\label{how-knn-works-in-supervised-learning}
+
+Before adapting kNN to recommender systems, it helps to first understand
+how the algorithm works in its original setting. Unlike most algorithms
+we've seen in class that estimate parameters or fit equations, kNN is a
+``lazy learner'' \citep{knn_lazy}. It stores the training data and
+defers computation until a query arrives. When a new example is
+presented, the algorithm measures its similarity to all stored examples,
+selects the \emph{k} closest ones, and bases its prediction on their
+values.
+
+In classification tasks, the new example is assigned to the majority
+class among its neighbors. In regression, the prediction is the average
+of their values. Weighted variants of kNN give greater influence to
+closer neighbors, which reduces the impact of outliers. The choice of
+\emph{k} is critical to prevent over or under fitting of the model. Too
+small a neighborhood makes the algorithm sensitive to noise, while too
+large a neighborhood can dilute meaningful signals.
+
+\begin{figure}[H]
+
+{\centering \includegraphics[width=3.125in,height=3.125in]{images/knnimage1.png}
+
+}
+
+\caption{A simple illustration of kNN\citep[source:][]{medium_knn}}
+
+\end{figure}%
+
+Because kNN does not assume any particular distribution of the data, it
+is considered non‑parametric. This flexibility makes it easy to apply,
+but it also introduces challenges in high‑dimensional spaces where
+distances lose contrast, a phenomenon known as the curse of
+dimensionality \citep[pg 19]{kramer2013}. The curse of dimensionality
+means that as the number of features grows, data points become
+increasingly sparse and distance measures lose meaning, making
+algorithms like kNN less effective\citep{geeksforgeeks_curse}.
+
+\subsection{\texorpdfstring{\textbf{How kNN Works in Recommender
+Systems}}{How kNN Works in Recommender Systems}}\label{sec-rec}
+
+In recommendation settings, the task is to predict missing ratings in a
+sparse user-item matrix of size (number of users) × (number of items).
+Each row represents a user, each column an item, and most cells are
+empty because users interact with only a small fraction of available
+items. Below is an example of such matrix:
+
+\begin{longtable}[]{@{}lllll@{}}
+\toprule\noalign{}
+User / Item & A & B & C & D \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+U1 & 4 & 4 & ? & 3 \\
+U2 & 4 & 5 & 2 & ? \\
+U3 & ? & 4 & 4 & 3 \\
+U4 & 2 & ? & 5 & ? \\
+\end{longtable}
+
+Since most cells are empty, kNN adapts by computing similarities only on
+overlapping ratings. (\citet{kramer2013}) notes that this reliance on
+shared ratings is both a strength because it uses actual behavioral
+similarity and a weakness because sparsity may cause the similarities to
+be unreliable. Two main variants are used:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{User‑based kNN:} The system identifies the \emph{k} users most
+  similar to the target user and infers preferences from their ratings
+  \citep{nikolakopoulos2021}. For example, if User 1 and User 2 have
+  rated many of the same items similarly, then User 2's rating of a new
+  item can help predict User 1's interest.
+\item
+  \textbf{Item‑based kNN:} Instead of comparing users, the system finds
+  items that consistently receive similar ratings across users
+  \citep{nikolakopoulos2021}. If Item A and Item B are rated alike by
+  many users, then a user who liked Item A is predicted to enjoy Item B
+  as well. Item‑based kNN is often more stable because item
+  relationships remain consistent even as new users enter or leave the
+  system \citep{ricci2022}. For this reason, modern commercial
+  recommenders tend to use item-based kNN over user-based.
+\end{itemize}
+
+Similarity metrics are central to these computations and are obtained in
+various ways. Euclidean distance, which we're already familiar with,
+provides the most straightforward measure of closeness between rating
+vectors. However, as explained in chapter 3 of (\citet{apxml2025}), it
+is sensitive to differences in rating scales and magnitudes. To address
+this, cosine similarity measures the angle between rating vectors and is
+thus resistant to scale differences. Another method, Pearson
+correlation, adjusts for user biases by centering ratings around
+individual means. Finally, Adjusted cosine similarity subtracts user
+averages before computing similarity to reduce the effect of rating
+habits \citep{aggarwal2016}. In this paper, we use \textbf{cosine
+similarity}, defined as: \[
+\text{similarity} = \cos(\theta) = \frac{A \cdot B}{\|A\| \cdot \|B\|}
+\]
+
+where \(A \cdot B\) is the dot product of the vectors and \(\|A\|\),
+\(\|B\|\) are their magnitudes.
+
+The similarity scores typically range from -1 to 1, with -1 for vectors
+that are polar opposites, 0 where there is no correlation, and 1 for
+perfectly similar vectors. Once similarities are computed, preference
+scores are calculated using weighted averages. In user-based approach, a
+simple average of available ratings is often misleading because
+different users have different rating scales \citep{apxml2025}. One user
+might rate movies from 3 to 5 stars, while another uses the full 1 to 5
+range. To account for this, we use the deviation from each user's
+average rating. For user‑based kNN, one formula for calcuating the
+predicted rating of user (u) for item (i) is defined as:
+
+\[
+P_{u,i} = \bar{r}_u + \frac{\sum_{v \in N} sim(u,v) \cdot (r_{v,i} - \bar{r}_v)}{\sum_{v \in N} |sim(u,v)|}
+\]
+
+Where;
+
+\begin{itemize}
+\item
+  \(P_{u,i}\) is the predicted rating/preference score for the target
+  user (u) on item (i).
+\item
+  \(\bar{r}_u\) is user (u)'s average rating. We add it at the end so
+  that the prediction is returned to the user's original rating scale.
+\item
+  N is the neighborhood of users most similar to (u) who have rated item
+  (i).
+\item
+  \(\text{sim}(u,v)\) is the similarity score between the target user
+  (u) and a neighbor (v).
+\item
+  \(r_{v,i} - \bar{r}_v\) is neighbor (v)'s rating of item (i), centered
+  by subtracting their own average rating. This expresses how much
+  higher or lower than average the neighbor rated that item.
+\item
+  The denominator, \(\sum_{v \in N} |\text{sim}(u,v)|\), normalizes the
+  weighted sum so that the prediction isn't inflated by the number or
+  magnitude of similarity scores.
+\end{itemize}
+
+Formula and breakdowns were sourced from chapter 3 of
+(\citet{apxml2025}).
+
+For item-based kNN, the logic mirrors the user-based approach but is
+slightly simpler. To predict user (u)'s rating for item (i), we look at
+the other items that user (u) has already rated. The prediction is
+formed by taking a weighted average of those ratings, where the weights
+come from the similarity between item (i) and each neighboring item.
+
+The formula is:
+
+\[
+P_{u,i} = \frac{\sum_{j \in N} sim(i,j) \cdot r_{u,j}}{\sum_{j \in N} |sim(i,j)|}
+\]
+
+Where;
+
+\begin{itemize}
+\item
+  \(P_{u,i}\) is the predicted rating/preference score for user (u) on
+  item (i).
+\item
+  N is the set of items most similar to item (i) that user (u) has
+  already rated.
+\item
+  \(\text{sim}(i,j)\) is the similarity between the target item (i) and
+  a neighbor item (j).
+\item
+  \(r_{u,j}\) is the rating user (u) gave to item (j).
+\end{itemize}
+
+Formula and breakdowns were sourced from chapter 3 of
+(\citet{apxml2025}).
+
+The item-based formulation is slightly simpler than the user-based
+version because we do not need to adjust for user averages. All ratings
+involved in the calculation come from the same user therefore their
+rating scale is already consistent across items.
+
+A critical design choice in kNN is the size of the neighborhood, denoted
+by \(k\). The number of neighbors directly influences the bias-variance
+trade‑off in predictions \citep{dsm_biasvariance}. With very small
+\(k\), the recommender becomes highly sensitive to noise in individual
+ratings, which can reduce accuracy. With very large \(k\), the
+recommender averages across many dissimilar users or items, diluting
+meaningful signals. In practice, the optimal \(k\) is determined
+empirically by evaluating accuracy metrics such as RMSE, MAE, Precision,
+and Recall across different values of \(k\) \citep{aggarwal2016}.
+Cross‑validation is commonly used to select \(k\), ensuring that the
+chosen neighborhood size generalizes well to unseen data
+\citep{linkedin_knn}.
+
+\subsection{\texorpdfstring{\textbf{Toy
+Example}}{Toy Example}}\label{toy-example}
+
+We work through a toy example adapted from Aggawral's book to emphasize
+idea. Consider a simple dataset of three users and three movies:
+
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+User & A & B & C \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+U1 & 5 & 4 & ? \\
+U2 & 4 & 4 & 2 \\
+U3 & 1 & 1 & 1 \\
+\end{longtable}
+
+\textbf{Entries:} Ratings on a 1--5 scale. The ``?'' is the missing
+rating we want to predict (U1's rating for Movie C).
+
+First, we compute the similarity between Movie C and movies that U1 has
+already rated (A and B) using cosine similarity.
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Movie A ratings vector:} {[}5, 4, 1{]} from U1, U2, U3\\
+\item
+  \textbf{Movie B ratings vector:} {[}4, 4, 1{]} from U1, U2, U3\\
+\item
+  \textbf{Movie C ratings vector:} {[}?, 2, 1{]} → U1's rating is
+  missing, so we only use U2 and U3: {[}2, 1{]}
+\end{itemize}
+
+Now,
+
+To compute \textbf{sim(A, C)}, we compare Movie A's ratings from U2 and
+U3 ({[}4, 1{]}) with Movie C's ratings from U2 and U3 ({[}2, 1{]}).
+
+\[
+sim(A,C) = \frac{(4 \cdot 2) + (1 \cdot 1)}{\sqrt{4^2+1^2} \cdot \sqrt{2^2+1^2}} \approx 0.98
+\]
+
+To compute \textbf{sim(B, C)}, we compare Movie B's ratings from U2 and
+U3 ({[}4, 1{]}) with Movie C's ratings from U2 and U3 ({[}2, 1{]}).
+
+\[
+sim(B,C) = \frac{(4 \cdot 2) + (1 \cdot 1)}{\sqrt{4^2+1^2} \cdot \sqrt{2^2+1^2}} \approx 0.96
+\]
+
+These values (0.98 and 0.96) show that Movies A and B are both highly
+similar to Movie C therefore we use their ratings to calculate the
+predicted rating for Movie C.
+
+Plugging in values into the Item-Based formula we get:
+
+\[
+P_{U1,C} = \frac{(0.98 \cdot 5) + (0.96 \cdot 4)}{0.98 + 0.96} = \frac{4.9 + 3.84}{1.94} \approx 4.55
+\]
+
+U1's predicted rating for Movie C is about 4.6 stars. The recommendation
+system system expects U1 to enjoy Movie C almost as much as Movies A and
+B.
+
+\subsection{\texorpdfstring{\textbf{Evaluating Performance of kNN
+Recommender
+Systems}}{Evaluating Performance of kNN Recommender Systems}}\label{evaluating-performance-of-knn-recommender-systems}
+
+Evaluating recommender systems requires a suite of complementary
+metrics, since no single measure can fully capture performance. The
+choice of neighborhood size \(k\) in kNN is closely tied to these
+metrics, as it shapes both prediction accuracy and recommendation
+quality \citep{nikolakopoulos2021}.
+
+\begin{itemize}
+\item
+  \textbf{Prediction Accuracy (ratings‑based):}\\
+  This answers the question whether the system predicts ratings
+  correctly. Metrics such as \textbf{RMSE (Root Mean Squared Error)} and
+  \textbf{MAE (Mean Absolute Error)} are used for this purpose. RMSE
+  penalizes large errors more heavily which makes it sensitive to
+  extreme mispredictions, while MAE provides an interpretable measure of
+  the average deviation between predicted and actual ratings
+  \citep{aggarwal2016}. Smaller neighborhoods may reduce RMSE when
+  neighbors are highly similar, but they risk instability. Larger
+  neighborhoods on the other hand smooth predictions but can inflate MAE
+  by averaging across dissimilar users \citep{dsm_biasvariance}.
+\item
+  \textbf{Recommendation Accuracy (top-N lists):}\\
+  Beyond rating prediction, recommender systems must generate useful
+  item suggestions. Here, metrics such as \textbf{Precision},
+  \textbf{Recall}, and the \textbf{F1 Score} are used. Precision
+  measures the proportion of recommended items that are truly relevant,
+  recall captures the proportion of relevant items successfully
+  recommended, and F1 balances the two \citep{aggarwal2016}. The choice
+  of \(k\) directly affects these outcomes: a small neighborhood may
+  yield highly precise but narrow recommendations, while a larger
+  neighborhood increases recall but risks introducing irrelevant items
+  \citep{dsm_biasvariance, linkedin_knn}.
+\item
+  \textbf{Ranking Quality:}\\
+  Finally, recommendation quality also depends on which items are
+  suggested and how they are ordered. Measures such as \textbf{ROC
+  curves and AUC} visualize the trade‑off between true positives and
+  false positives, while \textbf{Precision-Recall curves} highlight
+  performance in sparse datasets where relevant items are rare
+  \citep{aggarwal2016}.
+\end{itemize}
+
+\subsection{\texorpdfstring{\textbf{Strengths and Weaknesses of kNN in
+Recommendation
+Systems}}{Strengths and Weaknesses of kNN in Recommendation Systems}}\label{strengths-and-weaknesses-of-knn-in-recommendation-systems}
+
+As we established in the sections above, kNN requires no training phase,
+is easy to explain, and works well for small or dense datasets where
+overlaps are plentiful. Its neighbor‑driven reasoning makes it
+particularly suitable for educational settings and for systems where
+interpretability is valued.
+
+However, kNN also has notable weaknesses. Its reliance on overlapping
+ratings makes it vulnerable to sparsity, and its computational cost
+grows quickly with dataset size. In high‑dimensional rating matrices,
+distance metrics can become unreliable therefore reducing accuracy
+\citep{kramer2013}. These limitations explain why kNN is often used as a
+baseline method, while large‑scale commercial systems like Netflix or
+Spotify, where accuracy and scalability matter most rely on more
+advanced model‑based approaches such as matrix factorization or deep
+learning \citep{hssina2021}.
+
+\section{\texorpdfstring{\textbf{Comparison to a Model-Based Method
+(SVD)}}{Comparison to a Model-Based Method (SVD)}}\label{comparison-to-a-model-based-method-svd}
+
+We've established above that while kNN provides an intuitive way to
+generate recommendations by looking at neighbors, it struggles with
+sparse data and scalability. To address these challenges, recommender
+systems often turn to model-based methods. One of the most influential
+is \textbf{Singular Value Decomposition (SVD)}, a matrix factorization
+technique that has become central to modern recommendation engines
+\citep{hssina2021}.
+
+\subsection{What SVD Does (Very
+High-Level)}\label{what-svd-does-very-high-level}
+
+SVD takes the large (millions of ratings), sparse user--item ratings
+matrix (R) and decomposes it into three smaller matrices
+\citep{apxml2025, hssina2021}:
+
+\[
+R_{m \times n} = U_{m \times r} \cdot \Sigma_{r \times r} \cdot V^T_{r \times n}
+\]
+
+\begin{itemize}
+\tightlist
+\item
+  \(U_{m \times r}\): Represents the \(m\) users in terms of hidden
+  ``taste dimensions'' (latent factors). Each row corresponds to a
+  user's coordinates in the reduced latent space.
+\item
+  \(\Sigma_{r \times r}\): Diagonal matrix of singular values, showing
+  which factors are most important.
+\item
+  \(V^T_{r \times n}\): Represents the \(n\) items in terms of the same
+  latent factors. Each column corresponds to an item's coordinates in
+  the latent space.
+\end{itemize}
+
+As explained in chapter 4 of (\citet{apxml2025}) SVD compresses the
+ratings matrix into a lower-dimensional representation by keeping only
+the top k singular values. This reveals hidden patterns of preference
+for example, one factor might capture a user's tendency toward
+action/sci‑fi movies, while another captures romance/musicals.
+Predictions for missing ratings are made by combining a user's latent
+profile with an item's latent profile \citep{apxml2025}.
+
+This approach differs fundamentally from kNN. While kNN predictions rely
+on local neighborhoods and finds similar users or items directly from
+observed ratings, SVD learns a compressed representation of the entire
+dataset and its predictions come from latent factors rather than direct
+neighbors \citep{hssina2021}.
+
+kNN is transparent and easy to interpret (``your neighbor liked this, so
+you might too''), but it struggles with sparsity and scalability
+\citep{nikolakopoulos2021}. SVD, by contrast, is less interpretable
+because latent factors are abstract, yet it generalizes better and
+scales efficiently to millions of users and items \citep{apxml2025}.
+
+The trade-offs between the two methods can be summarized as
+follows\citep{apxml2025, nikolakopoulos2021, hssina2021}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2639}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3750}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3611}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Aspect
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+kNN (Memory-Based)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+SVD (Model-Based)
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Mechanism} & Direct similarity between users/items & Factorizes
+ratings matrix: \(R = U \Sigma V^T\) \\
+\textbf{Data requirement} & Works directly on raw ratings & Needs enough
+data to learn latent factors \\
+\textbf{Scalability} & Struggles with millions of users/items &
+Efficient at large scale once trained \\
+\textbf{Cold start problem*} & Severe (new users/items have no
+neighbors) & Still an issue, but generalizes better \\
+\textbf{Accuracy} & Good for small datasets, local patterns & Better for
+large datasets, global patterns \\
+\textbf{Interpretability} & Easy to explain (``neighbors liked it'') &
+Harder to explain (latent factors abstract) \\
+\end{longtable}
+
+*The cold start problem arises when new users or items have too few
+ratings to support reliable recommendations \citep{apxml2025}.
+
+\newpage
+
+\section{\texorpdfstring{\textbf{Application: Building a Simple
+Recommendation Engine with
+kNN}}{Application: Building a Simple Recommendation Engine with kNN}}\label{application-building-a-simple-recommendation-engine-with-knn}
+
+This analysis uses the Book‑Crossing dataset, originally compiled by
+Cai‑Nicolas Ziegler and later made available on Kaggle \citep{bkaggle}.
+The implementation relies on the R package recommenderlab
+(\citet{recommenderlabdocs}), which provides standardized data
+structures (realRatingMatrix) and functions for collaborative filtering,
+evaluation schemes, and model comparison. All code snippets for model
+training and evaluation in the following analysis were adapted from the
+official recommenderlab documentations
+\citep{recommenderlabdocs, recommenderlabdocs2025}. The dataset consists
+of three interconnected tables:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Books dataset}: Contains metadata for each book, including
+  ISBN, title, and author.
+\item
+  \textbf{Ratings dataset}: Records user interactions with books, where
+  each entry includes a \texttt{user\_id}, \texttt{book\_id}, and a
+  numerical rating on a 0-10 scale.
+\item
+  \textbf{Users dataset}: Provides demographic information for each
+  user, including \texttt{user\_id}, age, and location.
+\end{itemize}
+
+A snippet of these datasets can be found in section \ref{sec-data} of
+the appendix.
+
+\subsection{\texorpdfstring{\textbf{Data
+Preprocessing}}{Data Preprocessing}}\label{data-preprocessing}
+
+We begin by loading the three source files and cleaning them to retain
+only the relevant attributes. See data loading code in \ref{sec-code1}.
+For books, we keep the ISBN, title, and author; for ratings, we rename
+the columns to \texttt{user\_id}, \texttt{book\_id}, and
+\texttt{book\_rating}; and for users, we retain the \texttt{user\_id}
+and \texttt{location}. There were no duplicate entries or missing
+values.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Select \& rename columns }
+\NormalTok{books }\OtherTok{\textless{}{-}}\NormalTok{ books }\SpecialCharTok{|\textgreater{}} 
+         \FunctionTok{select}\NormalTok{(ISBN,Book.Title,Book.Author) }\SpecialCharTok{|\textgreater{}} 
+         \FunctionTok{rename}\NormalTok{(}
+           \AttributeTok{book\_title =}\NormalTok{ Book.Title,}
+           \AttributeTok{author =}\NormalTok{ Book.Author,}
+           \AttributeTok{book\_id =}\NormalTok{ ISBN}
+\NormalTok{         )}
+
+\NormalTok{ratings }\OtherTok{\textless{}{-}}\NormalTok{ ratings }\SpecialCharTok{|\textgreater{}} 
+  \FunctionTok{rename}\NormalTok{(}
+    \AttributeTok{user\_id =}\NormalTok{ User.ID,}
+    \AttributeTok{book\_rating =}\NormalTok{ Book.Rating,}
+    \AttributeTok{book\_id =}\NormalTok{ ISBN}
+\NormalTok{  )}
+\NormalTok{users }\OtherTok{\textless{}{-}}\NormalTok{ users }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{select}\NormalTok{(User.ID, Location,Age) }\SpecialCharTok{|\textgreater{}} 
+  \FunctionTok{rename}\NormalTok{(}
+    \AttributeTok{user\_id =}\NormalTok{ User.ID,}
+    \AttributeTok{location =}\NormalTok{ Location,}
+    \AttributeTok{age =}\NormalTok{ Age)}
+\end{Highlighting}
+\end{Shaded}
+
+The three datasets are then joined into a single ratings table to
+provide a unified view of user-book interactions.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#join the three tables}
+\NormalTok{ratings\_full }\OtherTok{\textless{}{-}}\NormalTok{ ratings }\SpecialCharTok{|\textgreater{}} 
+  \FunctionTok{inner\_join}\NormalTok{(books, }
+             \AttributeTok{by =} \StringTok{"book\_id"}\NormalTok{)}\SpecialCharTok{|\textgreater{}}  
+  \FunctionTok{inner\_join}\NormalTok{(users, }
+             \AttributeTok{by =} \StringTok{"user\_id"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+After joining the three datasets, the combined table contains over 1
+million ratings from approximately 92,000 users on nearly 270,000 books.
+Data exploratory code in section \ref{sec-code2} of appendix for
+reference.
+
+This raw dataset is highly sparse because most users rate only a handful
+of books, and most books receive very few ratings. Such sparsity is
+typical in recommendation systems and motivates the filtering and
+preprocessing steps described below.
+
+Preliminary summary statistics revealed that the ratings in the raw
+dataset range from 0 to 10. However as can be seen in the table below,
+more than half of the ratings in the dataset were equal to zero. Code in
+\ref{sec-code3}.
+
+\begin{longtable}[]{@{}
+  >{\centering\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.1081}}
+  >{\centering\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0811}}
+  >{\centering\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0811}}
+  >{\centering\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0811}}
+  >{\centering\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0811}}
+  >{\centering\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0946}}
+  >{\centering\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0946}}
+  >{\centering\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0946}}
+  >{\centering\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0946}}
+  >{\centering\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0946}}
+  >{\centering\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0946}}@{}}
+\caption{Distribution of Ratings in the Dataset}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\centering
+0
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+1
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+2
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+3
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+4
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+5
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+6
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+7
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+8
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+9
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+10
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\centering
+0
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+1
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+2
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+3
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+4
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+5
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+6
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+7
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+8
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+9
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+10
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+647294 & 1481 & 2375 & 5118 & 7617 & 45355 & 31687 & 66402 & 91804 &
+60778 & 71225 \\
+\end{longtable}
+
+For this analysis, the zero values were interpreted as indicators that a
+user had interacted with a book without providing explicit feedback and
+not as genuine ratings. In other words, a 0 denotes presence in the
+system rather than an expression of preference. We saw in earlier in
+section \ref{sec-rec} that collaborative filtering depends on explicit
+numerical ratings to compute similarities and generate predictions.
+Therefore, including these implicit entries would skew the rating
+distribution and distort accuracy measures. To avoid this bias, all
+records with a rating of zero were excluded from the analysis.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Drop records with rating = 0}
+\NormalTok{ratings\_clean }\OtherTok{\textless{}{-}}\NormalTok{ ratings\_full }\SpecialCharTok{|\textgreater{}} 
+  \FunctionTok{filter}\NormalTok{(book\_rating }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+In order for our recommendations to be meaningful, we need to include
+users and books with sufficiently active profiles only.
+
+\pandocbounded{\includegraphics[keepaspectratio]{FinalProjectReport_files/figure-pdf/unnamed-chunk-8-1.pdf}}
+
+The histogram above shows the distribution of how many books each user
+has rated in the dataset (See code in \ref{sec-code4}). Because the
+x‑axis is plotted on a log scale, we can see that the majority of users
+contributed only a small number of ratings, while a much smaller group
+of highly active users contributed thousands. This is because most users
+interact with only a handful of items, whereas a few users generate a
+disproportionately large number of ratings. This motivates the decision
+to set a threshold for ``active'' users to ensure that the recommender
+system is trained on profiles with enough ratings to support meaningful
+recommendations. This same pattern was found with the items as well,
+with most books being rated only once or twice, while a small number of
+popular titles received hundreds of ratings. A histogram of the
+distribution is in appendix \ref{sec-plot} for reference.
+
+To mitigate this, we introduced a threshold of 10 ratings and therefore
+excluded books with fewer than 10 ratings from the final dataset. This
+cutoff ensures that the recommender system is trained on items with
+sufficient feedback to support meaningful recommendations.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Set thresholds }
+\NormalTok{min\_user\_ratings }\OtherTok{\textless{}{-}} \DecValTok{10}   \CommentTok{\# active users}
+\NormalTok{min\_item\_ratings }\OtherTok{\textless{}{-}} \DecValTok{10}   \CommentTok{\# active books}
+
+\CommentTok{\# Filter ratings dataset to keep only active users and active books}
+\NormalTok{ratings\_filtered }\OtherTok{\textless{}{-}}\NormalTok{ ratings\_clean }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{inner\_join}\NormalTok{(user\_counts }\SpecialCharTok{|\textgreater{}} \FunctionTok{filter}\NormalTok{(n\_user }\SpecialCharTok{\textgreater{}=}\NormalTok{ min\_user\_ratings), }
+             \AttributeTok{by =} \StringTok{"user\_id"}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{inner\_join}\NormalTok{(item\_counts }\SpecialCharTok{|\textgreater{}} \FunctionTok{filter}\NormalTok{(n\_item }\SpecialCharTok{\textgreater{}=}\NormalTok{ min\_item\_ratings), }
+             \AttributeTok{by =} \StringTok{"book\_id"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+The filtering process substantially reduced the dataset, as shown in
+table below. Code in \ref{sec-code5}).
+
+\begin{longtable}[]{@{}cccc@{}}
+\caption{Dataset size before and after filtering
+thresholds}\tabularnewline
+\toprule\noalign{}
+Stage & Users & Books & Ratings \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Stage & Users & Books & Ratings \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Before filtering & 68091 & 149836 & 383842 \\
+After filtering & 6318 & 5438 & 87178 \\
+\end{longtable}
+
+Before applying thresholds, the dataset contained 68,091 users, 149,836
+books and 383,842 ratings. After requiring each user and each book to
+have at least 10 ratings, the dataset was reduced to 6,318 users, 5,438
+books, and 87,178 ratings. This reduction highlights the sparsity of the
+original dataset where most users and books had very few ratings. By
+retaining only active users and active books, the final dataset provides
+a denser interaction matrix that supports more reliable similarity
+calculations and improves the stability of the recommender system
+results.
+
+\subsection{\texorpdfstring{\textbf{Matrix
+Transformation}}{Matrix Transformation}}\label{matrix-transformation}
+
+As we already established, collaborative filtering requires a user-item
+matrix. Therefore, the filtered ratings were reshaped into wide format,
+converted to a matrix, and then cast into a \texttt{realRatingMatrix}
+object. This is the format expected by \texttt{recommenderlab} as
+discussed in (\citet{recommenderlabdocs2025}).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# reshape into wide format (users as rows, books as columns)}
+\NormalTok{rating\_wide }\OtherTok{\textless{}{-}}\NormalTok{ ratings\_filtered }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{select}\NormalTok{(user\_id, book\_id, book\_rating) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{pivot\_wider}\NormalTok{(}\AttributeTok{names\_from =}\NormalTok{ book\_id, }\AttributeTok{values\_from =}\NormalTok{ book\_rating)}
+\CommentTok{\# convert to matrix (drop user\_id column)}
+\NormalTok{rating\_matrix }\OtherTok{\textless{}{-}} \FunctionTok{as.matrix}\NormalTok{(rating\_wide[,}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{])}
+\CommentTok{\# convert to realRatingMatrix}
+\NormalTok{rating\_matrix }\OtherTok{\textless{}{-}} \FunctionTok{as}\NormalTok{(rating\_matrix, }\StringTok{"realRatingMatrix"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{\texorpdfstring{\textbf{Implementing kNN \& Model
+Evaluation}}{Implementing kNN \& Model Evaluation}}\label{implementing-knn-model-evaluation}
+
+Once the ratings matrix was transformed into a realRatingMatrix, the
+next step was to implement a k‑Nearest Neighbors recommender. In
+recommenderlab, this is achieved with the Recommender() function,
+specifying ``UBCF'' (user‑based collaborative filtering) or ``IBCF''
+(item‑based collaborative filtering).
+
+To fit the model and evaluate performance, two complementary schemes can
+be used. For awareness purposes, the code snippet below illustrates a
+simple train/test split scheme. The idea is the same as what we have
+seen in class this semester. The model is trained on 70\% of the data,
+predictions are generated for the ``known'' portion of the test set, and
+accuracy is measured against the ``unknown'' ratings.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Set a random seed for reproducibility}
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{495}\NormalTok{)}
+\CommentTok{\# Define an evaluation scheme:}
+\CommentTok{\# method = "split": simple train/test split}
+\CommentTok{\# train = 0.7: use 70\% of the data for training}
+\CommentTok{\# given = 10: assume 10 ratings per user are known in the test set}
+\CommentTok{\# goodRating = 6: ratings \textgreater{}= 6 are considered relevant items}
+\NormalTok{scheme\_split }\OtherTok{\textless{}{-}} \FunctionTok{evaluationScheme}\NormalTok{(rating\_matrix, }
+                                 \AttributeTok{method=}\StringTok{"split"}\NormalTok{, }
+                                 \AttributeTok{train=}\FloatTok{0.7}\NormalTok{, }
+                                 \AttributeTok{given=}\DecValTok{10}\NormalTok{, }
+                                 \AttributeTok{goodRating=}\DecValTok{6}\NormalTok{)}
+\CommentTok{\# Train UBCF on training set}
+\CommentTok{\# nn = neighborhood size }
+\CommentTok{\# method = similarity measure}
+\CommentTok{\# normalize center ratings before similarity calculation}
+\NormalTok{ubcf\_model }\OtherTok{\textless{}{-}} \FunctionTok{Recommender}\NormalTok{(}\FunctionTok{getData}\NormalTok{(scheme\_split, }\StringTok{"train"}\NormalTok{), }
+                          \AttributeTok{method=}\StringTok{"UBCF"}\NormalTok{,}
+                          \AttributeTok{parameter=}\FunctionTok{list}\NormalTok{(}
+                            \AttributeTok{nn=}\DecValTok{30}\NormalTok{, }\AttributeTok{method=}\StringTok{"Cosine"}\NormalTok{, }\AttributeTok{normalize=}\StringTok{"center"}\NormalTok{))}
+\CommentTok{\# Generate predicted ratings for the "known" portion of the test set}
+\NormalTok{ubcf\_pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(ubcf\_model, }\FunctionTok{getData}\NormalTok{(scheme\_split, }\StringTok{"known"}\NormalTok{), }
+                     \AttributeTok{type=}\StringTok{"ratings"}\NormalTok{)}
+\CommentTok{\# Evaluate prediction accuracy against the "unknown" ratings:}
+\CommentTok{\# This computes metrics such as RMSE, MSE, and MAE}
+\NormalTok{metrics }\OtherTok{\textless{}{-}} \FunctionTok{calcPredictionAccuracy}\NormalTok{(ubcf\_pred, }\FunctionTok{getData}\NormalTok{(scheme\_split, }
+                                                     \StringTok{"unknown"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+Because a single split can be sensitive to how the data is partitioned,
+this analysis used k‑fold cross‑validation scheme for model selection.
+The idea here is also similar to what we've seen in class. In this
+scheme, the dataset is divided into five folds; each fold is used once
+as a test set while the remaining folds serve as training data. Results
+are averaged across folds to provide a more reliable estimate of
+performance.
+
+In the next step, cross-validation was used to compare two different
+neighborhood sizes (k) and similarity measures (Cosine vs.~Pearson).
+This was to ensure that the chosen configuration generalizes well to
+unseen data.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# set seed  to ensure reproducibility of the folds}
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{495}\NormalTok{)}
+\CommentTok{\# Perform 5{-}fold cross{-}validation for exploratory evaluation}
+\CommentTok{\# goodRating=6 means ratings \textgreater{}= 6 are considered "relevant"}
+\NormalTok{scheme\_cv }\OtherTok{\textless{}{-}} \FunctionTok{evaluationScheme}\NormalTok{(rating\_matrix, }
+                              \AttributeTok{method=}\StringTok{"cross{-}validation"}\NormalTok{,}
+                              \AttributeTok{k=}\DecValTok{5}\NormalTok{,  }\CommentTok{\#number of folds }
+                              \AttributeTok{given=}\DecValTok{10}\NormalTok{, }\CommentTok{\# 10 ratings per user are known}
+                              \AttributeTok{goodRating=}\DecValTok{6}\NormalTok{) }
+
+\CommentTok{\# Define a grid of algorithms to compare}
+\NormalTok{algorithms\_grid }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{(}
+  \StringTok{"UBCF\_cosine\_k10"} \OtherTok{=} \FunctionTok{list}\NormalTok{(}\AttributeTok{name=}\StringTok{"UBCF"}\NormalTok{, }
+                           \AttributeTok{param=}\FunctionTok{list}\NormalTok{(}\AttributeTok{nn=}\DecValTok{10}\NormalTok{, }
+                                      \AttributeTok{method=}\StringTok{"Cosine"}\NormalTok{, }
+                                      \AttributeTok{normalize=}\StringTok{"center"}\NormalTok{)),}
+  \StringTok{"UBCF\_pearson\_k30"} \OtherTok{=} \FunctionTok{list}\NormalTok{(}\AttributeTok{name=}\StringTok{"UBCF"}\NormalTok{, }
+                            \AttributeTok{param=}\FunctionTok{list}\NormalTok{(}\AttributeTok{nn=}\DecValTok{30}\NormalTok{, }
+                                       \AttributeTok{method=}\StringTok{"Pearson"}\NormalTok{, }
+                                       \AttributeTok{normalize=}\StringTok{"center"}\NormalTok{))}
+\NormalTok{)}
+
+\CommentTok{\# Run ratings{-}based cross{-}validation}
+\CommentTok{\# type = "ratings" means predictions are compared to actual ratings}
+\NormalTok{cv\_results\_ratings }\OtherTok{\textless{}{-}} \FunctionTok{evaluate}\NormalTok{(scheme\_cv, }
+\NormalTok{                                     algorithms\_grid, }
+                                     \AttributeTok{type=}\StringTok{"ratings"}\NormalTok{)}
+
+\CommentTok{\# Summarize prediction accuracy(RMSE/MAE)}
+\NormalTok{ratings\_summary }\OtherTok{\textless{}{-}} \FunctionTok{bind\_rows}\NormalTok{(}\FunctionTok{lapply}\NormalTok{(cv\_results\_ratings, avg), }
+                                   \AttributeTok{.id=}\StringTok{"model"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Based on the exploratory cross‑validation results (See appendix
+\ref{sec-res} ), user‑based collaborative filtering with cosine
+similarity and a neighborhood size of k = 10 was selected as the final
+model. To quantify its predictive accuracy, the model was evaluated
+using a train/test split. This provides an estimate of how well the
+chosen configuration generalizes to unseen data.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Set up evaluation scheme using seed for reproducibility}
+\CommentTok{\# Meanings of the function parameters can be seen in the }
+\CommentTok{\# previous code block}
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{495}\NormalTok{)}
+\NormalTok{scheme\_final }\OtherTok{\textless{}{-}} \FunctionTok{evaluationScheme}\NormalTok{(rating\_matrix, }
+                                 \AttributeTok{method=}\StringTok{"split"}\NormalTok{, }
+                                 \AttributeTok{train=}\FloatTok{0.8}\NormalTok{, }
+                                 \AttributeTok{given=}\DecValTok{10}\NormalTok{, }
+                                 \AttributeTok{goodRating=}\DecValTok{6}\NormalTok{)}
+\CommentTok{\# Train final model on training set}
+\NormalTok{final\_model\_eval }\OtherTok{\textless{}{-}} \FunctionTok{Recommender}\NormalTok{(}
+  \FunctionTok{getData}\NormalTok{(scheme\_final, }\StringTok{"train"}\NormalTok{),}
+  \AttributeTok{method    =} \StringTok{"UBCF"}\NormalTok{,}
+  \AttributeTok{parameter =} \FunctionTok{list}\NormalTok{(}\AttributeTok{nn =} \DecValTok{10}\NormalTok{, }
+                   \AttributeTok{method =} \StringTok{"Cosine"}\NormalTok{, }
+                   \AttributeTok{normalize =} \StringTok{"center"}\NormalTok{)}
+\NormalTok{)}
+
+\CommentTok{\# Generate predicted ratings }
+\NormalTok{final\_pred\_ratings }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(}
+\NormalTok{  final\_model\_eval, }
+  \FunctionTok{getData}\NormalTok{(scheme\_final, }\StringTok{"known"}\NormalTok{), }
+  \AttributeTok{type=}\StringTok{"ratings"}\NormalTok{)}
+\CommentTok{\# Computes metrics such as RMSE, MSE, and MAE}
+\NormalTok{metrics\_ratings }\OtherTok{\textless{}{-}} \FunctionTok{calcPredictionAccuracy}\NormalTok{(}
+\NormalTok{  final\_pred\_ratings, }
+  \FunctionTok{getData}\NormalTok{(scheme\_final, }\StringTok{"unknown"}\NormalTok{))}
+\NormalTok{metrics\_ratings}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+    RMSE      MSE      MAE 
+1.890030 3.572213 1.407952 
+\end{verbatim}
+
+The final model (UBCF with cosine similarity, k = 10) achieved an RMSE
+of 1.89, MSE of 3.57, and MAE of 1.41 on the train/test evaluation
+scheme. These values indicate that predictions deviate from true ratings
+by approximately 1-2 points on average.
+
+To contextualize these results, we compare the chosen kNN approach
+against a baseline matrix factorization method (SVD). This comparison
+highlights the relative strengths of neighborhood‑based collaborative
+filtering in capturing user preferences within the dataset. See code
+used to fit SVD model in \ref{sec-code6}.
+
+\begin{longtable}[]{@{}cccc@{}}
+\caption{Performance comparison of UBCF and SVD models}\tabularnewline
+\toprule\noalign{}
+Model & RMSE & MSE & MAE \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Model & RMSE & MSE & MAE \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+UBCF (Cosine, k=10) & 1.89 & 3.57 & 1.41 \\
+SVD (k=50) & 1.60 & 2.56 & 1.19 \\
+\end{longtable}
+
+As can be seen in the table above SVD achieved lower error values across
+all three metrics (Table code in \ref{sec-code7}). These results confirm
+the broader finding in recommender system literature discussed in the
+exposition section that matrix factorization methods such as SVD
+typically outperform neighborhood‑based approaches in terms of
+predictive accuracy. Nevertheless, the kNN framework remains valuable
+for pedagogical purposes, as its mechanics are more transparent and
+intuitive.
+
+\subsection{\texorpdfstring{\textbf{Interactive Shiny
+Application}}{Interactive Shiny Application}}\label{interactive-shiny-application}
+
+To illustrate how recommendation works in practice, an interactive Shiny
+application that implements the user‑based kNN model with cosine
+similarity was developed. The app provides a hands‑on interface where
+users can select a specific user ID, adjust the neighborhood size \(k\)
+and specify the number of recommendations to generate. The output is a
+ranked table of book titles and authors, accompanied by preference
+scores that reflect the relative strength of each recommendation. These
+scores are not bounded by the original 1-10 rating scale but serve as
+indicators of predicted interest, with higher values corresponding to
+stronger recommendations.
+
+The application also includes a user lookup tab, which retrieves
+demographic information such as age and location from the users file.
+This feature allows the app users to contextualize recommendation
+patterns by examining how user characteristics relate to the books
+suggested. Screenshots of both tabs are included below to demonstrate
+the workflow: one showing the recommendation interface with sliders and
+output table, and another highlighting the user lookup functionality.
+The full code used to make the app can be found in the file
+\textbf{app.R} in the project repo however section \ref{sec-code8}
+illustrates a snippet.
+
+\begin{figure}[H]
+
+{\centering \pandocbounded{\includegraphics[keepaspectratio]{images/recommendation.png}}
+
+}
+
+\caption{\emph{Figure illustrates the Recommendations tab, where users
+can adjust neighborhood size and number of recommendations.}}
+
+\end{figure}%
+
+\begin{figure}[H]
+
+{\centering \pandocbounded{\includegraphics[keepaspectratio]{images/userlookup.png}}
+
+}
+
+\caption{\emph{Figure illustrates the Lookup tab, where users can
+retrieve demographic information i.e.~age and location.}}
+
+\end{figure}%
+
+\newpage
+
+\section{\texorpdfstring{\textbf{Appendix}}{Appendix}}\label{appendix}
+
+\subsection{Dataset Samples}\label{sec-data}
+
+These samples illustrate the original format of the books, ratings, and
+users tables before preprocessing. They provide transparency about the
+raw data sources used in the study.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{kable}\NormalTok{(}\FunctionTok{head}\NormalTok{(books, }\DecValTok{10}\NormalTok{), }\AttributeTok{caption =} \StringTok{"Sample of Books Dataset"}\NormalTok{, }\AttributeTok{align =} \StringTok{"c"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}
+  >{\centering\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.0896}}
+  >{\centering\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.7463}}
+  >{\centering\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1642}}@{}}
+\caption{Sample of Books Dataset}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\centering
+book\_id
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+book\_title
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+author
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\centering
+book\_id
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+book\_title
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+author
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+0195153448 & Classical Mythology & Mark P. O. Morford \\
+0002005018 & Clara Callan & Richard Bruce Wright \\
+0060973129 & Decision in Normandy & Carlo D'Este \\
+0374157065 & Flu: The Story of the Great Influenza Pandemic of 1918 and
+the Search for the Virus That Caused It & Gina Bari Kolata \\
+0393045218 & The Mummies of Urumchi & E. J. W. Barber \\
+0399135782 & The Kitchen God's Wife & Amy Tan \\
+0425176428 & What If?: The World's Foremost Military Historians Imagine
+What Might Have Been & Robert Cowley \\
+0671870432 & PLEADING GUILTY & Scott Turow \\
+0679425608 & Under the Black Flag: The Romance and the Reality of Life
+Among the Pirates & David Cordingly \\
+074322678X & Where You'll Find Me: And Other Stories & Ann Beattie \\
+\end{longtable}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{kable}\NormalTok{(}\FunctionTok{head}\NormalTok{(ratings, }\DecValTok{10}\NormalTok{), }\AttributeTok{caption =} \StringTok{"Sample of Ratings Dataset"}\NormalTok{, }\AttributeTok{align =} \StringTok{"c"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}ccc@{}}
+\caption{Sample of Ratings Dataset}\tabularnewline
+\toprule\noalign{}
+user\_id & book\_id & book\_rating \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+user\_id & book\_id & book\_rating \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+276725 & 034545104X & 0 \\
+276726 & 0155061224 & 5 \\
+276727 & 0446520802 & 0 \\
+276729 & 052165615X & 3 \\
+276729 & 0521795028 & 6 \\
+276733 & 2080674722 & 0 \\
+276736 & 3257224281 & 8 \\
+276737 & 0600570967 & 6 \\
+276744 & 038550120X & 7 \\
+276745 & 342310538 & 10 \\
+\end{longtable}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{kable}\NormalTok{(}\FunctionTok{head}\NormalTok{(users, }\DecValTok{10}\NormalTok{), }\AttributeTok{caption =} \StringTok{"Sample of Users Dataset"}\NormalTok{, }\AttributeTok{align =} \StringTok{"c"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}ccc@{}}
+\caption{Sample of Users Dataset}\tabularnewline
+\toprule\noalign{}
+user\_id & location & age \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+user\_id & location & age \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+1 & nyc, new york, usa & NA \\
+2 & stockton, california, usa & 18 \\
+3 & moscow, yukon territory, russia & NA \\
+4 & porto, v.n.gaia, portugal & 17 \\
+5 & farnborough, hants, united kingdom & NA \\
+6 & santa monica, california, usa & 61 \\
+7 & washington, dc, usa & NA \\
+8 & timmins, ontario, canada & NA \\
+9 & germantown, tennessee, usa & NA \\
+10 & albacete, wisconsin, spain & 26 \\
+\end{longtable}
+
+\subsection{Distribution Plots}\label{sec-plot}
+
+These plots highlight the long‑tailed distributions typical of
+recommendation datasets, motivating the filtering thresholds applied in
+preprocessing.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Make histogram for ratings per user}
+\NormalTok{p1 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(user\_counts, }\FunctionTok{aes}\NormalTok{(n\_user)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{binwidth =} \DecValTok{1}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_x\_log10}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"Distribution of Ratings per User (log scale)"}\NormalTok{,}
+    \AttributeTok{x =} \StringTok{"Number of Ratings"}\NormalTok{, }\AttributeTok{y =} \StringTok{"Count of Users"}\NormalTok{)}
+
+\CommentTok{\# Make histogram for ratings per book}
+\NormalTok{p2 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(item\_counts, }\FunctionTok{aes}\NormalTok{(n\_item)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{binwidth =} \DecValTok{1}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_x\_log10}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"Distribution of Ratings per Book (log scale)"}\NormalTok{,}
+    \AttributeTok{x =} \StringTok{"Number of Ratings"}\NormalTok{, }\AttributeTok{y =} \StringTok{"Count of Books"}\NormalTok{)}
+\CommentTok{\# Arrange side by side}
+\FunctionTok{grid.arrange}\NormalTok{(p1, p2, }\AttributeTok{ncol =} \DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{FinalProjectReport_files/figure-pdf/unnamed-chunk-20-1.pdf}}
+
+\subsection{Cross‑Validation Results Grid}\label{sec-res}
+
+This table provides the detailed RMSE and MAE values across different
+neighborhood sizes and similarity metrics, supporting the choice of UBCF
+with cosine similarity and k = 10.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Generate 5{-}fold cv results}
+\NormalTok{ratings\_summary }\OtherTok{\textless{}{-}} \FunctionTok{bind\_rows}\NormalTok{(}
+  \FunctionTok{lapply}\NormalTok{(cv\_results\_ratings, }\ControlFlowTok{function}\NormalTok{(x) }\FunctionTok{as.data.frame}\NormalTok{(}\FunctionTok{t}\NormalTok{(}\FunctionTok{avg}\NormalTok{(x)))),}
+  \AttributeTok{.id =} \StringTok{"Model"}
+\NormalTok{)}
+\CommentTok{\# Format the table}
+\FunctionTok{kable}\NormalTok{(ratings\_summary,}
+      \AttributeTok{caption =} \StringTok{"Cross{-}validation results for UBCF models"}\NormalTok{,}
+      \AttributeTok{digits =} \DecValTok{3}\NormalTok{, }\AttributeTok{align =} \StringTok{"c"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}lcc@{}}
+\caption{Cross-validation results for UBCF models}\tabularnewline
+\toprule\noalign{}
+& Model & V1 \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+& Model & V1 \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+RMSE\ldots1 & UBCF\_cosine\_k10 & 1.986 \\
+MSE\ldots2 & UBCF\_cosine\_k10 & 3.947 \\
+MAE\ldots3 & UBCF\_cosine\_k10 & 1.480 \\
+RMSE\ldots4 & UBCF\_pearson\_k30 & 2.038 \\
+MSE\ldots5 & UBCF\_pearson\_k30 & 4.160 \\
+MAE\ldots6 & UBCF\_pearson\_k30 & 1.552 \\
+\end{longtable}
+
+\subsection{Full Comparison of UBCF
+vs.~SVD}\label{full-comparison-of-ubcf-vs.-svd}
+
+This figure visually compares the predictive accuracy of UBCF and SVD
+across RMSE, MSE, and MAE.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Pivot table to long fromat}
+\NormalTok{comparison\_long }\OtherTok{\textless{}{-}}\NormalTok{ comparison\_df }\SpecialCharTok{|\textgreater{}} 
+\NormalTok{  tidyr}\SpecialCharTok{::}\FunctionTok{pivot\_longer}\NormalTok{(}\AttributeTok{cols =} \FunctionTok{c}\NormalTok{(}\StringTok{"RMSE"}\NormalTok{,}\StringTok{"MSE"}\NormalTok{,}\StringTok{"MAE"}\NormalTok{),}
+                      \AttributeTok{names\_to =} \StringTok{"Metric"}\NormalTok{, }\AttributeTok{values\_to =} \StringTok{"Value"}\NormalTok{)}
+\CommentTok{\# Make a stacked bar chart to compare}
+\FunctionTok{ggplot}\NormalTok{(comparison\_long, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Metric, }\AttributeTok{y =}\NormalTok{ Value, }\AttributeTok{fill =}\NormalTok{ Model)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_col}\NormalTok{(}\AttributeTok{position =} \StringTok{"dodge"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_text}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{label =} \FunctionTok{round}\NormalTok{(Value, }\DecValTok{2}\NormalTok{)), }
+            \AttributeTok{position =} \FunctionTok{position\_dodge}\NormalTok{(}\AttributeTok{width =} \FloatTok{0.9}\NormalTok{), }\AttributeTok{vjust =} \SpecialCharTok{{-}}\FloatTok{0.3}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"UBCF vs. SVD Performance Metrics"}\NormalTok{,}
+       \AttributeTok{x =} \StringTok{"Metric"}\NormalTok{, }\AttributeTok{y =} \StringTok{"Value"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{FinalProjectReport_files/figure-pdf/unnamed-chunk-22-1.pdf}}
+
+\subsection{Hidden Code}\label{sec-code}
+
+This section contains all the code snippets that were hidden in the main
+body to provide transparency.
+
+\subsubsection{This snippet illustrates how the data was read
+in.}\label{sec-code1}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# read in the data}
+\NormalTok{books   }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"Data/books.csv"}\NormalTok{)}
+\NormalTok{ratings }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"Data/ratings.csv"}\NormalTok{)}
+\NormalTok{users   }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"Data/users.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{This snippet illustrates how the dataset was
+examined.}\label{sec-code2}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# examine structure of new dataset}
+\FunctionTok{nrow}\NormalTok{(ratings\_full)}
+\FunctionTok{head}\NormalTok{(ratings\_full)}
+\FunctionTok{length}\NormalTok{(}\FunctionTok{unique}\NormalTok{(ratings\_full}\SpecialCharTok{$}\NormalTok{user\_id))}
+\FunctionTok{length}\NormalTok{(}\FunctionTok{unique}\NormalTok{(ratings\_full}\SpecialCharTok{$}\NormalTok{book\_id))}
+\FunctionTok{length}\NormalTok{(ratings\_full}\SpecialCharTok{$}\NormalTok{book\_rating)}
+\FunctionTok{summary}\NormalTok{(ratings\_full)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{This snippet illustrates how the summary table of ratings
+was made.}\label{sec-code3}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Build frequency table}
+\NormalTok{rating\_freq }\OtherTok{\textless{}{-}}\NormalTok{ ratings\_full }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{count}\NormalTok{(book\_rating, }\AttributeTok{name =} \StringTok{"Count"}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{arrange}\NormalTok{(book\_rating)}
+
+\CommentTok{\# Pivot wider so ratings are columns}
+\NormalTok{rating\_freq\_wide }\OtherTok{\textless{}{-}}\NormalTok{ rating\_freq }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{pivot\_wider}\NormalTok{(}\AttributeTok{names\_from =}\NormalTok{ book\_rating, }\AttributeTok{values\_from =}\NormalTok{ Count)}
+
+\CommentTok{\# Display horizontal table}
+\FunctionTok{kable}\NormalTok{(rating\_freq\_wide,}
+      \AttributeTok{caption =} \StringTok{"Distribution of Ratings in the Dataset"}\NormalTok{,}
+      \AttributeTok{align =} \StringTok{"c"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{This snippet illustrates how the histogram of ratings was
+made.}\label{sec-code4}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Get counts of ratings per user }
+\NormalTok{user\_counts }\OtherTok{\textless{}{-}}\NormalTok{ ratings\_clean }\SpecialCharTok{|\textgreater{}} 
+  \FunctionTok{count}\NormalTok{(user\_id, }\AttributeTok{name =} \StringTok{"n\_user"}\NormalTok{, }\AttributeTok{sort =} \ConstantTok{TRUE}\NormalTok{)}
+\CommentTok{\# Plot a histogram of results}
+\FunctionTok{ggplot}\NormalTok{(user\_counts, }\FunctionTok{aes}\NormalTok{(n\_user)) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{binwidth =} \DecValTok{1}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_x\_log10}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"Distribution of Ratings per User"}\NormalTok{,}
+    \AttributeTok{x =} \StringTok{"Number of Ratings (log scale)"}\NormalTok{,}
+    \AttributeTok{y =} \StringTok{"Count of Users"}
+\NormalTok{  ) }
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{This snippet illustrates how the dataset comparison table
+was made.}\label{sec-code5}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Consolidate tables for the before }
+\NormalTok{before\_summary }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
+  \AttributeTok{Users   =} \FunctionTok{n\_distinct}\NormalTok{(ratings\_clean}\SpecialCharTok{$}\NormalTok{user\_id),}
+  \AttributeTok{Books   =} \FunctionTok{n\_distinct}\NormalTok{(ratings\_clean}\SpecialCharTok{$}\NormalTok{book\_id),}
+  \AttributeTok{Ratings =} \FunctionTok{nrow}\NormalTok{(ratings\_clean)}
+\NormalTok{)}
+
+\CommentTok{\# Consolidate tables for the after }
+\NormalTok{after\_summary }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
+  \AttributeTok{Users   =} \FunctionTok{n\_distinct}\NormalTok{(ratings\_filtered}\SpecialCharTok{$}\NormalTok{user\_id),}
+  \AttributeTok{Books   =} \FunctionTok{n\_distinct}\NormalTok{(ratings\_filtered}\SpecialCharTok{$}\NormalTok{book\_id),}
+  \AttributeTok{Ratings =} \FunctionTok{nrow}\NormalTok{(ratings\_filtered)}
+\NormalTok{)}
+\CommentTok{\# Join the two tables}
+\NormalTok{summary\_table }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(}
+  \FunctionTok{cbind}\NormalTok{(}\AttributeTok{Stage =} \StringTok{"Before filtering"}\NormalTok{, before\_summary),}
+  \FunctionTok{cbind}\NormalTok{(}\AttributeTok{Stage =} \StringTok{"After filtering"}\NormalTok{,  after\_summary)}
+\NormalTok{)}
+
+\CommentTok{\# Format table nicely}
+\FunctionTok{kable}\NormalTok{(summary\_table, }
+      \AttributeTok{caption =} \StringTok{"Dataset size before and after filtering thresholds"}\NormalTok{,}
+      \AttributeTok{align =} \StringTok{"c"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{This snippet illustrates how the SVD model was
+fit.}\label{sec-code6}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Train SVD model on training set}
+\NormalTok{svd\_model\_eval }\OtherTok{\textless{}{-}} \FunctionTok{Recommender}\NormalTok{(}
+  \FunctionTok{getData}\NormalTok{(scheme\_final, }\StringTok{"train"}\NormalTok{),}
+  \AttributeTok{method    =} \StringTok{"SVD"}\NormalTok{,}
+  \AttributeTok{parameter =} \FunctionTok{list}\NormalTok{(}\AttributeTok{normalize =} \StringTok{"center"}\NormalTok{, }\AttributeTok{k =} \DecValTok{50}\NormalTok{)  }
+  \CommentTok{\# k = number of latent factors}
+\NormalTok{)}
+
+\CommentTok{\# Predict ratings for known test set}
+\NormalTok{svd\_pred\_ratings }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(}
+\NormalTok{  svd\_model\_eval,}
+  \FunctionTok{getData}\NormalTok{(scheme\_final, }\StringTok{"known"}\NormalTok{), }
+  \AttributeTok{type=}\StringTok{"ratings"}\NormalTok{)}
+
+\CommentTok{\# Calculate ratings{-}based metrics}
+\NormalTok{metrics\_svd }\OtherTok{\textless{}{-}} \FunctionTok{calcPredictionAccuracy}\NormalTok{(}
+\NormalTok{  svd\_pred\_ratings, }
+  \FunctionTok{getData}\NormalTok{(scheme\_final, }\StringTok{"unknown"}\NormalTok{))}
+\FunctionTok{print}\NormalTok{(metrics\_svd)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{This snippet illustrates how the table comparing SVD and
+UBCF was made.}\label{sec-code7}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Combine UBCF and SVD results }
+\NormalTok{comparison\_df }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
+  \AttributeTok{Model  =} \FunctionTok{c}\NormalTok{(}\StringTok{"UBCF (Cosine, k=10)"}\NormalTok{, }\StringTok{"SVD (k=50)"}\NormalTok{),}
+  \AttributeTok{RMSE   =} \FunctionTok{c}\NormalTok{(metrics\_ratings[}\StringTok{"RMSE"}\NormalTok{], metrics\_svd[}\StringTok{"RMSE"}\NormalTok{]),}
+  \AttributeTok{MSE    =} \FunctionTok{c}\NormalTok{(metrics\_ratings[}\StringTok{"MSE"}\NormalTok{],  metrics\_svd[}\StringTok{"MSE"}\NormalTok{]),}
+  \AttributeTok{MAE    =} \FunctionTok{c}\NormalTok{(metrics\_ratings[}\StringTok{"MAE"}\NormalTok{],  metrics\_svd[}\StringTok{"MAE"}\NormalTok{])}
+\NormalTok{)}
+\CommentTok{\# Format table nicely}
+\FunctionTok{kable}\NormalTok{(comparison\_df, }
+      \AttributeTok{caption =} \StringTok{"Performance comparison of UBCF and SVD models"}\NormalTok{,}
+      \AttributeTok{digits =} \DecValTok{2}\NormalTok{, }\AttributeTok{align =} \StringTok{"c"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Shiny App Code Snippet}\label{sec-code8}
+
+This snippet illustrates how the UBCF model is embedded in the Shiny app
+to allow interactive adjustment of neighborhood size and number of
+recommendations. The full code can be found in the file app.R in the
+project repo.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Define the server logic for the Shiny app}
+\NormalTok{server }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(input, output) \{}
+\CommentTok{\# Create a reactive expression that builds a UBCF model }
+\CommentTok{\# whenever the user changes the neighborhood size (k).}
+\NormalTok{  model\_reactive }\OtherTok{\textless{}{-}} \FunctionTok{reactive}\NormalTok{(\{}
+    \FunctionTok{Recommender}\NormalTok{(rating\_matrix, }\AttributeTok{method =} \StringTok{"UBCF"}\NormalTok{,}
+                \AttributeTok{parameter =} \FunctionTok{list}\NormalTok{(}\AttributeTok{nn =}\NormalTok{ input}\SpecialCharTok{$}\NormalTok{k, }\AttributeTok{method =} \StringTok{"Cosine"}\NormalTok{, }
+                                 \AttributeTok{normalize =} \StringTok{"center"}\NormalTok{))}
+\NormalTok{  \})}
+\CommentTok{\# Render the recommendations as a table}
+\NormalTok{  output}\SpecialCharTok{$}\NormalTok{recommendations }\OtherTok{\textless{}{-}} \FunctionTok{renderTable}\NormalTok{(\{}
+\CommentTok{\# Generate predictions for the selected user id}
+\NormalTok{    pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(}\FunctionTok{model\_reactive}\NormalTok{(), rating\_matrix[input}\SpecialCharTok{$}\NormalTok{user\_id,], }
+                    \AttributeTok{n =}\NormalTok{ input}\SpecialCharTok{$}\NormalTok{n)}
+    \FunctionTok{as}\NormalTok{(pred, }\StringTok{"list"}\NormalTok{)}
+\NormalTok{  \})}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+
+
+\renewcommand\refname{\textbf{References}}
+\bibliography{bibliography.bib}
+
+
+
+\end{document}
